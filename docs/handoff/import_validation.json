@@ -1,0 +1,25 @@
+{
+  "counts": {
+    "COPIED": 2428,
+    "TRANSFORMED": 378,
+    "csv_compared": 260,
+    "python_checked": 108,
+    "shell_checked": 26,
+    "EXCLUDED": 11,
+    "json_checked": 8,
+    "known_historical_invalid_json": 1
+  },
+  "errors": [],
+  "historical_syntax_issues": [],
+  "scope": "Import integrity and static syntax only; no scientific result, deployment or raw-recording reproduction",
+  "javascript": {
+    "checked": 258,
+    "issues": []
+  },
+  "gitleaks_findings": {
+    "source": 0,
+    "target": 0,
+    "office_pdf": 0
+  },
+  "new_documentation_link_errors": []
+}

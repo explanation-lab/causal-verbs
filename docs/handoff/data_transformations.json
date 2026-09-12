@@ -1,0 +1,4177 @@
+[
+  {
+    "destination": "current/study1_baseline_causal_chains/data/analysis_data/chains_baseline_full_run-responses.csv",
+    "rows": 100,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause_andy",
+      "bike_cause_suzy",
+      "bike_fault_andy",
+      "bike_fault_suzy",
+      "bike_punish_andy",
+      "bike_punish_suzy",
+      "bike_simple_andy",
+      "bike_simple_suzy",
+      "mirror_cause_bobby",
+      "mirror_cause_sophia",
+      "mirror_fault_bobby",
+      "mirror_fault_sophia",
+      "mirror_punish_bobby",
+      "mirror_punish_sophia",
+      "mirror_simple_bobby",
+      "mirror_simple_sophia",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study2_intention_causal_chains/data/analysis_data/adult_pilot_rounds_unordered/adult_causation_and_punishment_new_updated_to_8_qs-responses.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause_andy",
+      "bike_cause_suzy",
+      "bike_fault_andy",
+      "bike_fault_suzy",
+      "bike_punish_andy",
+      "bike_punish_suzy",
+      "bike_simple_andy",
+      "bike_simple_suzy",
+      "mirror_cause_bobby",
+      "mirror_cause_sophia",
+      "mirror_fault_bobby",
+      "mirror_fault_sophia",
+      "mirror_punish_bobby",
+      "mirror_punish_sophia",
+      "mirror_simple_bobby",
+      "mirror_simple_sophia",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study2_intention_causal_chains/data/analysis_data/adult_pilot_rounds_unordered/adult_causation_and_punishment_updated_to_8_qs_for-responses.csv",
+    "rows": 42,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause_andy",
+      "bike_cause_suzy",
+      "bike_fault_andy",
+      "bike_fault_suzy",
+      "bike_punish_andy",
+      "bike_punish_suzy",
+      "bike_simple_andy",
+      "bike_simple_suzy",
+      "mirror_cause_bobby",
+      "mirror_cause_sophia",
+      "mirror_fault_bobby",
+      "mirror_fault_sophia",
+      "mirror_punish_bobby",
+      "mirror_punish_sophia",
+      "mirror_simple_bobby",
+      "mirror_simple_sophia",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study2_intention_causal_chains/data/analysis_data/adult_pilot_rounds_unordered/causation_and_punishment_without_priming_test_verb-responses.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause_andy",
+      "bike_cause_suzy",
+      "bike_fault_andy",
+      "bike_fault_suzy",
+      "bike_punish_andy",
+      "bike_punish_suzy",
+      "bike_simple_andy",
+      "bike_simple_suzy",
+      "mirror_cause_bobby",
+      "mirror_cause_sophia",
+      "mirror_fault_bobby",
+      "mirror_fault_sophia",
+      "mirror_punish_bobby",
+      "mirror_punish_sophia",
+      "mirror_simple_bobby",
+      "mirror_simple_sophia",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study2_intention_causal_chains/data/analysis_data/adult_pilot_rounds_unordered/exp2_new_pilot-responses.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause_andy",
+      "bike_cause_suzy",
+      "bike_fault_andy",
+      "bike_fault_suzy",
+      "bike_punish_andy",
+      "bike_punish_suzy",
+      "bike_simple_andy",
+      "bike_simple_suzy",
+      "mirror_cause_bobby",
+      "mirror_cause_sophia",
+      "mirror_fault_bobby",
+      "mirror_fault_sophia",
+      "mirror_punish_bobby",
+      "mirror_punish_sophia",
+      "mirror_simple_bobby",
+      "mirror_simple_sophia",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/single_cause/data/single_cause_pilot1-responses.csv",
+    "rows": 32,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause_andy",
+      "bike_fault_andy",
+      "bike_punish_andy",
+      "bike_simple_andy",
+      "mirror_cause_sophia",
+      "mirror_fault_sophia",
+      "mirror_punish_sophia",
+      "mirror_simple_sophia",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/mediapipe_summary_combined.csv",
+    "rows": 122,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_9cf68eb1e0bc8f3c.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_7252e38e4cdde77a.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_b2a0e59b3210f28a.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_6c73e92856cc6729.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_23fd58dc3b6da72c.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_12e82989e4898268.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_063413fac0e118b6.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_146c4185965086b2.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_bd93bba9dee81160.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_b99ad3c6c755b59f.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_ca551004dbfe980b.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_dbbf47008e357009.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_ddec70d6932e2031.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_422d2a510d219b72.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_3b8f03eca0949666.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_b1ed02d198c4aa00.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_4639a6ec9132a69b.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_1516ee5f91d45dae.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_cbdceaf396bff6fe.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_1934299e9402a2dd.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_5e10c9b1cff40bee.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_6b06c63920e6b398.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_855caf35676749ab.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_eaa58162949695d6.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_f28dd454363ffb54.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_c467ef3024fe0146.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_b6b489dfd108ccc1.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_2a2f80666b3be352.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_9fa97768dcfbf935.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_a8471e45b3cc3292.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_1d687df94736dbad.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_68a743355901dfc7.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_dc1baa87232a7f05.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_4cf02d98bd8761dd.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_99d8276fdff55b3e.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_17c5a83b510980f8.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_81805f9bc620b6d0.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_a7df5ab049314116.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_21cee9517fcb1cb4.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_aabc65b9548c4a91.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_509ab64d90ae884b.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_fcfdc05d135abc9b.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_9589c3aaf53ed786.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_f730a0d6c15c40f0.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_488f8d3e746ffb23.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_97e5e15fd829d1cd.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_08777709c9d4b27e.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_b0f162c586b95d76.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_be59264e08611064.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_1c79ed531871bfc9.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_465e2410864b8c63.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_bf4ed477ea53d2b0.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_e366d045a8e8904d.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_9a192e810a712c1d.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_7a0a488bf2f3e123.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_da341fe3cccfd90d.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_a48a08c34a84e897.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_92c18d19d1740ed2.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_2a1cdab01a5d8d92.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_21ed0055ec6a357f.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/adults_pilot_mediapipe_n61/results/mediapipe_summary_cv_1f14a7d950f2d48a.csv",
+    "rows": 2,
+    "columns": [
+      "ParticipantID",
+      "TrialIndex",
+      "TrialType",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Center Looking Frames",
+      "NoFace Frames",
+      "Left Looking %",
+      "Right Looking %",
+      "Annotation File"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: ParticipantID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_2yo_toddler_batch_n7/icatcher_summary_combined.csv",
+    "rows": 14,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_2yo_toddler_batch_n7/results/icatcher_summary_cv_7ebacb663549df3b.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_2yo_toddler_batch_n7/results/icatcher_summary_cv_f2073b4bbd9e7ae9.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_2yo_toddler_batch_n7/results/icatcher_summary_cv_9a793f2454efe491.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_2yo_toddler_batch_n7/results/icatcher_summary_cv_654ce23e3b349cf6.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_2yo_toddler_batch_n7/results/icatcher_summary_cv_578448fb7f60a3a4.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_2yo_toddler_batch_n7/results/icatcher_summary_cv_52d5f1f06feb3b2f.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_2yo_toddler_batch_n7/results/icatcher_summary_cv_254dc36bb02d6465.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/icatcher_summary_combined.csv",
+    "rows": 146,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_dfd3dacee533f093.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_460e7ec89eff904f.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_0c56a8794c9ac39e.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_0753c9c32e9bc0bf.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_37deb94137e29bbf.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_5eafd45690cc0a6f.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_511f50afa1d38ea9.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_67834e5a0a430e2e.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_332056bf924483da.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_4efc093919de4fb3.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_832a72bbdb747bc9.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_89b8dbc0fb98d821.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_ea3bc5ff1e721d52.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_f03ffb1bee6c69d8.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_99557abc23b80af3.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_fe0498592c13a5c3.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_3688d967abe69f30.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_72d55e718a63e652.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_51c5cd42652dd243.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_b7db49ee1002372e.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_aaf7fc55dc968ebe.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_d0c052f44f488ce9.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_106d9904172b2327.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_fdb47cc11f13802a.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_9f47ff7e803102d7.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_5320a27847e9332c.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_f5ddef6e43b48dd9.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_1d1b097b904a629b.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_38c2d344c2ae2e14.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_9a39a3032588c775.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_31f24839a95cf812.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_6bfad9090a021c1e.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_8ed5c826accac9ce.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_f869dd9b86fe3f5f.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_40c5d2bd034b009a.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_b56e2a742ff7639e.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_a72dc24344a6f1df.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_f528313644ba02ba.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_647280c29012c368.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_c19ccc2853db832c.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_4e94ace594e02354.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_d31e6008a3bb65d4.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_8d1705654fa017a8.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_6fcd83c3d204c7c3.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_3cb74bfb95afed55.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_2fa4c289b83ea9e5.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_1c1ed714cdf27706.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_e43b6a281a72363f.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_1257edf838ebf45f.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_6bbf7b9ef6e19ffe.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_2077c9de4d8696b1.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_a6f0924aebed427b.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_282bb9c5ceddce0e.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_5676cbdadbdf2296.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_bccf675ba0072dd2.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_d523d12027b3c280.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_bf76d38744eafdb3.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_31412889c1c51c0d.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_ba5d4ced8f7e6f37.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_794935851af6d4c8.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_7db2a8430096bd5a.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_f37ef13d00adda9c.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_bbd074c1b450ef83.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_092578f0f15d4e42.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_a3686ccd4fb2323f.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_de19e01278289ab8.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_6ec405704d5303d9.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_c808b6e749d47167.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_b6e647d748d559b2.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_49c8fd5f357f2620.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_9a30b00feb9989e7.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_3b300ae43a4c65b9.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_pilot_batch1_n80/results/icatcher_summary_cv_17236a8202ef4b1b.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/first_transitions.csv",
+    "rows": 57,
+    "columns": [
+      "uuid",
+      "context",
+      "condition",
+      "congruence",
+      "init",
+      "first_trans",
+      "latency_s",
+      "pattern"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: uuid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/icatcher_summary_combined.csv",
+    "rows": 58,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_a12c988ffaa6c451.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_06a65a851b32c99b.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_5f9e0d35df02ff0b.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_c9c7c5f393d46135.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_8fbdb778a1d532ff.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_ea8a3b40077b35d4.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_3a98e54a218cfad8.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_186a5876d2bea8e2.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_e7038af4852139dd.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_758b1dd7e540289c.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_1589cff547665665.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_946aba3c307d1615.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_eaca98941276c1af.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_e69338911d80ca4c.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_ba0a9fff0fd93fda.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_15fef3ebad54b262.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_128e1001e9052814.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_fe471546ff1f2cf0.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_a4ae1dc2be840d02.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_60f521198df6fc5c.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_8605e5f2949dfc33.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_7ce0db3cdb4cb12a.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_ef39f047d7b684fb.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_e13bdd30eb1aa21e.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_3c2913df0a0269b9.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_097891dc9e6c8fa0.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_e4f6bc9d8ccea888.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_cfc391164ee8d7ad.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/results/icatcher_summary_cv_44e648acb7ec4dcb.csv",
+    "rows": 2,
+    "columns": [
+      "Response UUID",
+      "Age (Days)",
+      "Age (Years)",
+      "Frame Index",
+      "Condition",
+      "Direction",
+      "Context",
+      "Left Looking Frames",
+      "Right Looking Frames",
+      "Away/Other Frames",
+      "Video Filename"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: Response UUID; Replaced recording/export names and absolute paths with opaque recording codes; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "current/study3_nonverbal_looking_time/06_processed_gaze_results/children_repilot_batch3_with_single_cause_n29/window_comparison.csv",
+    "rows": 16,
+    "columns": [
+      "context",
+      "condition",
+      "mean",
+      "sem",
+      "count",
+      "window"
+    ],
+    "transformation": "CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study1_verbal/adult_pilot_response_data/chainspilot8-responses.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause_andy",
+      "bike_cause_suzy",
+      "bike_fault_andy",
+      "bike_fault_suzy",
+      "bike_punish_andy",
+      "bike_punish_suzy",
+      "bike_simple_andy",
+      "bike_simple_suzy",
+      "mirror_cause_bobby",
+      "mirror_cause_sophia",
+      "mirror_fault_bobby",
+      "mirror_fault_sophia",
+      "mirror_punish_bobby",
+      "mirror_punish_sophia",
+      "mirror_simple_bobby",
+      "mirror_simple_sophia",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study1_verbal/pilot1_all_responses.csv",
+    "rows": 371,
+    "columns": [
+      "experiment",
+      "response_id",
+      "participant_hashed_id",
+      "child_hashed_id",
+      "completed",
+      "is_preview",
+      "child_age_rounded",
+      "child_gender",
+      "condition",
+      "phase",
+      "scenario",
+      "scenario_object",
+      "video",
+      "question_type",
+      "response",
+      "rt_ms"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: child_hashed_id, participant_hashed_id, response_id; Removed exact session date_created column; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study1_verbal/pilot1_exp1_responses.csv",
+    "rows": 230,
+    "columns": [
+      "experiment",
+      "response_id",
+      "participant_hashed_id",
+      "child_hashed_id",
+      "completed",
+      "is_preview",
+      "child_age_rounded",
+      "child_gender",
+      "condition",
+      "phase",
+      "scenario",
+      "scenario_object",
+      "video",
+      "question_type",
+      "response",
+      "rt_ms"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: child_hashed_id, participant_hashed_id, response_id; Removed exact session date_created column; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study1_verbal/pilot1_exp2_responses.csv",
+    "rows": 30,
+    "columns": [
+      "experiment",
+      "response_id",
+      "participant_hashed_id",
+      "child_hashed_id",
+      "completed",
+      "is_preview",
+      "child_age_rounded",
+      "child_gender",
+      "condition",
+      "phase",
+      "scenario",
+      "scenario_object",
+      "video",
+      "question_type",
+      "response",
+      "rt_ms"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: child_hashed_id, participant_hashed_id, response_id; Removed exact session date_created column; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study1_verbal/pilot1_exp3_responses.csv",
+    "rows": 36,
+    "columns": [
+      "experiment",
+      "response_id",
+      "participant_hashed_id",
+      "child_hashed_id",
+      "completed",
+      "is_preview",
+      "child_age_rounded",
+      "child_gender",
+      "condition",
+      "phase",
+      "scenario",
+      "scenario_object",
+      "video",
+      "question_type",
+      "response",
+      "rt_ms"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: child_hashed_id, participant_hashed_id, response_id; Removed exact session date_created column; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study1_verbal/pilot1_punishment_responses.csv",
+    "rows": 75,
+    "columns": [
+      "experiment",
+      "response_id",
+      "participant_hashed_id",
+      "child_hashed_id",
+      "completed",
+      "is_preview",
+      "child_age_rounded",
+      "child_gender",
+      "condition",
+      "phase",
+      "scenario",
+      "scenario_object",
+      "video",
+      "question_type",
+      "response",
+      "rt_ms"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: child_hashed_id, participant_hashed_id, response_id; Removed exact session date_created column; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/experiment3_4cases/exp3_mental_mental_absent/data.csv",
+    "rows": 40,
+    "columns": [
+      "participant_id",
+      "chain_type",
+      "chain_cause",
+      "chain_simple",
+      "chain_fault",
+      "chain_punishment",
+      "age",
+      "race",
+      "gender",
+      "ethnicity"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: participant_id; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v2/what_happened-chain_type.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "chain_type",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v2/what_happened-participants.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v2/what_happened-responses.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause",
+      "bike_fault",
+      "bike_punishment",
+      "bike_simple",
+      "mirror_cause",
+      "mirror_fault",
+      "mirror_punishment",
+      "mirror_simple",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v2/what_happened-scenario_order.csv",
+    "rows": 80,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v3/what_happened-condition (1).csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v3/what_happened-participants.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v3/what_happened-question_orders.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike",
+      "mirror",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v3/what_happened-responses.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause",
+      "bike_fault",
+      "bike_punish",
+      "bike_simple",
+      "mirror_cause",
+      "mirror_fault",
+      "mirror_punish",
+      "mirror_simple",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/casual_verb_punish_v3/what_happened-scenario_order.csv",
+    "rows": 80,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment2_intent_v3/what_happened-condition.csv",
+    "rows": 20,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment2_intent_v3/what_happened-participants.csv",
+    "rows": 20,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment2_intent_v3/what_happened-question_orders.csv",
+    "rows": 20,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike",
+      "mirror",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment2_intent_v3/what_happened-responses.csv",
+    "rows": 20,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "bike_cause",
+      "bike_fault",
+      "bike_punish",
+      "bike_simple",
+      "mirror_cause",
+      "mirror_fault",
+      "mirror_punish",
+      "mirror_simple",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment2_intent_v3/what_happened-scenario_order.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment3_pilot5/what_happened-condition.csv",
+    "rows": 39,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment3_pilot5/what_happened-participants.csv",
+    "rows": 39,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment3_pilot5/what_happened-question_orders.csv",
+    "rows": 39,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "balloon",
+      "drum",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment3_pilot5/what_happened-responses.csv",
+    "rows": 39,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "balloon_cause_pop",
+      "balloon_cause_sad",
+      "balloon_pop",
+      "balloon_sad",
+      "drum_anger",
+      "drum_break",
+      "drum_cause_anger",
+      "drum_cause_break",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment3_pilot5/what_happened-scenario_order.csv",
+    "rows": 78,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v2/what_happened-condition.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v2/what_happened-participants.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v2/what_happened-question_order.csv",
+    "rows": 80,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v2/what_happened-responses.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "hurt_cause",
+      "hurt_lexical",
+      "shock_cause",
+      "shock_lexical",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v2/what_happened-scenario_order.csv",
+    "rows": 80,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v3/what_happened-condition.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v3/what_happened-participants.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v3/what_happened-question_order.csv",
+    "rows": 82,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v3/what_happened-responses.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "hurt_cause",
+      "hurt_lexical",
+      "shock_cause",
+      "shock_lexical",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_absence_v3/what_happened-scenario_order.csv",
+    "rows": 82,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_hurt/what_happened-condition (1).csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_hurt/what_happened-participants.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_hurt/what_happened-question_order.csv",
+    "rows": 80,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_hurt/what_happened-responses.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "cause_hurt",
+      "hurt",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_mental_v4/what_happened-condition.csv",
+    "rows": 20,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_mental_v4/what_happened-participants.csv",
+    "rows": 20,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_mental_v4/what_happened-question_order.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_mental_v4/what_happened-responses.csv",
+    "rows": 20,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "hurt_cause",
+      "hurt_lexical",
+      "shock_cause",
+      "shock_lexical",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment4_mental_v4/what_happened-scenario_order.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_scare_visible/what_happened-condition (1).csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_scare_visible/what_happened-participants.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_scare_visible/what_happened-question_order.csv",
+    "rows": 82,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_scare_visible/what_happened-responses.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "cause_scare",
+      "scare",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_v3/experiment5_v3-participants.csv",
+    "rows": 21,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_v3/experiment5_v3-question_order.csv",
+    "rows": 42,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_v3/experiment5_v3-responses.csv",
+    "rows": 21,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "excited_cause",
+      "excited_lexical",
+      "scared_cause",
+      "scared_lexical",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_v3/experiment5_v3-scenario_order.csv",
+    "rows": 42,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_visual_v2/what_happened-condition.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_visual_v2/what_happened-participants.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_visual_v2/what_happened-question_order.csv",
+    "rows": 82,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_visual_v2/what_happened-responses.csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "excited_cause",
+      "excited_lexical",
+      "scared_cause",
+      "scared_lexical",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/experiment5_visual_v2/what_happened-scenario_order.csv",
+    "rows": 82,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_physical_chain_v1/what_happened-condition.csv",
+    "rows": 82,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_physical_chain_v1/what_happened-participants.csv",
+    "rows": 82,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_physical_chain_v1/what_happened-question_order.csv",
+    "rows": 328,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_physical_chain_v1/what_happened-responses.csv",
+    "rows": 82,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "anger",
+      "anger_cause",
+      "break",
+      "break_cause",
+      "warmup_crumble",
+      "warmup_switch",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v2/what_happened-condition (1).csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v2/what_happened-participants.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v2/what_happened-question_order.csv",
+    "rows": 160,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v2/what_happened-responses.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "anger",
+      "break",
+      "cause_anger",
+      "cause_break",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v3/what_happened-condition (2).csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v3/what_happened-participants (1).csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v3/what_happened-question_order (1).csv",
+    "rows": 164,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "question_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v3/what_happened-responses (1).csv",
+    "rows": 41,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "anger",
+      "break",
+      "cause_anger",
+      "cause_break",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v4/what_happened-condition (1).csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "condition",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v4/what_happened-participants.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "age",
+      "ethnicity",
+      "gender",
+      "race",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v4/what_happened-question_orders.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "balloon",
+      "drum",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v4/what_happened-responses.csv",
+    "rows": 40,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "balloon_cause_pop",
+      "balloon_cause_sad",
+      "balloon_pop",
+      "balloon_sad",
+      "drum_anger",
+      "drum_break",
+      "drum_cause_anger",
+      "drum_cause_break",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study2_verbal/results/mental_verb_chain_v4/what_happened-scenario_order.csv",
+    "rows": 80,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "scenario_order",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study3_nonverbal/01_pilot1_earliest_adult_pilot/response_data/non_verbal_adult_pilot1_fixed_cc-responses.csv",
+    "rows": 39,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "distal_broke",
+      "distal_cause",
+      "distal_fair",
+      "distal_punished",
+      "distal_should_punish",
+      "proximal_broke",
+      "proximal_cause",
+      "proximal_fair",
+      "proximal_punished",
+      "proximal_should_punish",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study3_nonverbal/02_non_verbal_omission_pilot/response_data/non_verbal_omission_adult_p1_fixed-responses.csv",
+    "rows": 20,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "punish_distal_broke",
+      "punish_distal_cause",
+      "punish_distal_deserve_punish",
+      "punish_distal_fair",
+      "punish_distal_intend_left",
+      "punish_distal_intend_right",
+      "punish_distal_punished",
+      "punish_distal_should_punish",
+      "punish_distal_which_intended",
+      "punish_ommitter_broke",
+      "punish_ommitter_cause",
+      "punish_ommitter_deserve_punish",
+      "punish_ommitter_fair",
+      "punish_ommitter_intend_left",
+      "punish_ommitter_intend_right",
+      "punish_ommitter_punished",
+      "punish_ommitter_should_punish",
+      "punish_ommitter_which_intended",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  },
+  {
+    "destination": "archive/study3_nonverbal/06_non_verbal_pilot2_adult_explicit_rating/response_data/non_verbal_pilot2-responses.csv",
+    "rows": 39,
+    "columns": [
+      "workerid",
+      "proliferate.condition",
+      "distal_broke",
+      "distal_cause",
+      "distal_deserve_punish",
+      "distal_fair",
+      "distal_intend_left",
+      "distal_intend_right",
+      "distal_punished",
+      "distal_should_punish",
+      "distal_which_intended",
+      "proximal_broke",
+      "proximal_cause",
+      "proximal_deserve_punish",
+      "proximal_fair",
+      "proximal_intend_left",
+      "proximal_intend_right",
+      "proximal_punished",
+      "proximal_should_punish",
+      "proximal_which_intended",
+      "error"
+    ],
+    "transformation": "Replaced platform/participant identifiers with opaque keyed codes: workerid; CSV serialization normalized; all other cells and all rows retained"
+  }
+]
