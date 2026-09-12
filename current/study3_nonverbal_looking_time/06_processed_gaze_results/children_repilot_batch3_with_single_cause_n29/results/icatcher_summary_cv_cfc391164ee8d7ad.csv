@@ -1,0 +1,3 @@
+Response UUID,Age (Days),Age (Years),Frame Index,Condition,Direction,Context,Left Looking Frames,Right Looking Frames,Away/Other Frames,Video Filename
+cv_cfc391164ee8d7ad,1170,3.2,9,proximal,backward,chains,100,293,0,cv_843dd256196fa0b6.webm
+cv_cfc391164ee8d7ad,1170,3.2,13,distal,backward,chains,161,232,0,cv_e2f9de796df95329.webm

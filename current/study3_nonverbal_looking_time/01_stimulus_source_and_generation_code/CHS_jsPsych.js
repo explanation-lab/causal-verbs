@@ -1,0 +1,633 @@
+// ════════════════════════════════════════════════════════════════════
+//  NON-VERBAL FULL STUDY — CHS jsPsych version (REVISED after lab meeting)
+//
+//  Changes vs. previous version:
+//   (1) Characters have eyes only (no mouths/expressions); star authority
+//       keeps its expressions. All character stimuli re-rendered.
+//   (2) Familiarization/warmup replaced: THREE punishment-only warmups,
+//       each with a SINGLE character (left / center / right position),
+//       order randomized and recorded (warmup_order in data).
+//   (3) Test trials now include an ANTICIPATORY FREEZE: the animation
+//       pauses just before the authority reveals its target — the star
+//       turns angry at center ("getting ready to punish") and the scene
+//       freezes for anticipatory looking. The scene then unfolds as
+//       usual (approach + star removal) and ends with the outcome freeze
+//       for post-punishment looking time.
+//   (4) REDESIGN (post second lab meeting, per David): the punishment
+//       sequence for BOTH warmup and test now reads as: bad outcome ->
+//       almost immediately, the large star (angry face + brief shake +
+//       non-directional sound cue), still fully centered -> star settles,
+//       staying angry and centered -> 2-2.5 s anticipatory pause (this is
+//       the anticipatory-looking window; both characters still matched,
+//       nothing indicates direction) -> star moves over and takes the
+//       target's star. The causal event is now shown ONCE (not x3) so
+//       repeated-viewing scan patterns don't carry into the anticipatory
+//       window. In single_cause, the distal/bystander character makes a
+//       small, clearly irrelevant hop-in-place before the proximal
+//       character acts, so it isn't the only character that never moves.
+//
+//  Test trial timeline (recorded as one webcam segment):
+//    bullseye                                                  3.0 s
+//    part1 GIF  (causal event x1, angry+shake+sound, settles)  5.4 s
+//    ANTICIPATORY FREEZE (angry star, static, centered)        2.5 s
+//    part2 GIF  (authority approaches target, removes star)    2.88 s
+//    outcome freeze                                            8.0 s
+//
+//  Warmup trial timeline (single continuous GIF, ~16.7-17.1 s):
+//    neutral scene -> bad action -> almost-immediate angry+shake+sound
+//    (centered) -> static angry hold (3.0 s) -> authority approaches +
+//    removes star -> final freeze (held via loop=1 last-frame hold).
+//
+//  (5) LOAD-TIMING FIX: every GIF (warmup punish clips, test part1) is now
+//      preloaded well ahead of when it's actually shown (warmups + test
+//      phase 1's part1 at script start, during consent/intro/practice;
+//      test phase 2's part1 during test phase 1's ~20s run), using a
+//      SESSION-WIDE cache-busting value (session_cb) so the preload URL
+//      and the playback URL match exactly and the browser can serve the
+//      warmed copy instantly. On top of that, the sound-cue and phase-swap
+//      timers for both warmup and test no longer start counting from the
+//      moment the trial's DOM is inserted -- they're anchored to the
+//      visible <img>'s actual 'load' event (or fire immediately if it's
+//      already loaded). Previously, timers ran on a fixed schedule
+//      regardless of how long the GIF actually took to fetch/decode, so
+//      under any real network/CPU latency the sound could fire before the
+//      shake was visible, and the fixed-duration display window could run
+//      out before the shake had even started rendering -- both bugs got
+//      worse over a session as browser load accumulated (webcam
+//      recording, prior images, etc.), matching the reported "1st warmup
+//      in sync, 2nd early, 3rd very early; test 1 partial wiggle, test 2
+//      none" pattern.
+//
+//  (6) AUDIO COLD-START FIX (per David, next round: "in the first warmup,
+//      the shaking starts before the sound; 2nd/3rd are in sync"): a
+//      browser's very first real audio playback in a page session has
+//      extra one-time decode/output-pipeline latency, independent of file
+//      download time -- so whichever cue plays first in the whole session
+//      (always warmup trial 1) visibly lagged behind its shake, while
+//      later cues (pipeline already warm) were instant. Fixed by reusing
+//      one persistent, preloaded Audio element for every cue instead of
+//      constructing a new one per call, and "priming" it with a real
+//      muted play+pause on the study's first user gesture (the Start
+//      button), which happens minutes before warmup 1 actually needs it.
+//
+//  Paste the contents of this file directly into the
+//  "jsPsych Experiment Code" editor on childrenhelpingscience.com.
+// ════════════════════════════════════════════════════════════════════
+
+
+// ── Inject CSS ──
+const _style = document.createElement('style');
+_style.textContent = `
+    .jspsych-content-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    .jspsych-content {
+        max-width: 98% !important;
+        width: 98% !important;
+        margin: 0 auto !important;
+    }
+    .trial-visual {
+        display: block;
+        width: 100%;
+        max-height:70vh;
+        margin: 0 auto;
+        object-fit: contain;
+    }
+    .instructions-box {
+        max-width: 680px;
+        margin: 30px auto;
+        font-size: 1.1em;
+        line-height: 1.7;
+        text-align: left;
+    }
+    .instructions-box h2 { margin-bottom: 10px; }
+    .instructions-box ul  { padding-left: 1.4em; }
+    .continue-btn-group {
+        position: fixed !important;
+        bottom: 24px !important;
+        right: 28px !important;
+        margin: 0 !important;
+        justify-content: flex-end !important;
+        z-index: 9999 !important;
+    }
+    .continue-btn-group .jspsych-btn {
+        font-size: 1.3em !important;
+        padding: 14px 44px !important;
+    }
+`;
+document.head.appendChild(_style);
+
+// ════════════════════════════════════════════════════════════════════
+//  CONFIG
+// ════════════════════════════════════════════════════════════════════
+
+const BASE = 'https://raw.githubusercontent.com/SunnyZ-cs/non_verbal_adults/main/non_verbal_full_study_updated/materials/';
+
+// ── Warmup (punishment-only, single character; replaces familiarization) ──
+const warmup_positions = ['left', 'center', 'right'];
+// Fisher-Yates shuffle; the resulting order is RECORDED in the data
+for (let i = warmup_positions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [warmup_positions[i], warmup_positions[j]] = [warmup_positions[j], warmup_positions[i]];
+}
+const warmup_durations = {
+    left: 17120,
+    center: 17120,
+    right: 16680
+};
+// Offset (ms) into each warmup GIF at which the star's brief angry shake
+// begins -- this is when the non-directional sound cue fires.
+const warmup_sound_offset_ms = {
+    left: 7600,
+    center: 7600,
+    right: 7160
+};
+const warmup_gap = 1000;              // blank between warmups
+
+// ── Non-directional sound cue (plays at shake onset, both warmup + test) ──
+// (6) AUDIO COLD-START FIX (per David: "in the first warmup, the shaking
+//     starts before the sound; in the 2nd/3rd they're in sync"): the OLD
+//     playCue() created a brand-new `Audio` object from scratch on every
+//     call. A browser's very first real audio decode/playback in a page
+//     session carries extra one-time latency (codec/output-pipeline init)
+//     regardless of how early the file itself was fetched -- so the FIRST
+//     ever cue (always warmup trial 1, since it's the first sound played
+//     all session) lagged visibly behind the shake, while the 2nd/3rd cues
+//     (pipeline already warm) fired instantly and looked in sync. Fix: use
+//     ONE persistent, preloaded Audio element for every cue for the rest of
+//     the session (cheaper and more consistent than re-instantiating), and
+//     "prime" it with a real muted play+pause on the study's first genuine
+//     user gesture (the Start button below) -- that happens minutes before
+//     warmup 1, giving the decode pipeline plenty of time to fully warm up.
+const SOUND_URL = BASE + 'punish_cue.mp3';
+const cueAudio = new Audio(SOUND_URL);
+cueAudio.preload = 'auto';
+cueAudio.load();
+let cueAudioPrimed = false;
+function primeCueAudio() {
+    if (cueAudioPrimed) return;
+    cueAudioPrimed = true;
+    const prevVolume = cueAudio.volume;
+    cueAudio.volume = 0;
+    cueAudio.play().then(() => {
+        cueAudio.pause();
+        cueAudio.currentTime = 0;
+        cueAudio.volume = prevVolume;
+    }).catch(() => {
+        // If priming itself fails (e.g. gesture not recognized), just
+        // restore volume -- playCue() will still try to play for real later.
+        cueAudio.volume = prevVolume;
+    });
+}
+function playCue() {
+    try {
+        cueAudio.currentTime = 0;
+        cueAudio.volume = 1.0;
+        cueAudio.play().catch(err => console.warn('Sound cue playback failed:', err));
+    } catch (err) {
+        console.warn('Sound cue error:', err);
+    }
+}
+
+// ── Load-timing helpers ──────────────────────────────────────────────
+// One cache-busting value for the WHOLE session (not one per trial). This
+// still forces a fresh fetch from GitHub once per session (avoiding a
+// stale CDN-cached older build), but critically it means a URL we preload
+// ahead of time and the URL actually used at playback time are byte-for-
+// byte identical, so the browser can serve the already-downloaded copy
+// from cache instantly instead of re-fetching from the network.
+const session_cb = Date.now();
+function withCb(url) { return url + '?cb=' + session_cb; }
+
+// Fire-and-forget background download into the browser's HTTP cache. Uses
+// fetch() (not `new Image()`) so nothing gets decoded/rendered/animated in
+// the background -- it only warms the cache so the real, visible <img>
+// element can load near-instantly when its trial actually starts.
+function preloadUrl(url) {
+    fetch(url).catch(err => console.warn('Preload failed:', url, err));
+}
+
+// Run `fn` once `imgEl` has actually finished loading (i.e. the browser is
+// really about to start animating it), or immediately if it's already
+// loaded (e.g. served from a warm cache) -- this is what the sound-cue and
+// phase-swap timers are anchored to, INSTEAD OF the moment the trial's DOM
+// was inserted. Without this, a slow/cold image fetch could delay the
+// visible start of a GIF's animation while the timers (previously started
+// at DOM-insertion time) kept counting down regardless, making the sound
+// cue and phase swaps land early relative to what the viewer actually sees
+// -- exactly the "sound arrives before the wiggle" / "wiggle looks cut
+// off" symptom this fixes.
+function onImageReady(imgEl, fn) {
+    if (imgEl && imgEl.complete && imgEl.naturalWidth !== 0) {
+        fn();
+    } else if (imgEl) {
+        imgEl.addEventListener('load', fn, { once: true });
+        imgEl.addEventListener('error', fn, { once: true }); // don't hang forever if it fails
+    } else {
+        fn();
+    }
+}
+
+function warmupUrl(position) { return withCb(BASE + `warmup_punish_${position}.gif`); }
+
+// Kick off downloads for all 3 warmup GIFs as early as possible -- right
+// now, before consent/intro/practice videos even play. That gives each one
+// tens of seconds of lead time to finish downloading in the background,
+// well before the warmup phase actually starts.
+warmup_positions.forEach(pos => preloadUrl(warmupUrl(pos)));
+
+// ── Context / direction / order randomization (unchanged) ──
+const context = Math.random() < 0.5 ? 'chains' : 'single_cause';
+const direction = Math.random() < 0.5 ? 'forward' : 'backward';
+const is_forward = direction === 'forward';
+
+function testFiles(cond) {
+    const stem = `${context}_` + (is_forward ? '' : 'reverse_') + `${cond}_test`;
+    return {
+        part1:  BASE + stem + '_part1.gif',
+        antic:  BASE + stem + '_anticipatory_freeze.png',
+        part2:  BASE + stem + '_part2.gif',
+        freeze: BASE + stem + '_final_freeze.png',
+    };
+}
+
+// Phase durations (ms). part1/part2 match the exact GIF split points
+// (both context generators produce identical split/sound frame counts:
+// see chains_timing.json / single_cause_timing.json in materials/).
+const part1_duration  = 5440;    // causal event x1, angry+shake+sound, settles centered
+                                  // (+1 frame vs. earlier build: the shake now snaps one
+                                  // extra "settled" frame at the end so it visibly finishes
+                                  // and returns to neutral instead of ending mid-tilt)
+const test_sound_offset_ms = 4920;      // offset into part1 at which the shake+sound cue begins
+const antic_duration  = 3000;           // ANTICIPATORY FREEZE (David: "3 seconds"): static
+                                         // angry star, dead-centered, no directional cue
+const part2_duration  = 2880;    // authority approaches target + removes star
+const freeze_duration = 8000;           // outcome freeze (post-punishment looking) -- shortened from
+                                         // 20s: window-comparison analyses (report_to_david.md) show
+                                         // the unpunished-preference effect is strongest at 0-1s, still
+                                         // present at 1-3s, and only weakens (not adds new signal) after
+                                         // that, while away-looking roughly doubles (9-12% -> 20-21%)
+                                         // over the later part of the old 20s window.
+
+const test_order = Math.random() < 0.5 ?
+    [{name: 'distal',  files: testFiles('distal')},  {name: 'proximal', files: testFiles('proximal')}] :
+    [{name: 'proximal', files: testFiles('proximal')}, {name: 'distal',  files: testFiles('distal')}];
+
+const assigned_combo = `${context}_` + (is_forward ? '' : 'reverse_') + `${test_order[0].name}_test_final.gif`;
+
+// Kick off the first test trial's part1.gif download early too, same
+// reasoning as the warmup preloads above -- it has the entire consent +
+// intro + practice + warmup phase as lead time before it's actually shown.
+preloadUrl(withCb(test_order[0].files.part1));
+
+// ════════════════════════════════════════════════════════════════════
+//  INIT jsPsych
+// ════════════════════════════════════════════════════════════════════
+
+const jsPsych = initJsPsych();
+
+// ════════════════════════════════════════════════════════════════════
+//  CHS-SPECIFIC FRAMES
+// ════════════════════════════════════════════════════════════════════
+
+const video_config = {
+    type: chsRecord.VideoConfigPlugin
+};
+
+const video_consent = {
+    type: chsRecord.VideoConsentPlugin,
+    PIName:      'Ellen Markman',
+    institution: 'The Markman Lab of Stanford University',
+    PIContact:   'Ellen Markman at markman@stanford.edu',
+    purpose:     'This study is about how children perceive causal chains, single causes, and responsibility.',
+    procedures:  'Your child will watch short animated sequences. We will record their eye movements to measure their looking times.',
+    risk_statement: 'There are no expected risks to participation.',
+    payment:     'After you finish the study, we will email you a $5 Amazon gift card within approximately 3–5 business days.',
+    research_rights_statement: 'This research has been reviewed and approved by an Institutional Review Board (“IRB”), a group of people who oversee research involving humans as participants. Information to help you understand research is on-line at https://irb.stanford.edu/. You may talk to a IRB staff member at (650) 723-2480 or irb2-manager@lists.stanford.edu for any of the following: 1) Your questions, concerns, or complaints are not being answered by the research team; 2) you cannot reach the research team; 3) you want to talk to someone besides the research team; 4) you have questions about your rights as a research subject; 5) you want to get information or provide input about this research.',
+    include_databrary: true
+};
+
+const instructions = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+        <div class="instructions-box">
+            <h2>Overview</h2>
+            <ul>
+                <li>The study takes about 5–10 minutes.</li>
+                <li>Your child will watch short animated clips.</li>
+                <li><strong>IMPORTANT:</strong> Please position your child's head so that they face the center of the screen directly.</li>
+            </ul>
+            <p><strong>For parents:</strong> Please help keep your child's attention on the screen.</p>
+        </div>`,
+    choices: ['Start ▶'],
+    on_load: function() {
+        // First real user gesture in the study -- use it to prime the sound
+        // cue's audio pipeline (see cueAudio/primeCueAudio above) well ahead
+        // of warmup trial 1, the first trial that actually needs to play it.
+        const group = document.getElementById('jspsych-html-button-response-btngroup');
+        const btn = group && group.querySelector('button');
+        if (btn) btn.addEventListener('click', primeCueAudio, { once: true });
+    },
+    data: { trial_type: 'instructions' }
+};
+
+const start_recording = { type: chsRecord.StartRecordPlugin };
+const stop_recording  = { type: chsRecord.StopRecordPlugin  };
+
+// ════════════════════════════════════════════════════════════════════
+//  TRIAL BUILDERS
+// ════════════════════════════════════════════════════════════════════
+
+// Helper function to build video trials that auto-advance
+function buildVideoTrial(filename, trial_name) {
+    return {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `<video id="${trial_name}-vid" class="trial-visual" autoplay><source src="${BASE}${filename}" type="video/mp4"></video>`,
+        choices: "NO_KEYS",
+        on_load: function() {
+            const vid = document.getElementById(`${trial_name}-vid`);
+            if (vid) {
+                vid.onended = function() { jsPsych.finishTrial(); };
+                vid.onerror = function() { jsPsych.finishTrial(); };
+            } else {
+                setTimeout(jsPsych.finishTrial, 5000);
+            }
+        },
+        data: { trial_type: trial_name }
+    };
+}
+
+// Helper function to build video trials that require a 'Next' button click
+function buildVideoTrialWithNext(filename, trial_name) {
+    return {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `<video id="${trial_name}-vid" class="trial-visual" src="${BASE}${filename}" autoplay playsinline></video>`,
+        choices: ['Next'],
+        on_load: function() {
+            const group = document.getElementById('jspsych-html-button-response-btngroup');
+            if (group) group.classList.add('continue-btn-group');
+            const btn = group && group.querySelector('button');
+            if (btn) {
+                btn.disabled = true;
+                const vid = document.getElementById(`${trial_name}-vid`);
+                if (vid) {
+                    vid.addEventListener('ended', () => { btn.disabled = false; });
+                    vid.addEventListener('error', () => { btn.disabled = false; });
+                }
+            }
+        },
+        data: { trial_type: trial_name }
+    };
+}
+
+const intro_video = buildVideoTrialWithNext('overall_study_intro.mp4', 'overall_study_intro');
+const warmup_practice = buildVideoTrial('warmup_practice.mp4', 'warmup_practice');
+const warmup_finish = buildVideoTrialWithNext('warmup_finish.mp4', 'warmup_finish');
+const outro_video = buildVideoTrial('overall_study_end.mp4', 'overall_study_end');
+
+// ── Warmup punishment trial (single character, one of 3 positions) ──
+// The GIF plays once (loop=1 encoded in the file) then holds its last frame.
+function buildWarmupPunishTrial(position, index) {
+    return {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function() {
+            return `<img id="warmup-visual-${index}" src="${warmupUrl(position)}" class="trial-visual">`;
+        },
+        choices: "NO_KEYS",
+        trial_duration: warmup_durations[position],
+        post_trial_gap: 0,
+        on_load: function() {
+            const el = document.getElementById(`warmup-visual-${index}`);
+            // Anchor the sound-cue timer to when the GIF is ACTUALLY ready
+            // to animate (usually instant, since it was preloaded well in
+            // advance), not to when this trial's DOM was inserted.
+            onImageReady(el, function() {
+                setTimeout(playCue, warmup_sound_offset_ms[position]);
+            });
+        },
+        data: { trial_type: 'warmup_punish', warmup_position: position, warmup_index: index }
+    };
+}
+
+// ── Bullseye (attention refixation, 3 s) ──
+function bullseyeTrial(tag) {
+    return {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `
+        <div style="display:flex; justify-content:center; align-items:center; height:70vh;">
+            <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <style>
+                @keyframes pulse-svg {
+                  0% { transform: scale(0.8); opacity: 0.8; }
+                  50% { transform: scale(1.1); opacity: 1; }
+                  100% { transform: scale(0.8); opacity: 0.8; }
+                }
+                .bullseye-group {
+                  animation: pulse-svg 1s infinite ease-in-out;
+                  transform-origin: center;
+                }
+              </style>
+              <g class="bullseye-group">
+                <circle cx="100" cy="100" r="90" fill="#000000"/>
+                <circle cx="100" cy="100" r="70" fill="#ffffff"/>
+                <circle cx="100" cy="100" r="50" fill="#000000"/>
+                <circle cx="100" cy="100" r="30" fill="#ffffff"/>
+                <circle cx="100" cy="100" r="10" fill="#000000"/>
+              </g>
+            </svg>
+        </div>`,
+        choices: "NO_KEYS",
+        trial_duration: 3000,
+        data: { trial_type: tag + '_bullseye' }
+    };
+}
+
+// ── Test trial: part1 -> ANTICIPATORY FREEZE -> part2 -> outcome freeze ──
+// One <img> element; src swaps at exact phase boundaries. All phases are
+// inside a single webcam recording segment (recording spans the whole
+// timeline built in buildTestTimeline).
+//
+// `nextPart1Url`: if given, its download is kicked off in the background
+// once THIS trial's part1 is showing -- it then has this whole trial's
+// ~20+ second duration as lead time before the NEXT test trial actually
+// needs it, instead of starting cold at that trial's DOM insertion.
+function buildTestTimeline(testObj, nextPart1Url) {
+    const trials = [];
+    const f = testObj.files;
+
+    // 0. Start webcam recording FIRST.
+    trials.push(start_recording);
+
+    // 0.5. Pulsing bullseye (3 s)
+    trials.push(bullseyeTrial(testObj.name));
+
+    // 1. part1 + anticipatory freeze + part2 + outcome freeze in ONE trial
+    //    (single <img>, zero-flash src swaps; all images preloaded first)
+    trials.push({
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function() {
+            return `<img id="test-visual" src="${withCb(f.part1)}" class="trial-visual">`;
+        },
+        choices: "NO_KEYS",
+        trial_duration: part1_duration + antic_duration + part2_duration + freeze_duration,
+        on_load: function() {
+            const antic_url = withCb(f.antic);
+            const part2_url = withCb(f.part2);
+            const freeze_url = withCb(f.freeze);
+
+            // Background-preload this trial's own later-phase assets --
+            // plenty of lead time (part1_duration ms at minimum) before
+            // any of them are actually needed.
+            preloadUrl(antic_url);
+            preloadUrl(part2_url);
+            preloadUrl(freeze_url);
+            if (nextPart1Url) preloadUrl(nextPart1Url);
+
+            const el = document.getElementById('test-visual');
+            // Anchor every timer to when part1 is ACTUALLY ready to
+            // animate (usually instant, since it was preloaded well in
+            // advance), not to when this trial's DOM was inserted --
+            // otherwise a slow/cold fetch eats into the fixed time budget
+            // below and can visibly cut the shake short or skip it, while
+            // the sound cue (which doesn't care about visible content)
+            // still fires on the original schedule and ends up sounding
+            // early relative to what's on screen.
+            onImageReady(el, function() {
+                // Non-directional sound cue, fires when the star's brief
+                // angry shake begins (still inside part1, well before the split).
+                setTimeout(playCue, test_sound_offset_ms);
+                // ANTICIPATORY FREEZE: angry star at center, target not yet knowable
+                setTimeout(function() { if (el) el.src = antic_url; }, part1_duration);
+                // Reveal: authority flies to its target and removes the star
+                setTimeout(function() { if (el) el.src = part2_url; }, part1_duration + antic_duration);
+                // Outcome freeze: post-punishment looking time
+                setTimeout(function() { if (el) el.src = freeze_url; }, part1_duration + antic_duration + part2_duration);
+            });
+        },
+        data: {
+            trial_type: testObj.name + '_full_test',
+            phase_durations: {
+                bullseye: 3000,
+                part1: part1_duration,
+                anticipatory_freeze: antic_duration,
+                part2: part2_duration,
+                outcome_freeze: freeze_duration
+            }
+        }
+    });
+
+    // 2. Stop webcam recording
+    trials.push(stop_recording);
+
+    return trials;
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  RUN THE EXPERIMENT
+// ════════════════════════════════════════════════════════════════════
+
+const debrief_page = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+        <div class="instructions-box" style="max-width: 800px; margin: 40px auto; text-align: left; line-height: 1.7; font-family: Arial, sans-serif;">
+            <h1 style="text-align: center; margin-bottom: 30px; font-size: 2.2em; font-weight: normal; color: #333;">Thank you!</h1>
+
+            <p style="margin-bottom: 1.5em; font-size: 1.05em; color: #444;">This study is a follow-up to our previous research examining how children trace fault and responsibility. In this combined study, we examine and compare children's judgments in two different scenarios: causal chains (where a distal cause shape initiates an action that propagates through a proximal cause shape to break a cube) and single causes (where only the proximal cause shape directly breaks the cube while the distal cause shape remains inactive).</p>
+
+            <p style="margin-bottom: 1.5em; font-size: 1.05em; color: #444;">In our previous work, we found that younger children tend to focus on the direct, proximal cause (the agent that physically contacts the object), while older children can trace responsibility back to the initial, distal cause (the agent that started the chain reaction).</p>
+
+            <p style="margin-bottom: 1.5em; font-size: 1.05em; color: #444;">With this design, we use a non-verbal eye-tracking method. By measuring where children look on the screen while watching shapes interact — especially during the moment just before the star authority chooses which shape to punish — we are testing whether younger children can represent these causal structures implicitly, even when they struggle to express these relationships verbally.</p>
+
+            <p style="margin-bottom: 1.5em; font-size: 1.05em; color: #444;"><strong>A note on child behavior:</strong> Please note that there are many reasons a child might look more or less at a particular shape on any given trial (such as a preference for a certain color or shape, or simply looking around), and that is completely normal and okay! That is why we average looking times over many children to find general patterns rather than looking at individual responses.</p>
+
+            <p style="margin-bottom: 1.5em; font-size: 1.05em; color: #444;"><strong>Compensation:</strong> As a reminder, you will receive a $5 Amazon.com gift card via email within approximately a week of completing the study.</p>
+
+            <p style="margin-bottom: 2em; font-size: 1.05em; color: #444;">If you are interested in learning more about this topic, please visit our lab website: <a href="https://markmanlab.stanford.edu" target="_blank" style="color: #337ab7; text-decoration: none;">markmanlab.stanford.edu</a>, or check out this paper:
+            <a href="https://davdrose.github.io/assets/pdf/cause_fault_cog_sci.pdf" target="_blank" style="color: #337ab7; text-decoration: none;">https://davdrose.github.io/assets/pdf/cause_fault_cog_sci.pdf</a>. Thank you again for your participation!</p>
+
+            <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+                <button id="fb-share-btn" class="jspsych-btn" style="background-color: #3b5998; color: white; border: none; padding: 12px 24px; font-size: 1.1em; border-radius: 4px; cursor: pointer; margin-right: 15px; font-weight: bold;">Share this study on Facebook!</button>
+                <button id="exit-btn" class="jspsych-btn" style="background-color: #5cb85c; color: white; border: none; padding: 12px 24px; font-size: 1.1em; border-radius: 4px; cursor: pointer; font-weight: bold;">Exit</button>
+            </div>
+        </div>
+    `,
+    choices: "NO_KEYS",
+    on_load: function() {
+        const fbBtn = document.getElementById('fb-share-btn');
+        if (fbBtn) {
+            fbBtn.addEventListener('click', function() {
+                const studyUrl = window.location.href;
+                const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(studyUrl)}`;
+                window.open(fbShareUrl, '_blank');
+            });
+        }
+        const exitBtn = document.getElementById('exit-btn');
+        if (exitBtn) {
+            exitBtn.addEventListener('click', function() {
+                window.location.href = "https://childrenhelpingscience.com/studies/history/";
+            });
+        }
+    },
+    data: { trial_type: 'debrief' }
+};
+
+jsPsych.run([
+    // ── Setup ──
+    { type: jsPsychFullscreen, fullscreen_mode: true },
+    video_config,
+    video_consent,
+    instructions,
+
+    // ── Intro Sequence ──
+    intro_video,
+    warmup_practice,
+    warmup_finish,
+
+    // ── Record randomizations (incl. warmup order) ──
+    {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: '',
+        choices: [],
+        trial_duration: 0,
+        data: {
+            trial_type: 'randomization_info',
+            warmup_order: warmup_positions.slice(),
+            test_order: [test_order[0].name, test_order[1].name],
+            direction: direction,
+            assigned_combo: assigned_combo,
+            context: context,
+            phase_durations: {
+                warmup: warmup_durations,
+                part1: part1_duration,
+                anticipatory_freeze: antic_duration,
+                part2: part2_duration,
+                outcome_freeze: freeze_duration
+            }
+        }
+    },
+
+    // ── Warmup Phase: 3 punishment-only warmups, single character,
+    //    positions randomized (order recorded above) ──
+    bullseyeTrial('warmup_0'),
+    buildWarmupPunishTrial(warmup_positions[0], 0),
+    bullseyeTrial('warmup_1'),
+    buildWarmupPunishTrial(warmup_positions[1], 1),
+    bullseyeTrial('warmup_2'),
+    buildWarmupPunishTrial(warmup_positions[2], 2),
+
+    // ── Test Phase 1 (preloads test phase 2's part1.gif in the background) ──
+    ...buildTestTimeline(test_order[0], withCb(test_order[1].files.part1)),
+
+    // ── Test Phase 2 ──
+    ...buildTestTimeline(test_order[1], null),
+
+    // ── Outro Sequence ──
+    outro_video,
+
+    // ── End ──
+    { type: jsPsychFullscreen, fullscreen_mode: false, delay_after: 0 },
+    { type: chsSurvey.ExitSurveyPlugin },
+    debrief_page
+]);

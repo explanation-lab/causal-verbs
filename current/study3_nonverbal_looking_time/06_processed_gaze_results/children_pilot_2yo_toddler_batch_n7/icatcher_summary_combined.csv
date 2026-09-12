@@ -1,0 +1,15 @@
+Response UUID,Age (Days),Age (Years),Frame Index,Condition,Left Looking Frames,Right Looking Frames,Away/Other Frames,Video Filename
+cv_7ebacb663549df3b,750,2.05,9,proximal,405,87,14,cv_5015ffdecace81ac.webm
+cv_7ebacb663549df3b,750,2.05,13,distal,140,27,49,cv_12076be29d0a2d7f.webm
+cv_f2073b4bbd9e7ae9,780,2.14,9,distal,53,125,117,cv_253aba666156bcd7.webm
+cv_f2073b4bbd9e7ae9,780,2.14,13,proximal,107,68,120,cv_ce49167a8a859d1e.webm
+cv_9a793f2454efe491,1050,2.87,9,distal,118,439,54,cv_b12838d52dc84bea.webm
+cv_9a793f2454efe491,1050,2.87,13,proximal,418,193,6,cv_f27d199cb3eca837.webm
+cv_654ce23e3b349cf6,1080,2.96,9,distal,32,85,10,cv_f4ec0027dc71c434.webm
+cv_654ce23e3b349cf6,1080,2.96,13,proximal,94,42,1,cv_e2529d58ec12eb5e.webm
+cv_578448fb7f60a3a4,960,2.63,9,proximal,452,141,0,cv_becb5ac1687a724c.webm
+cv_578448fb7f60a3a4,960,2.63,13,distal,309,282,1,cv_23bfd5ee8560b802.webm
+cv_52d5f1f06feb3b2f,840,2.3,9,proximal,149,17,284,cv_d3cbede563a2dd47.webm
+cv_52d5f1f06feb3b2f,840,2.3,13,distal,287,1,168,cv_d47bf164fc5b86af.webm
+cv_254dc36bb02d6465,870,2.38,9,distal,193,261,1,cv_e471f7d8be9655de.webm
+cv_254dc36bb02d6465,870,2.38,13,proximal,183,265,7,cv_0dd1f4947bd5a931.webm

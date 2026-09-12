@@ -1,0 +1,3 @@
+Response UUID,Age (Days),Age (Years),Frame Index,Condition,Left Looking Frames,Right Looking Frames,Away/Other Frames,Video Filename
+cv_3b300ae43a4c65b9,1950,5.34,9,proximal,14,3,574,cv_e93c5dcaf70824e0.webm
+cv_3b300ae43a4c65b9,1950,5.34,13,distal,0,0,590,cv_024a5bb53e8eba94.webm

@@ -1,0 +1,3 @@
+ParticipantID,TrialIndex,TrialType,Left Looking Frames,Right Looking Frames,Center Looking Frames,NoFace Frames,Left Looking %,Right Looking %,Annotation File
+cv_4639a6ec9132a69b,1,distal,112,118,71,0,37.21,39.2,cv_bb01c9a3178b0d2f.txt
+cv_4639a6ec9132a69b,2,proximal,130,134,36,0,43.33,44.67,cv_87ffa1585bc2554f.txt

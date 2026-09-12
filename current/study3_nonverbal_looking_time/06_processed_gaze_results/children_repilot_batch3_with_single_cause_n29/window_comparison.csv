@@ -1,0 +1,17 @@
+context,condition,mean,sem,count,window
+chains,distal,0.123,0.072,15,0-1s
+chains,proximal,0.953,0.026,13,0-1s
+single_cause,distal,0.12,0.085,13,0-1s
+single_cause,proximal,0.885,0.07,12,0-1s
+chains,distal,0.4,0.068,15,1-3s
+chains,proximal,0.712,0.068,14,1-3s
+single_cause,distal,0.436,0.09,13,1-3s
+single_cause,proximal,0.838,0.064,12,1-3s
+chains,distal,0.488,0.063,16,3-20s
+chains,proximal,0.719,0.048,15,3-20s
+single_cause,distal,0.425,0.05,12,3-20s
+single_cause,proximal,0.62,0.044,13,3-20s
+chains,distal,0.466,0.058,16,full
+chains,proximal,0.732,0.043,15,full
+single_cause,distal,0.378,0.055,13,full
+single_cause,proximal,0.668,0.038,13,full
