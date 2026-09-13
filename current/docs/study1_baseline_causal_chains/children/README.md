@@ -1,7 +1,9 @@
-# Study 1 — baseline causal chains — children
+# Study 1 — Baseline causal chains — children
 
-Current preregistered child data missing; 26 children were reported at handoff. Archived pilot derivatives do not fill this gap. Protocol document: [exp1_children.docx](preregistration/exp1_children.docx); immutable registration/deployment match unverified.
+Start with the [study guide](../README.md) for the scientific question and what participants do.
 
-Current platform/recruitment status and precise deployment IDs were not checked.
+Current child data were collected, but the dataset has not been added here yet. The child data folder will hold it once it is received. Read the [child preregistration](preregistration/exp1_children.docx) for the study plan.
 
-[Experiment files](../../../code/experiments/study1_baseline_causal_chains/children) · [Data](../../../data/study1_baseline_causal_chains/children) · [Figures](../../../figures/study1_baseline_causal_chains/children) · [Study guide](../README.md)
+Next: add the data, confirm which experiment version produced them, and plan the analysis with the project lead. Older pilots should not be used as a substitute.
+
+[Experiment files](../../../code/experiments/study1_baseline_causal_chains/children) · [Data](../../../data/study1_baseline_causal_chains/children) · [Figures](../../../figures/study1_baseline_causal_chains)

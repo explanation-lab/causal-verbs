@@ -1,5 +1,5 @@
-# Study 3 — nonverbal — children: data
+# Study 3 — Nonverbal — older children datasets
 
-No files are confidently assigned to this slot in the supplied handoff. The directory is an organizational placeholder, not evidence that a dataset, implementation or analysis exists.
+No datasets are stored in this folder. See [the older-version guide](../../../docs/study3_nonverbal/README.md) for what is available elsewhere.
 
-See [the study guide](../../../docs/study3_nonverbal/README.md).
+Start with [the current study](../../../../current/docs/study3_nonverbal/README.md) unless you have been assigned to work with an older version.

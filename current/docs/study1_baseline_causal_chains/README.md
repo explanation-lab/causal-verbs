@@ -1,19 +1,54 @@
-# Study 1 — baseline causal chains
+# Study 1 — Baseline causal chains
 
-Authoritative guide to the organized screened import. Scientific handoff acceptance remains unresolved.
+## What is this study asking?
 
-[Experiments](../../code/experiments/study1_baseline_causal_chains) · [Data](../../data/study1_baseline_causal_chains) · [Figures](../../figures/study1_baseline_causal_chains) · [Archive](../../../archive/docs/study1_baseline_causal_chains/README.md) · [Handoff gaps](../../../docs/handoff/HANDOFF_STATUS.md)
+When two people's actions lead to the same outcome, do we give them the same causal responsibility and blame? We also ask whether children and adults make the same judgments.
 
-Adults and children evaluate distal and proximal agents in baseline causal chains using caused, lexical-causative, fault and punishment questions. The hypotheses and age-related predictions are recorded in the supplied protocol documents.
+A **causal chain** is a sequence in which one person's action leads another person to produce the final outcome. For example, Andy bumps into Suzy, and Suzy then falls into and breaks a fence. Andy is the earlier or **distal** cause; Suzy is the later or **proximal** cause.
 
-Adult browser code and child CHS/jsPsych code include operational images/videos and editable slide sources. The adult preregistered dataset `chains_baseline_full_run-responses.csv` contains 100 screened response rows. Current child data are **missing**; the handoff reports 26 children aged 3–9 collected so far. Older child pilot derivatives in the archive are not that current dataset.
+## What happens in the study?
 
-`adults/preregistration/exp1_adults.docx` and `children/preregistration/exp1_children.docx` are the applicable current verbal protocol documents. Their immutable registration records and deployed-version matches remain unverified.
+Adults view illustrated stories, and children watch short narrated videos. The scenarios involve a broken fence or a cracked mirror. Participants answer questions about each character:
 
-Original statistical and plot-generating scripts are **missing**. Conversion/image-size helpers are supplied experiment utilities, not substitutes for those analyses. Summary PNGs and extracted talk images are retained at study level because population/cohort attribution is not established for every plot; no new figure was generated.
+- Did this person **cause** the outcome?
+- Did this person **break** the fence or **crack** the mirror?
+- Was it this person's **fault**?
+- Should this person be **punished**?
 
-The handoff describes adult collection as completed and child collection as ongoing. Current dashboards were not checked. Recover child exports through secure channels, the original analyses, inclusion rules, figure/cohort maps and exact platform/deployment IDs.
+The contrast between “cause the fence to break” and “break the fence” matters: a specific verb such as *break* is sometimes called a **lexical causative**. We test whether that wording changes which person people select. Children answer using yes/no picture buttons after hearing each question.
 
-[Adults](adults/README.md) · [Children](children/README.md) · [Original handoff notes](source_notes/HANDOFF_README.source.txt)
+The online experiments use **jsPsych**, a JavaScript library that presents study materials and records responses in a browser. The child version runs through **Children Helping Science (CHS/Lookit)**, our online platform for child studies.
 
-Original notes describe the handoff at the time they were written; their historical paths and completeness claims are not current operating instructions. Future analysis must use relative paths. No R/Rmd analysis was supplied or created.
+## Adults
+
+The preregistered adult data have been collected. The [adult dataset](../../data/study1_baseline_causal_chains/adults/chains_baseline_full_run-responses.csv) is already here and contains 100 response rows.
+
+Read the [adult preregistration](adults/preregistration/exp1_adults.docx) for the planned hypotheses, sample size and analyses. A preregistration records those plans before the main data are analyzed. The [adult experiment folder](../../code/experiments/study1_baseline_causal_chains/adults/) contains the browser code, images and editable slides.
+
+The [existing figures](../../figures/study1_baseline_causal_chains/) are available, but we do not yet have the code that created them. Before reusing a plot, confirm which dataset and age group it shows.
+
+## Children
+
+Current child data **were collected**, but that dataset is not yet in the repository. It will be added to the [child data folder](../../data/study1_baseline_causal_chains/children/) when received. Older pilot files should not be used in its place.
+
+The [child experiment code and videos](../../code/experiments/study1_baseline_causal_chains/children/) and [child preregistration](children/preregistration/exp1_children.docx) are available. We still need to confirm which experiment version produced the collected child data. The [study figures](../../figures/study1_baseline_causal_chains/) can be inspected while that dataset is being located.
+
+## What still needs to be done
+
+- [ ] Add the current child dataset when it is received.
+- [ ] Confirm which experiment version produced the child dataset.
+- [ ] Recover the original statistical and plotting code if available, and identify the data behind each figure.
+- [ ] Confirm the registered study plan and any later changes before starting the analysis.
+- [ ] Build the [shared R analysis](../../code/R/README.md) only after the data and analysis decisions are confirmed.
+
+## Where to find things
+
+| Material | Link |
+| --- | --- |
+| Experiment code and stimuli | [Adults](../../code/experiments/study1_baseline_causal_chains/adults/) · [Children](../../code/experiments/study1_baseline_causal_chains/children/) |
+| Participant datasets | [Adults](../../data/study1_baseline_causal_chains/adults/) · [Children](../../data/study1_baseline_causal_chains/children/) |
+| Study information and preregistrations | [Adults](adults/README.md) · [Children](children/README.md) |
+| Plots and results | [Study figure folder](../../figures/study1_baseline_causal_chains/) |
+| Future shared analysis | [R analysis plan](../../code/R/README.md) |
+
+[Back to the project overview](../../../README.md). Work on the files assigned by the project lead; keep existing data, figures, protocols and stimuli unchanged unless a specific update has been agreed.

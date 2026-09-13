@@ -1,28 +1,62 @@
-# Study 3 — nonverbal
+# Study 3 — Nonverbal
 
-Authoritative guide to the organized screened import. Scientific handoff acceptance remains unresolved.
+## What is this study asking?
 
-[Experiments](../../code/experiments/study3_nonverbal) · [Data](../../data/study3_nonverbal) · [Figures](../../figures/study3_nonverbal) · [Archive](../../../archive/docs/study3_nonverbal/README.md) · [Python pipeline](../../code/python/study3_nonverbal/README.md) · [Handoff gaps](../../../docs/handoff/HANDOFF_STATUS.md)
+Can people's looking patterns tell us whom they expect to be punished after something goes wrong? This study uses **nonverbal measures**: we measure where and how long participants look, rather than relying on their spoken answers.
 
-Adult Proliferate webcam and child CHS/Lookit implementations examine looking in causal-chain and punishment scenarios. The current child design combines chains and single-cause trials; it stays together rather than duplicating the single-cause condition into a separate dataset.
+Some animations show a **causal chain**, where one character's action causes another character to produce the final outcome. Others show a single character directly causing it. The earlier character in a chain is sometimes called the **distal** cause; the later one is the **proximal** cause.
 
-Current child experiment materials include split GIFs, freeze PNGs, warmup media and two supplied CHS driver copies. The adult driver still references Sunny's earlier `pilot_kids_version` assets, preserved with that archived child implementation. The new folder location does not establish stimulus/deployment equivalence.
+## What happens in the study?
 
-| Supplied batch | Population | Combined rows / coded participants | Interpretation |
-| --- | --- | --- | --- |
-| `adults_pilot_mediapipe_n61` | Adults | 122 / 61 | Webcam pilot; referenced frame-level adult annotation files absent |
-| `children_pilot_batch1_n80` | Children | 146 / 73 | Pilot; n80 name and exclusions need reconciliation |
-| `children_pilot_2yo_toddler_batch_n7` | Children | 14 / 7 | Toddler pilot |
-| `children_repilot_batch3_with_single_cause_n29` | Children | 58 / 29 | Repilot with chains and single cause; cropped/full numeric gaze output and derived transition/window tables supplied |
+Participants watch animated characters cause an outcome and see a star character punish one of them. Practice scenes introduce the events. In the current child code, the action pauses before and after punishment so we can measure looking during those periods. A webcam records the participant's face during the relevant trials.
 
-These are **pilot/repilot processed gaze datasets**, not verified completed preregistered datasets. Raw participant recordings and identifiable exports remain **SECURE-EXTERNAL**, with location, custodian, inventory and access unresolved.
+**Gaze coding** means turning the video into measurements of looking direction. The child processing code uses **iCatcher**, software that classifies looking left, right or away. The adult code uses **MediaPipe**, software that tracks facial and eye landmarks to estimate looking. These measurements can then be compared across trials and participants.
 
-The two `prior_protocols/exp3_*.docx` documents are preserved by population. The adult document describes explicit ratings, whereas the supplied current adult pilot records webcam looking; the design also evolved to include single cause and anticipatory windows. Neither document is asserted to govern the current deployed design. Current preregistration/deployment/version matching remains unresolved.
+The browser experiments use **jsPsych**, a JavaScript library for presenting materials and recording responses. The child version uses **Children Helping Science (CHS/Lookit)**, an online child-study platform; the adult version uses **Proliferate**, an online experiment platform.
 
-Supplied Python includes stimulus generation, iCatcher cropped/full processing, local MediaPipe, a Sherlock adaptation, input preparation/merging helpers, and **one unique downstream script**, `unfair_punishment_analysis.py`, retained in two original copies. Most reported statistical and figure-generating code is missing. Reports and result decks are historical, unchanged evidence, not independently reproduced findings.
+## Adults
 
-Read the [pipeline audit](../../../docs/NONVERBAL_REPRODUCIBILITY.md) before execution. Generator output paths, timing JSONs, supplementary asset sources/instructions, pinned environments and Sunny's personal asset hosting remain unresolved. No generator, processing pipeline or live study was run during reorganization.
+An adult webcam pilot dataset is available for **61 participants** in [adults_pilot_mediapipe_n61/](../../data/study3_nonverbal/adults/adults_pilot_mediapipe_n61/). A pilot is an early study used to try out the design. There are 122 rows in the combined summary table; rows represent trial summaries, not 122 different people.
 
-[Adults](adults/README.md) · [Children](children/README.md) · [Original handoff notes](source_notes/HANDOFF_README.source.txt)
+The [adult experiment code](../../code/experiments/study3_nonverbal/adults/), [MediaPipe processing code](../../code/python/study3_nonverbal/mediapipe/README.md) and [adult figures](../../figures/study3_nonverbal/adults/) are available. The original videos and some detailed per-frame output referenced in the tables are not stored here.
 
-Original notes describe the handoff at the time they were written; their historical paths and completeness claims are not current operating instructions. Future analysis must use relative paths. No R/Rmd analysis was supplied or created.
+The [earlier adult protocol](adults/prior_protocols/exp3_adults.docx) describes an explicit-rating study in which participants give answers. It should not be assumed to be the plan for this webcam version. Before the next study, confirm which written plan applies and which experiment version produced the existing pilot data.
+
+## Children
+
+Three child pilot/repilot datasets are available. A repilot tests a revised version of a design.
+
+| Folder | Participants in the available summaries | What to know |
+| --- | ---: | --- |
+| [children_pilot_batch1_n80](../../data/study3_nonverbal/children/children_pilot_batch1_n80/) | 73 | The folder says n80; we need to explain the difference |
+| [children_pilot_2yo_toddler_batch_n7](../../data/study3_nonverbal/children/children_pilot_2yo_toddler_batch_n7/) | 7 | Toddler pilot |
+| [children_repilot_batch3_with_single_cause_n29](../../data/study3_nonverbal/children/children_repilot_batch3_with_single_cause_n29/) | 29 | Revised pilot with chains and single-cause trials; detailed gaze labels and additional summary tables are included |
+
+These are pilot datasets. They should not be treated as a completed main study simply because code or a protocol document is present. The [current child code and stimuli](../../code/experiments/study3_nonverbal/children/) include design changes that still need to be matched to the earlier recordings.
+
+The [earlier child protocol](children/prior_protocols/exp3_children.docx) is available, but we need to establish how it relates to the next planned version. A preregistration records hypotheses, sample size and analysis plans in advance; these earlier documents are not a substitute for confirming the plan for the next study. [Child figures](../../figures/study3_nonverbal/children/) and [existing reports](children/reports/) show previous results.
+
+## What still needs to be done
+
+- [ ] Confirm where the original participant videos are securely stored and that the assigned researchers have permission to access them. Keep raw video/audio and identifying information outside GitHub, including recordings embedded in spreadsheet exports.
+- [ ] Confirm which experiment version produced each pilot dataset, and explain the 73-versus-80 participant count.
+- [ ] Document and check the steps from participant video → gaze coding → data tables → analysis → figures, starting with the [Python guide](../../code/python/study3_nonverbal/README.md).
+- [ ] Recover missing analysis scripts, detailed adult gaze outputs and the software versions needed to run the processing code.
+- [ ] Check that the stimulus-generation scripts reproduce the actual study stimuli, using a separate output location so existing stimuli are not overwritten. Fix output paths; recover or check the missing timing files that specify animation durations.
+- [ ] Document how the introductory, ending and practice videos and sound cues were made.
+- [ ] Move experiment assets to lab-controlled hosting before deploying the study again. The adult and child code currently load different sets of media from an external personal GitHub account.
+- [ ] Confirm the written study plan and decide which analysis will be used for the next version.
+
+There is substantial Python processing code, plus one existing analysis script in two identical copies. We still need several scripts behind the reports and plots. Looking left or right also cannot separate looking at the star from looking at a character when they overlap on screen; take that into account when deciding what the next analysis can answer.
+
+## Where to find things
+
+| Material | Link |
+| --- | --- |
+| Experiment code and stimuli | [Adults](../../code/experiments/study3_nonverbal/adults/) · [Children](../../code/experiments/study3_nonverbal/children/) |
+| Participant datasets | [Adults](../../data/study3_nonverbal/adults/) · [Children](../../data/study3_nonverbal/children/) |
+| Study information and earlier protocols | [Adults](adults/README.md) · [Children](children/README.md) |
+| Plots and results | [Study figure folder](../../figures/study3_nonverbal/) |
+| Processing and analysis | [Python guide](../../code/python/study3_nonverbal/README.md) |
+
+[Back to the project overview](../../../README.md). Work on the files assigned by the project lead; keep existing data, figures, protocols and stimuli unchanged unless a specific update has been agreed.

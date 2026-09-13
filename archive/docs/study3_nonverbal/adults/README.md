@@ -1,5 +1,7 @@
-# Archived adults — Study 3 — nonverbal
+# Study 3 — Nonverbal — older adults materials
 
-[Experiments](../../../code/experiments/study3_nonverbal/adults) · [Data](../../../data/study3_nonverbal/adults) · [Figures](../../../figures/study3_nonverbal/adults) · [Archive study guide](../README.md)
+Use these files only for an assigned task involving an older study version. Keep the archived files unchanged. If a folder contains only a README, no other files are stored in that folder yet.
 
-Version folders preserve the original identities; a README-only folder means no material was confidently assigned to that category/population. Do not infer unrecorded collection, deployment or missing analyses from the directory scaffold.
+[Experiment files](../../../code/experiments/study3_nonverbal/adults) · [Data](../../../data/study3_nonverbal/adults) · [Figures](../../../figures/study3_nonverbal/adults)
+
+Read the [older-version guide](../README.md) for what is available, or return to [the current study](../../../../current/docs/study3_nonverbal/README.md).

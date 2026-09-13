@@ -1,5 +1,5 @@
-# Study 1 — baseline causal chains — children: data
+# Study 1 — Baseline causal chains — child data
 
-No files are confidently assigned to this slot in the supplied handoff. The directory is an organizational placeholder, not evidence that a dataset, implementation or analysis exists.
+The current Study 1 child data were collected. The dataset will be stored here once it is received and added to the repository.
 
-See [the study guide](../../../docs/study1_baseline_causal_chains/README.md).
+[Study guide](../../../docs/study1_baseline_causal_chains/README.md). Keep identifying information and original participant recordings outside GitHub.

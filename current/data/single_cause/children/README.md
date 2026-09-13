@@ -1,5 +1,5 @@
-# Single-cause studies — children: data
+# Single cause — child data
 
-No files are confidently assigned to this slot in the supplied handoff. The directory is an organizational placeholder, not evidence that a dataset, implementation or analysis exists.
+An earlier child single-cause pilot was run. Its participant dataset still needs to be located and will be stored here once it is ready to add. Existing age-group figures are linked from the study guide.
 
-See [the study guide](../../../docs/single_cause/README.md).
+[Study guide](../../../docs/single_cause/README.md). Keep identifying information and original participant recordings outside GitHub.

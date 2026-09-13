@@ -1,5 +1,7 @@
-# Study 1 — baseline causal chains — children: figures
+# Study 1 — Baseline causal chains — children figures
 
-No files are confidently assigned to this slot in the supplied handoff. Supplied plots with uncertain or combined populations remain at study level. The directory is an organizational placeholder, not evidence that a dataset, implementation or analysis exists.
+The existing plots are in the [study figure folder](../), one level above this folder. Some plots combine groups, and others still need to be matched to the data they show.
 
-See [the study guide](../../../docs/study1_baseline_causal_chains/README.md).
+We do not yet have the scripts that created those figures. Keep the existing images unchanged; use this folder for future children figures once the analysis is agreed.
+
+[Study guide](../../../docs/study1_baseline_causal_chains/README.md).

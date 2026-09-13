@@ -1,62 +1,64 @@
-# Causal verbs — Cornell Explanation Lab
+# Causal responsibility — Cornell Explanation Lab
 
-We study how children and adults assign causation, fault and punishment in causal chains, how intention changes these judgments, and what nonverbal looking reveals about expectations.
+This repository contains the studies in our causal responsibility project. We study how children and adults decide what caused an outcome, who is at fault, and who should be punished. Some studies examine chains of events, some compare intentional and accidental actions, and others measure where people look instead of asking them to explain their judgments.
 
-**The organized, screened import is complete. Sunny's scientific handoff gaps remain unresolved.** The ordinary-Git `main` baseline and this reorganization do not constitute scientific handoff acceptance. See [project status](PROJECT_STATUS.md) and [handoff status](docs/handoff/HANDOFF_STATUS.md).
+## Start with your study
 
-## Start here
-
-`current/` contains the handoff-designated working versions and associated evidence. It does not certify current deployment, completed collection or reproducibility. `archive/` preserves earlier pilots and versions, with their original version names. Both separate code, data, documentation and figures, following the organization of [teleological_properties](https://github.com/cicl-stanford/teleological_properties) within the [Explanation Lab template](https://github.com/explanation-lab/research-project-template) conventions.
+If you are joining a project, start in `current/` and read the README for your assigned study. Do not work from `archive/` unless the study README specifically tells you to look there.
 
 ```text
-current/
-  code/
-    R/                  # README only; original analysis missing
-    experiments/        # study → adults/children → implementation/assets
-    python/             # supplied nonverbal pipeline and limited analysis
-  data/                 # study → adults/children → dataset or pilot batch
-  docs/                 # study → adults/children → protocols/reports/notes
-  figures/              # study → adults/children; shared/uncertain plots at study level
-archive/
-  code/experiments/     # study → adults/children → historical version
-  code/python/          # supplied historical processing/generation helpers
-  data/                 # study → adults/children → historical cohort/version
-  docs/                 # study/population notes; unclassified historical material
-  figures/              # historical results; unclassified historical figures
-docs/                   # project-wide reproducibility and handoff provenance
-reference_literature/   # background papers and shared lab talk
-presentation_assets_conference_talk/
-tools/handoff/          # integrity verification and historical import policy
+current/    = studies and materials we are currently using
+archive/    = older pilots and previous versions
 ```
 
-Every current study has adult and child folders for experiments, data, docs and figures. A README-only folder explicitly marks missing or unassigned material. There are no `raw/` or `processed/` levels under data.
+Inside `current/`, each study has four main parts:
 
-| Research line | Adult / child status | Preregistration | Data present | Analysis and major gaps |
-| --- | --- | --- | --- | --- |
-| [Study 1: baseline chains](current/docs/study1_baseline_causal_chains/README.md) | Adult preregistered run completed; child collection reported (26 at handoff), current data missing | Adult + child documents; immutable registration links unverified | 100 adult response rows; older pilots in archive | Original analysis/figure scripts and current child dataset missing; cohort/deployment matching open |
-| [Study 2: intention × chains](current/docs/study2_intention_causal_chains/README.md) | Adult + child implementations; preregistered collection reported, child collection substantial | Adult + child documents; immutable registration links unverified | Four earlier adult pilot exports, **not** the current preregistered run | Current adult and child datasets and original analysis scripts missing |
-| [Study 3: nonverbal](current/docs/study3_nonverbal/README.md) | Adult webcam pilot and child pilot/repilot; live/version status unresolved | Two prior-protocol documents; **not verified current-design preregistrations** | Adult n61 and three child pilot/repilot batches; **not verified preregistered datasets** | Gaze pipelines + one unique downstream Python script; most analyses, secure raw-data custody and protocol/deployment matching unresolved |
-| [Single cause](current/docs/single_cause/README.md) | Adult pilot; child arm reported awaiting approval at handoff | No standalone preregistration supplied | 32 adult pilot response rows; reported analytic N=30 needs reconciliation | Original analysis scripts and cohort mapping missing; nonverbal single-cause condition is in Study 3 |
+```text
+code/       = experiment and analysis code
+data/       = participant datasets
+docs/       = preregistrations and study information
+figures/    = plots and results
+```
 
-**No R or Rmd analysis files were supplied by Sunny.** [current/code/R/](current/code/R/) contains only a README. Supplied Study 1, Study 2 and single-cause figures cannot currently be reproduced from original analysis scripts because those scripts were not supplied. A PNG is evidence of a supplied figure, not an executable analysis. The [nonverbal pipeline](docs/NONVERBAL_REPRODUCIBILITY.md) is only partly reproducible.
+Each part uses the same study names and has adult and child folders. Experiment code is in `code/experiments/`; analysis and processing code are in `code/R/` and `code/python/`. A folder containing only a README usually marks where a file will go once it is available. Some figures sit directly in a study's figure folder because they combine age groups or still need to be matched to a dataset.
 
-## Working with this repository
+## Where the studies stand
 
-Use normal Git; Git LFS is not required. Authenticate with your authorized lab GitHub account, then:
+Updated September 13, 2026. The links below take you directly to the four study guides.
+
+| Study | Adults | Children | Main next step |
+| --- | --- | --- | --- |
+| [Study 1: Baseline causal chains](current/docs/study1_baseline_causal_chains/README.md) | Data collected; adult preregistered data are here | Data collected; current dataset needs to be added | Add and analyze child data |
+| [Study 2: Intention × causal chains](current/docs/study2_intention_causal_chains/README.md) | Data collected; current preregistered dataset needs to be added | Data collection ongoing | Finish child collection and analyze |
+| [Study 3: Nonverbal](current/docs/study3_nonverbal/README.md) | Adult pilot data available | Child pilot/repilot data available | Clarify and document the analysis steps before the next study |
+| [Single cause](current/docs/single_cause/README.md) | Adult pilot data available | Child pilot was run; underlying dataset still needs to be located | Locate child data and organize analyses |
+
+A **pilot** is an early study used to try out a design or method; a repilot tests a revised version. A **preregistration** records the study's hypotheses, planned sample size and analysis plan before the main data are analyzed. Study 1 and Study 2 have adult and child preregistration documents. Study 3 has earlier protocol documents that need to be checked against the next planned version. Single cause has no separate preregistration here.
+
+## Your first tasks
+
+1. Read your assigned study guide and its adult or child section.
+2. Open the experiment materials, dataset descriptions and figures linked there. You can read code and documents on GitHub without running an experiment.
+3. Review the study's checklist with the project lead and choose a specific task. [PROJECT_STATUS.md](PROJECT_STATUS.md) lists the immediate priorities.
+
+We have result figures for the verbal studies, but we do not yet have the code that created them. No R or R Markdown analysis files are currently available. R is a programming language used for statistics; R Markdown combines written explanations, R code and results in one document. The planned [shared R analysis](current/code/R/README.md) will be built after the relevant datasets and analysis decisions are confirmed. Do not guess the original analysis from the plots.
+
+## Working on files
+
+Git records changes to files; GitHub holds the lab's shared copy. Cloning makes a copy on your computer, pulling gets shared updates, committing records your changes, and pushing sends those commits to GitHub. Use your authorized lab GitHub account. This project uses normal Git and does not require Git LFS.
 
 ```sh
 git clone https://github.com/explanation-lab/causal-verbs.git
 cd causal-verbs
 git pull
-python3 tools/handoff/verify_import.py
 ```
 
-The verification command checks preservation and static syntax; it does not run studies or analyses. All future analysis should use repository-relative input/output paths and write figures to the relevant `figures/` directory. One master Rmd is planned as **separate future work**, after original materials and analysis decisions are resolved; none was created here.
+Work on the files assigned to you in `current/`, and update the relevant study README when agreed tasks or collection status change. Keep these boundaries in mind:
 
-Experimental code, data and stimuli retain their screened bytes. Historical absolute/relative paths and Sunny's personal GitHub asset URLs remain in code; local execution and lab-controlled deployment require separate validation. Do not run a study, transfer helper or stimulus generator just to browse this repository.
+- Leave existing datasets, preregistrations and original figures unchanged. Coordinate new data additions with the project lead. Do not overwrite existing stimuli—the pictures, sounds and videos shown to participants.
+- Leave `archive/`, original source notes and internal record-keeping files alone unless you have a specific task involving them.
+- Keep raw participant video/audio, identifying information and access credentials out of GitHub. Participant data in this private repository are for authorized research use.
+- Inspect code as files; do not change a live Children Helping Science (CHS/Lookit) study just to see how it works. CHS/Lookit is the online platform used for many of our child studies. Some experiment code still loads media from an external personal GitHub account; move those assets to lab-controlled hosting before deploying the study again.
+- Use **relative paths** in future analysis: file locations within the project, rather than locations tied to one person's computer. Save new figures into the matching `current/figures/` study folder.
 
-## Provenance and access
-
-All **2,806 retained imported files**, including the **378 privacy transformations**, are preserved; the **11 exclusions** remain excluded. [Source mapping](docs/handoff/SOURCE_MAPPING.md) and the [reorganization ledger](docs/handoff/reorganization_mapping.csv) connect every file to its screened baseline. Original README notes are preserved verbatim as `*.source.txt` under documentation/source-notes areas; the new study READMEs are authoritative. Numerical reports remain unchanged and are labeled historical.
-
-This is a private repository containing coded research data. Raw participant video/audio, base64 recordings, identifiable exports, lookup tables and credentials belong in approved secure external storage, whose custody/access remains unresolved. See the [privacy review](docs/handoff/PRIVACY_REVIEW.md). Sunny Zhao prepared the source handoff; David Rose is the recipient. Owner/backup assignments and complete contributor roles remain to be confirmed. Existing notices are preserved; no new blanket license is asserted.
+For background reading and slides, see [reference material](reference_literature/README.md) and [shared presentation images](presentation_assets_conference_talk/README.md).

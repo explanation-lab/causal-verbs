@@ -1,7 +1,9 @@
-# Single-cause studies — children
+# Single cause — children
 
-Experiment implementation and materials supplied; no current dataset or standalone preregistration supplied. The handoff deck reported awaiting approval. By-age figures are not proof of a matched current child cohort; exact attribution remains unresolved.
+Start with the [study guide](../README.md) for the scientific question and what participants do.
 
-Current platform/recruitment status and precise deployment IDs were not checked.
+An earlier child intentional/accidental pilot was run, including at least 26 unique 3-year-olds. Existing child figures show ages 3–6, but the participant dataset behind them has not yet been located in the repository.
 
-[Experiment files](../../../code/experiments/single_cause/children) · [Data](../../../data/single_cause/children) · [Figures](../../../figures/single_cause/children) · [Study guide](../README.md)
+Next: locate that dataset and confirm which experiment version produced it and how it relates to later versions. No separate child preregistration is available here.
+
+[Experiment files](../../../code/experiments/single_cause/children) · [Data](../../../data/single_cause/children) · [Figures](../../../figures/single_cause)

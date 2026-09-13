@@ -1,11 +1,15 @@
-# Study 3 — nonverbal — archive
+# Study 3 — Nonverbal — older versions
 
-[Experiments](../../code/experiments/study3_nonverbal) · [Data](../../data/study3_nonverbal) · [Figures](../../figures/study3_nonverbal) · [Python helpers](../../code/python/study3_nonverbal) · [Current study](../../../current/docs/study3_nonverbal/README.md)
+Start with [the current study guide](../../../current/docs/study3_nonverbal/README.md) unless you have a specific task involving these older files. Keep archived files unchanged.
 
-Adult early-pilot and omission implementations remain under their numbered versions; their explicit-rating response exports are in data. The separate `06_non_verbal_pilot2_adult_explicit_rating/` CSV is retained as supplied, but its exact implementation match remains unresolved.
+Adult folders contain early pilots and an omission version, in which the design tests what happens when an action is left out. Three older adult datasets record explicit answers rather than webcam looking. We still need to identify the exact experiment code for `06_non_verbal_pilot2_adult_explicit_rating/`.
 
-Child `03_pilot_kids_version/` and `05_non_verbal_full_study_pre_batch3_update/` keep their generated materials and CHS drivers. Original generators, preprocessing and each version's iCatcher cluster helpers are under Python, separated by population/version. The warmup M4A and derived `temp.wav` remain as screened stimulus-production assets; they are not participant recordings.
+Child versions `03_pilot_kids_version/` and `05_non_verbal_full_study_pre_batch3_update/` contain animations and experiment code. Each version's Python files contain animation generators, input-processing helpers and iCatcher gaze coding, which labels looking direction from video. The warmup M4A and `temp.wav` are practice-scene audio files.
 
-These names preserve historical versions, not verified deployments or complete Git histories. The current adult driver still points to Sunny's hosted pilot-kids assets. The standalone nonverbal single-cause pilot is indexed under the single-cause archive.
+Some current adult code still loads media from an external personal GitHub account's older child-pilot folder. Confirm the media version before comparing data or preparing another deployment. The earlier standalone nonverbal single-cause pilot is in the single-cause archive.
 
-[Adults](adults/README.md) · [Children](children/README.md). Original source notes are historical provenance, not authoritative operating instructions.
+## Where to find things
+
+[Experiment files](../../code/experiments/study3_nonverbal) · [Data](../../data/study3_nonverbal) · [Figures](../../figures/study3_nonverbal) · [Python helpers](../../code/python/study3_nonverbal)
+
+[Adults](adults/README.md) · [Children](children/README.md)

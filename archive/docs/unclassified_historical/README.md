@@ -1,10 +1,11 @@
-# Unclassified historical material
+# Other older files to identify
 
-These files are retained without inventing a study or population assignment:
+These files are kept here because we still need to establish how they relate to the studies. Ask the project lead before using them in an analysis or presentation.
 
-- [Published-style summary figures](../../figures/unclassified_historical/published_summary_figures/): `Fig.1a.png`, `Fig.1b.png`, `Fig.2.png`, `Fig.3a.png`, `Fig.3b.png`, `Fig.4a.png`, `Fig.4b.png`, `Fig.5.png`. The handoff does not establish the study/cohort or generating code.
-- [generate_pdf.py](../../code/python/unclassified_historical/pcard_pdf_tool/generate_pdf.py) and [summary.pdf](pcard_pdf_tool/summary.pdf): supplied recruitment-purchase support, not scientific analysis. The script references unavailable historical receipts. No financial transaction or regeneration was performed.
+- [Eight summary figures](../../figures/unclassified_historical/published_summary_figures/), named `Fig.1a.png` through `Fig.5.png`: identify the study, participants and analysis behind each image.
+- [generate_pdf.py](../../code/python/unclassified_historical/pcard_pdf_tool/generate_pdf.py) and [summary.pdf](pcard_pdf_tool/summary.pdf): older purchasing paperwork and a PDF-making helper, not study analysis. The helper refers to receipts that are not in this repository.
+- The shared [timestamp-named presentation image](../../../presentation_assets_conference_talk/Image_20260528_205703.jpg): check its intended use before adding it to slides.
 
-Other unresolved assignments are documented in their study context: verbal study-level figures (including single-cause age plots), psychological-verb pilots inherited within the Study 1 archive, and the Study 3 explicit-rating pilot2 dataset whose exact code match is unknown. The timestamp-named [presentation image](../../../presentation_assets_conference_talk/Image_20260528_205703.jpg) also lacks a confirmed exact use.
+Other version questions are explained in the [Study 1](../study1_baseline_causal_chains/README.md) and [Study 3](../study3_nonverbal/README.md) older-version guides. The current single-cause guide explains the existing child figures and the missing underlying dataset.
 
-Both early adult hand-coded pilots were classifiable as intention-chain precursors and are documented under [archived Study 2](../study2_intention_causal_chains/README.md). Nothing was discarded or relabeled as a completed current cohort.
+Keep these older files unchanged. Return to the [project overview](../../../README.md) for normal study work.

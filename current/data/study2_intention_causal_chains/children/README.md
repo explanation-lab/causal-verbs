@@ -1,5 +1,5 @@
-# Study 2 — intention × causal chains — children: data
+# Study 2 — Intention × causal chains — child data
 
-No files are confidently assigned to this slot in the supplied handoff. The directory is an organizational placeholder, not evidence that a dataset, implementation or analysis exists.
+Study 2 child data collection is currently ongoing. The project lead will add the child dataset here after collection is complete.
 
-See [the study guide](../../../docs/study2_intention_causal_chains/README.md).
+[Study guide](../../../docs/study2_intention_causal_chains/README.md). Keep identifying information and original participant recordings outside GitHub.

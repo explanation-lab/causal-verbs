@@ -1,5 +1,5 @@
-# Single-cause studies — adults: data
+# Single cause — older adults datasets
 
-No files are confidently assigned to this slot in the supplied handoff. The directory is an organizational placeholder, not evidence that a dataset, implementation or analysis exists.
+No datasets are stored in this folder. See [the older-version guide](../../../docs/single_cause/README.md) for what is available elsewhere.
 
-See [the study guide](../../../docs/single_cause/README.md).
+Start with [the current study](../../../../current/docs/single_cause/README.md) unless you have been assigned to work with an older version.

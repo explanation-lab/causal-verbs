@@ -1,5 +1,5 @@
-# Study 2 — intention × causal chains — children: experiments
+# Study 2 — Intention × causal chains — older children experiment code and materials
 
-No files are confidently assigned to this slot in the supplied handoff. The directory is an organizational placeholder, not evidence that a dataset, implementation or analysis exists.
+No experiment code and materials are stored in this folder. See [the older-version guide](../../../../docs/study2_intention_causal_chains/README.md) for what is available elsewhere.
 
-See [the study guide](../../../../docs/study2_intention_causal_chains/README.md).
+Start with [the current study](../../../../../current/docs/study2_intention_causal_chains/README.md) unless you have been assigned to work with an older version.

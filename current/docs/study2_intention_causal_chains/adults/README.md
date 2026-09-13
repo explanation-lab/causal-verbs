@@ -1,7 +1,9 @@
-# Study 2 — intention × causal chains — adults
+# Study 2 — Intention × causal chains — adults
 
-Four earlier adult pilot datasets present; current preregistered adult dataset missing. Original analyses missing. Protocol document: [exp2_adults.docx](preregistration/exp2_adults.docx); immutable registration/deployment match unverified.
+Start with the [study guide](../README.md) for the scientific question and what participants do.
 
-Current platform/recruitment status and precise deployment IDs were not checked.
+Current adult data were collected; the correct preregistered dataset still needs to be added. The four adult files already here are earlier pilot datasets. Read the [adult preregistration](preregistration/exp2_adults.docx) for the main study plan.
 
-[Experiment files](../../../code/experiments/study2_intention_causal_chains/adults) · [Data](../../../data/study2_intention_causal_chains/adults) · [Figures](../../../figures/study2_intention_causal_chains/adults) · [Study guide](../README.md)
+Next: add the correct dataset and recover the code behind the existing figures if available.
+
+[Experiment files](../../../code/experiments/study2_intention_causal_chains/adults) · [Data](../../../data/study2_intention_causal_chains/adults) · [Figures](../../../figures/study2_intention_causal_chains)

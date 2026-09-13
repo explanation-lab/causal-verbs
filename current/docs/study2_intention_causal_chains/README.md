@@ -1,19 +1,48 @@
-# Study 2 — intention × causal chains
+# Study 2 — Intention × causal chains
 
-Authoritative guide to the organized screened import. Scientific handoff acceptance remains unresolved.
+## What is this study asking?
 
-[Experiments](../../code/experiments/study2_intention_causal_chains) · [Data](../../data/study2_intention_causal_chains) · [Figures](../../figures/study2_intention_causal_chains) · [Archive](../../../archive/docs/study2_intention_causal_chains/README.md) · [Handoff gaps](../../../docs/handoff/HANDOFF_STATUS.md)
+Does knowing that an action was intentional change who people think caused an outcome, who is at fault and who should be punished?
 
-This extends baseline chains with intentional versus accidental distal actions. Adults and children answer caused, lexical-causative, fault and punishment questions about both agents.
+As in Study 1, a **causal chain** links two people's actions: Andy bumps into Suzy, and Suzy breaks a fence. Andy is the earlier or **distal** cause; Suzy is the later or **proximal** cause. Here we compare a version in which Andy means to cause damage with one in which the event happens accidentally.
 
-Adult intentional/accidental v4 implementations remain separate below the adult experiment folder; child code implements the corresponding study. Editable slides and operational stimuli retain their original bytes and within-version asset organization.
+## What happens in the study?
 
-The four files in adult `adult_pilot_rounds_unordered/` contain 41, 42, 40 and 41 rows. They are **earlier adult pilots**, not the current preregistered adult run. Both the current preregistered adult dataset and current child dataset are **missing**. Substantial child collection occurred; missing files must not be described as no collection.
+Adults view illustrated stories; children watch narrated videos and answer with yes/no picture buttons. The intentional and accidental versions describe different reasons for the first person's action, while keeping the chain of events comparable.
 
-`adults/preregistration/exp2_adults.docx` and `children/preregistration/exp2_children.docx` are the applicable current verbal protocol documents. Immutable registration records/amendments and cohort-to-deployed-code matches remain unverified.
+Participants answer four kinds of question about each character: who caused the outcome, who broke/cracked the object, who is at fault and who should be punished. Comparing “cause the fence to break” with “break the fence” lets us test whether a specific causal verb changes the judgment. That specific-verb wording is sometimes called a **lexical causative**.
 
-Original statistical/figure scripts are **missing**. Supplied plots remain at study level until their populations/cohorts are confirmed; experiment conversion helpers do not reproduce them. The handoff reports ongoing preregistered collection, but current live status was not checked. Recover both current datasets, original analyses, exclusions, deployment IDs and precise cohort mappings.
+The browser code uses **jsPsych**, a JavaScript library for presenting experiments and recording responses. Children participate through **Children Helping Science (CHS/Lookit)**, our online child-study platform.
 
-[Adults](adults/README.md) · [Children](children/README.md) · [Original handoff notes](source_notes/HANDOFF_README.source.txt)
+## Adults
 
-Original notes describe the handoff at the time they were written; their historical paths and completeness claims are not current operating instructions. Future analysis must use relative paths. No R/Rmd analysis was supplied or created.
+The current adult data have been collected, but the correct preregistered dataset still needs to be added. The four files already in [adult_pilot_rounds_unordered/](../../data/study2_intention_causal_chains/adults/adult_pilot_rounds_unordered/) are **earlier pilot datasets**. A pilot is an early study used to try out the design. These files contain 41, 42, 40 and 41 rows; do not treat them as the current main-study data.
+
+The [adult experiment folder](../../code/experiments/study2_intention_causal_chains/adults/) has separate intentional and accidental versions. The [adult preregistration](adults/preregistration/exp2_adults.docx) records the hypotheses, planned sample size and analysis plan before the main data are analyzed. [Existing figures](../../figures/study2_intention_causal_chains/) are available, but the code that created them is not yet here.
+
+## Children
+
+**Child data collection is currently ongoing.** Continue collecting the planned sample. The project lead will add the child dataset to the [child data folder](../../data/study2_intention_causal_chains/children/) after collection is complete.
+
+Use the [child preregistration](children/preregistration/exp2_children.docx) to understand the study plan and the [child experiment folder](../../code/experiments/study2_intention_causal_chains/children/) to inspect the code and materials. Coordinate work on the running study with the project lead; do not edit the live study simply to inspect it.
+
+## What still needs to be done
+
+- [ ] Add the current adult preregistered dataset when it is received.
+- [ ] Continue collecting the child sample.
+- [ ] Have the project lead add the child dataset after collection is complete.
+- [ ] Confirm which experiment version produced each main-study dataset and whether the registered plan changed.
+- [ ] Recover the original statistical and plotting code if available, and identify the data behind the existing figures.
+- [ ] Plan the [shared R analysis](../../code/R/README.md) once the datasets and analysis decisions are confirmed.
+
+## Where to find things
+
+| Material | Link |
+| --- | --- |
+| Experiment code and stimuli | [Adults](../../code/experiments/study2_intention_causal_chains/adults/) · [Children](../../code/experiments/study2_intention_causal_chains/children/) |
+| Participant datasets | [Adults](../../data/study2_intention_causal_chains/adults/) · [Children](../../data/study2_intention_causal_chains/children/) |
+| Study information and preregistrations | [Adults](adults/README.md) · [Children](children/README.md) |
+| Plots and results | [Study figure folder](../../figures/study2_intention_causal_chains/) |
+| Future shared analysis | [R analysis plan](../../code/R/README.md) |
+
+[Back to the project overview](../../../README.md). Work on the files assigned by the project lead; keep existing data, figures, protocols and stimuli unchanged unless a specific update has been agreed.

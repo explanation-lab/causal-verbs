@@ -1,9 +1,13 @@
-# Single-cause studies — archive
+# Single cause — older versions
 
-[Experiments](../../code/experiments/single_cause) · [Data](../../data/single_cause) · [Figures](../../figures/single_cause) · [Python helpers](../../code/python/single_cause) · [Current study](../../../current/docs/single_cause/README.md)
+Start with [the current study guide](../../../current/docs/single_cause/README.md) unless you have a specific task involving these older files. Keep archived files unchanged.
 
-The child `nonverbal_standalone_pilot/` is the earlier standalone nonverbal single-cause implementation. Its CHS driver and generated materials are under experiments; its familiarization/test generators, local preprocessing and Sherlock iCatcher helpers are under Python with the same version name.
+The child `nonverbal_standalone_pilot/` folder contains an earlier study of looking at single-cause events. Its experiment code and animations are under experiments; Python contains animation generators and video-processing helpers.
 
-No distinct archived participant dataset, statistical analysis or standalone preregistration for this pilot was supplied here. It does not replace the current verbal single-cause study or the current combined nonverbal Study 3 batch. No adult archive implementation is inferred.
+No participant dataset, final analysis or separate preregistration for this particular archived nonverbal pilot is stored here. This is different from the earlier verbal child pilot described in the current single-cause guide, whose figures exist but whose underlying data still need to be located. The current combined nonverbal study is described in Study 3.
 
-[Adults](adults/README.md) · [Children](children/README.md). Original source notes are historical provenance, not authoritative operating instructions.
+## Where to find things
+
+[Experiment files](../../code/experiments/single_cause) · [Data](../../data/single_cause) · [Figures](../../figures/single_cause) · [Python helpers](../../code/python/single_cause)
+
+[Adults](adults/README.md) · [Children](children/README.md)

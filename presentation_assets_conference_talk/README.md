@@ -1,7 +1,7 @@
-# Shared presentation assets
+# Shared presentation images
 
-Screened character, background and expression images support slides across the verbal research lines. They are retained unchanged as project-wide presentation materials, not participant recordings.
+These character and background images can help illustrate the studies in lab presentations. They include Andy, Suzy, Bobby and Sophia, along with different expressions and room backgrounds.
 
-`Image_20260528_205703.jpg` retains its descriptive-status limitation: its exact study/use is unconfirmed. Do not infer a study assignment from the timestamped filename.
+Keep the originals unchanged. If you are preparing slides, confirm which images match the study version you are explaining. The timestamp-named `Image_20260528_205703.jpg` still needs its intended use confirmed.
 
-See [original notes](../docs/handoff/source/presentation_assets_conference_talk.README.source.txt) and [source mapping](../docs/handoff/SOURCE_MAPPING.md) for provenance. Operational experiment stimuli are indexed under each study's `current/code/experiments/` directory.
+The pictures and videos actually used in experiments are linked from each [study guide](../README.md). Changing a presentation image does not update a live experiment.

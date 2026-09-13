@@ -1,7 +1,9 @@
-# Study 3 — nonverbal — children
+# Study 3 — Nonverbal — children
 
-Three pilot/repilot gaze batches are present, including chains plus single cause in batch 3. The [prior child protocol](prior_protocols/exp3_children.docx) is not verified against the current design/deployment. Raw recordings, most downstream analyses, exact cohort mappings and current registration evidence remain unresolved. Historical reports below retain their numerical results unchanged.
+Start with the [study guide](../README.md) for the scientific question and what participants do.
 
-Current platform/recruitment status and precise deployment IDs were not checked.
+Three child pilot/repilot datasets are available, including the revised 29-child pilot with chains and single-cause trials. iCatcher is the software used to label looking direction from child webcam video.
 
-[Experiment files](../../../code/experiments/study3_nonverbal/children) · [Data](../../../data/study3_nonverbal/children) · [Figures](../../../figures/study3_nonverbal/children) · [Study guide](../README.md)
+The [earlier child protocol](prior_protocols/exp3_children.docx) needs to be checked against the next planned version. Next: confirm the experiment version for each dataset, secure access to original videos, and the steps needed to reproduce the existing reports and figures.
+
+[Experiment files](../../../code/experiments/study3_nonverbal/children) · [Data](../../../data/study3_nonverbal/children) · [Figures](../../../figures/study3_nonverbal) · [Gaze processing](../../../code/python/study3_nonverbal/icatcher/README.md)

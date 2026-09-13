@@ -1,11 +1,15 @@
-# Study 2 — intention × causal chains — archive
+# Study 2 — Intention × causal chains — older versions
 
-[Experiments](../../code/experiments/study2_intention_causal_chains) · [Data](../../data/study2_intention_causal_chains) · [Figures](../../figures/study2_intention_causal_chains) · [Current study](../../../current/docs/study2_intention_causal_chains/README.md)
+Start with [the current study guide](../../../current/docs/study2_intention_causal_chains/README.md) unless you have a specific task involving these older files. Keep archived files unchanged.
 
-Adult historical intentional/accidental implementations retain their distinct v1/v2/v3/v4 names, alongside the related experiment3–5 versions. No accidental v3 folder was supplied. Current v4 overlap is retained deliberately. The broader historical variants keep their inherited study grouping; exact cohort-to-code and figure matching remains incomplete.
+The adult experiment folders include intentional and accidental versions named v1, v2, v3 and v4, plus related experiment3–5 versions. There is no separate accidental v3 folder. Some v4 files also appear in the current study; keep both locations unchanged while comparing them.
 
-Response CSVs and the screened free-response CSV/JSON are in data, with version paths preserved. The known malformed JSON is retained unchanged alongside its valid CSV counterpart. Supplied plots and hand-coded distribution PDFs are in figures, not statistical code.
+Data tables, plots and response distributions summarized by hand are stored separately from code. One older free-response JSON file does not parse correctly; its CSV counterpart is also available. JSON and CSV are text formats for storing data. Do not repair or replace either file as part of simply reading the study.
 
-Both early hand-coded adult pilots 3 and 4 are routed here: direct inspection of the PPTX text shows intentional/accidental chain material in pilot3 and explicitly intentional chain scenarios in pilot4. Original notes identify pilot4 as a Study 2 precursor. Slide sources remain under experiments/early_handcoded/pilot3 or pilot4; distribution PDFs remain under the matching figure paths. This classification does not identify their dates, recruitment or analysis cohorts.
+The early adult pilots 3 and 4 used slides with intentional/accidental chain scenarios. Their editable slides are under `early_handcoded/pilot3/` and `pilot4/` in the experiment folder; the matching response-distribution PDFs are in the figure folder. Confirm which experiment version produced a dataset before comparing its results with the current study.
 
-[Adults](adults/README.md) · [Children](children/README.md). Original source notes are historical provenance, not authoritative operating instructions.
+## Where to find things
+
+[Experiment files](../../code/experiments/study2_intention_causal_chains) · [Data](../../data/study2_intention_causal_chains) · [Figures](../../figures/study2_intention_causal_chains)
+
+[Adults](adults/README.md) · [Children](children/README.md)

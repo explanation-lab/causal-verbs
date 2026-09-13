@@ -1,7 +1,9 @@
-# Single-cause studies — adults
+# Single cause — adults
 
-32 pilot response rows present; reported analyzed N=30 requires an inclusion/exclusion explanation. No standalone preregistration or original analysis scripts supplied.
+Start with the [study guide](../README.md) for the scientific question and what participants do.
 
-Current platform/recruitment status and precise deployment IDs were not checked.
+The [adult pilot dataset](../../../data/single_cause/adults/single_cause_pilot1-responses.csv) is already present with 32 rows. The reported analysis used 30 participants; determine which two rows were excluded and why before changing any analysis inputs.
 
-[Experiment files](../../../code/experiments/single_cause/adults) · [Data](../../../data/single_cause/adults) · [Figures](../../../figures/single_cause/adults) · [Study guide](../README.md)
+No separate preregistration or original plotting code is currently available. The study guide explains the questions and next tasks.
+
+[Experiment files](../../../code/experiments/single_cause/adults) · [Data](../../../data/single_cause/adults) · [Figures](../../../figures/single_cause)
