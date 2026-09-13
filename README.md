@@ -1,68 +1,62 @@
 # Causal verbs — Cornell Explanation Lab
 
-This project studies how children and adults attribute causation, fault and punishment to distal and proximal agents, how intention changes those judgments, and what nonverbal looking patterns reveal about expectations. The organization repository preserves Sunny Zhao's September 12, 2026 handoff from the Stanford Markman Lab for continued work in the Cornell Explanation Lab.
+We study how children and adults assign causation, fault and punishment in causal chains, how intention changes these judgments, and what nonverbal looking reveals about expectations.
 
-**This is an organized, screened handoff import, not a completed reproduction or a deployment.** Current priorities and unresolved handoff items are in [PROJECT_STATUS.md](PROJECT_STATUS.md) and [HANDOFF_STATUS.md](docs/handoff/HANDOFF_STATUS.md). The repository uses ordinary Git on `main`. Creating this baseline does not constitute scientific handoff acceptance; the unresolved gaps remain explicit.
+**The organized, screened import is complete. Sunny's scientific handoff gaps remain unresolved.** The ordinary-Git `main` baseline and this reorganization do not constitute scientific handoff acceptance. See [project status](PROJECT_STATUS.md) and [handoff status](docs/handoff/HANDOFF_STATUS.md).
 
-## Studies
+## Start here
 
-| Research line | Entry point | Available evidence |
-| --- | --- | --- |
-| Study 1 — baseline causal chains | [Study 1](current/study1_baseline_causal_chains/README.md) | Adult/child experiment implementations and editable materials; adult baseline responses; preregistration documents; figures |
-| Study 2 — intention × causal chains | [Study 2](current/study2_intention_causal_chains/README.md) | Intentional/accidental adult and child implementations; four unordered adult pilot datasets; preregistration documents; figures |
-| Study 3 — nonverbal looking-time studies | [Study 3](current/study3_nonverbal_looking_time/README.md) | Animation source and generated stimuli, child/adult experiments, gaze-processing pipelines, four processed gaze batches, reports and one downstream analysis script |
-| Single-cause studies | [Single cause](current/single_cause/README.md) | Standalone verbal adult/child implementations and adult pilot responses; archived standalone nonverbal pilot; the current nonverbal single-cause condition is part of Study 3 |
-
-## Organization
+`current/` contains the handoff-designated working versions and associated evidence. It does not certify current deployment, completed collection or reproducibility. `archive/` preserves earlier pilots and versions, with their original version names. Both separate code, data, documentation and figures, following the organization of [teleological_properties](https://github.com/cicl-stanford/teleological_properties) within the [Explanation Lab template](https://github.com/explanation-lab/research-project-template) conventions.
 
 ```text
 current/
-  study1_baseline_causal_chains/
-  study2_intention_causal_chains/
-  study3_nonverbal_looking_time/
-  single_cause/
+  code/
+    R/                  # README only; original analysis missing
+    experiments/        # study → adults/children → implementation/assets
+    python/             # supplied nonverbal pipeline and limited analysis
+  data/                 # study → adults/children → dataset or pilot batch
+  docs/                 # study → adults/children → protocols/reports/notes
+  figures/              # study → adults/children; shared/uncertain plots at study level
 archive/
-  study1_verbal/
-  study2_verbal/
-  study3_nonverbal/
-  single_cause/nonverbal_standalone_pilot/
-  adult_pilot_early_handcoded/
-docs/
-  NONVERBAL_REPRODUCIBILITY.md
-  handoff/
-reference_literature/
+  code/experiments/     # study → adults/children → historical version
+  code/python/          # supplied historical processing/generation helpers
+  data/                 # study → adults/children → historical cohort/version
+  docs/                 # study/population notes; unclassified historical material
+  figures/              # historical results; unclassified historical figures
+docs/                   # project-wide reproducibility and handoff provenance
+reference_literature/   # background papers and shared lab talk
 presentation_assets_conference_talk/
-tools/handoff/
+tools/handoff/          # integrity verification and historical import policy
 ```
 
-The study-centered layout follows the flexible [Explanation Lab research template](https://github.com/explanation-lab/research-project-template) and the lab's `current/` versus `archive/` convention. Code, data, editable stimulus sources, generated media and figures stay together within the relevant study/version. Historical filenames and internal experiment asset paths are retained where possible. `docs/` contains the handoff documents explicitly requested for this import; no browser output or GitHub Pages deployment is configured.
+Every current study has adult and child folders for experiments, data, docs and figures. A README-only folder explicitly marks missing or unassigned material. There are no `raw/` or `processed/` levels under data.
 
-Original top-level study notes are retained as `HANDOFF_README.md`. Other imported READMEs remain historical source documentation. Their assertions about completeness, live studies, registration, safe data or software versions are not independent verification. Use the new status and reproducibility documents for the audited import state.
+| Research line | Adult / child status | Preregistration | Data present | Analysis and major gaps |
+| --- | --- | --- | --- | --- |
+| [Study 1: baseline chains](current/docs/study1_baseline_causal_chains/README.md) | Adult preregistered run completed; child collection reported (26 at handoff), current data missing | Adult + child documents; immutable registration links unverified | 100 adult response rows; older pilots in archive | Original analysis/figure scripts and current child dataset missing; cohort/deployment matching open |
+| [Study 2: intention × chains](current/docs/study2_intention_causal_chains/README.md) | Adult + child implementations; preregistered collection reported, child collection substantial | Adult + child documents; immutable registration links unverified | Four earlier adult pilot exports, **not** the current preregistered run | Current adult and child datasets and original analysis scripts missing |
+| [Study 3: nonverbal](current/docs/study3_nonverbal/README.md) | Adult webcam pilot and child pilot/repilot; live/version status unresolved | Two prior-protocol documents; **not verified current-design preregistrations** | Adult n61 and three child pilot/repilot batches; **not verified preregistered datasets** | Gaze pipelines + one unique downstream Python script; most analyses, secure raw-data custody and protocol/deployment matching unresolved |
+| [Single cause](current/docs/single_cause/README.md) | Adult pilot; child arm reported awaiting approval at handoff | No standalone preregistration supplied | 32 adult pilot response rows; reported analytic N=30 needs reconciliation | Original analysis scripts and cohort mapping missing; nonverbal single-cause condition is in Study 3 |
 
-## Access and reproduction
+**No R or Rmd analysis files were supplied by Sunny.** [current/code/R/](current/code/R/) contains only a README. Supplied Study 1, Study 2 and single-cause figures cannot currently be reproduced from original analysis scripts because those scripts were not supplied. A PNG is evidence of a supplied figure, not an executable analysis. The [nonverbal pipeline](docs/NONVERBAL_REPRODUCIBILITY.md) is only partly reproducible.
 
-All files, including media and editable PowerPoint sources, are stored in ordinary Git. Git LFS is not required. A full checkout is approximately 4.8 GB before Git storage; identical files share Git objects.
+## Working with this repository
+
+Use normal Git; Git LFS is not required. Authenticate with your authorized lab GitHub account, then:
 
 ```sh
 git clone https://github.com/explanation-lab/causal-verbs.git
 cd causal-verbs
+git pull
 python3 tools/handoff/verify_import.py
 ```
 
-The verification command checks imported file hashes and basic source syntax without running studies or collecting data. It does not reproduce results. See [NONVERBAL_REPRODUCIBILITY.md](docs/NONVERBAL_REPRODUCIBILITY.md) for the source → stimuli → experiment → recording/export → gaze coding → data → analysis → results pipeline. Missing scripts, paths and timing outputs are intentionally left explicit.
+The verification command checks preservation and static syntax; it does not run studies or analyses. All future analysis should use repository-relative input/output paths and write figures to the relevant `figures/` directory. One master Rmd is planned as **separate future work**, after original materials and analysis decisions are resolved; none was created here.
 
-Study 1, Study 2 and single-cause verbal results cannot yet be regenerated from the supplied code. The available nonverbal fair/unfair-punishment analysis has a historical absolute input path. Experimental code still contains Sunny's personal GitHub asset URLs, historical institutional consent wording and live submission logic; importing it does not establish a Cornell-ready or locally runnable study.
+Experimental code, data and stimuli retain their screened bytes. Historical absolute/relative paths and Sunny's personal GitHub asset URLs remain in code; local execution and lab-controlled deployment require separate validation. Do not run a study, transfer helper or stimulus generator just to browse this repository.
 
-## Scientific resources and provenance
+## Provenance and access
 
-Six original adult/child preregistration DOCX files are preserved for Studies 1, 2 and 3. Their presence does not establish a registered OSF record; the handoff supplies no verified study-specific registration identifiers. Single-cause verbal preregistration is absent. Reports and figures are historical results, not results recomputed for this import.
+All **2,806 retained imported files**, including the **378 privacy transformations**, are preserved; the **11 exclusions** remain excluded. [Source mapping](docs/handoff/SOURCE_MAPPING.md) and the [reorganization ledger](docs/handoff/reorganization_mapping.csv) connect every file to its screened baseline. Original README notes are preserved verbatim as `*.source.txt` under documentation/source-notes areas; the new study READMEs are authoritative. Numerical reports remain unchanged and are labeled historical.
 
-[SOURCE_MAPPING.md](docs/handoff/SOURCE_MAPPING.md) identifies the exact source revision, routing and exclusions. Its [file manifest](docs/handoff/source_manifest.csv) accounts for every handoff working-tree file outside `.git`, with original and imported checksums. Sunny's original Git history was not imported because it contains unscreened data. The separately audited older repository was not consulted.
-
-## Contributors and data
-
-Sunny Zhao prepared the handoff and is credited in its original documentation for study implementation, stimulus generation and processing/analysis materials. David Rose is the named handoff recipient. A complete authorship/CRediT statement and operational owner/backup assignments remain to be confirmed.
-
-Only screened, coded research data are included. Participant/session IDs and recording filenames have been replaced with opaque codes; exact session dates were removed from derived child pilot tables. Trial responses, gaze measurements and analytic age/demographic variables are preserved. These remain restricted research data in a private repository, not a claim of irreversible anonymization. Raw participant audio/video, identifiable CHS exports, lookup tables, keys and credentials must remain outside GitHub. See [PRIVACY_REVIEW.md](docs/handoff/PRIVACY_REVIEW.md).
-
-Original notices and the archived license are retained; no new blanket license or publication permission is asserted for the imported scientific material or background literature.
+This is a private repository containing coded research data. Raw participant video/audio, base64 recordings, identifiable exports, lookup tables and credentials belong in approved secure external storage, whose custody/access remains unresolved. See the [privacy review](docs/handoff/PRIVACY_REVIEW.md). Sunny Zhao prepared the source handoff; David Rose is the recipient. Owner/backup assignments and complete contributor roles remain to be confirmed. Existing notices are preserved; no new blanket license is asserted.

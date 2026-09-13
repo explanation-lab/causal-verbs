@@ -22,4 +22,8 @@ Professional researcher/IRB contact details, public platform/project URLs and ch
 
 The original restricted exports remain in the untouched handoff source. This import has not moved them into verified institutional custody; the raw-data location/access gap remains open. The local import key is temporary restricted audit material, never committed. It is unnecessary for analysis of the imported data but would be required to reproduce exactly the same opaque codes on a future re-import. Confirm a durable restricted custody plan separately if it must be retained.
 
-`.gitignore` blocks common restricted filenames/directories and `.gitattributes` enables LFS for approved media. Neither substitutes for reviewing future commits. Keep raw recordings, identifiable exports, keys and payment/credential material out of this tree.
+`.gitignore` blocks common restricted filenames/directories and `.gitattributes` preserves ordinary-Git file bytes without text normalization. Neither substitutes for reviewing future commits. Keep raw recordings, identifiable exports, keys and payment/credential material out of this tree.
+
+## Organization-only follow-up (2026-09-13)
+
+All retained imported files, including all 378 transformed files and the original source-note text, remain byte-identical to the screened ordinary-Git baseline. The 11 exclusion records and privacy rules are unchanged. No source re-import, new privacy transformation, participant recording, credential or unscreened scientific file was introduced. The relocation changes only destination paths in the manifest and transformation ledger. See [reorganization verification](REORGANIZATION.md).

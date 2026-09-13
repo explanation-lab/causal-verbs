@@ -1,9 +1,7 @@
-# Import and verification tools
+# Preservation tools
 
-`verify_import.py` checks hydrated imported bytes against `docs/handoff/source_manifest.csv`, parses Python/JSON and performs shell syntax checks without executing scientific code. Its optional `--source PATH` reads the original handoff to verify source checksums, inventory, preservation of all non-identifier CSV values and rows, and opaque-code consistency.
+Run `python3 tools/handoff/verify_import.py` from the repository root. It verifies all 2,806 retained imported files against the relocated source manifest and performs non-executing syntax checks. It does not run studies, regenerate stimuli or reproduce analyses.
 
-`import_handoff.py` documents the one-time routing/sanitization policy. It requires `--source`, `--target` and a private `--private-key` file of at least 32 random bytes. Use an empty target for a new import; an interrupted run permits only identical existing content. The key must be kept outside Git. This policy was reviewed for this handoff's schemas and is not a general-purpose anonymizer.
+`import_handoff.py` is the unchanged historical import/sanitization policy for the original pre-reorganization layout. Its path literals are historical provenance. **Do not rerun it into this repository.** The reorganization used only the already-screened working tree; no privacy transformation was rerun. The private key is not in Git and is not needed to use the retained data.
 
-Opaque codes identify original coded values within their source context. They do not independently establish participant identity across different studies or reused numeric export IDs. No direct crosswalk is published. Keep the private repository and restricted source data under appropriate research access controls.
-
-Preserved scripts elsewhere are historical scientific artifacts. These import tools do not supply missing analyses, fix deployment paths or validate live collection.
+The verifier's optional `--source` mode is retained for separately authorized provenance checks, but was not needed for this reorganization. [Source mapping](../../docs/handoff/SOURCE_MAPPING.md) and the [reorganization ledger](../../docs/handoff/reorganization_mapping.csv) describe the current paths and original checksums. No new scientific analysis code is supplied by these tools.

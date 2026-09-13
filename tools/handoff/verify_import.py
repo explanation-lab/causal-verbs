@@ -20,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 ID_FIELDS = {'workerid', 'Response UUID', 'ParticipantID', 'uuid', 'response_id', 'participant_hashed_id', 'child_hashed_id', 'participant_id'}
 PATH_FIELDS = {'Video Filename', 'Annotation File'}
-KNOWN_INVALID_JSON = 'archive/study2_verbal/experiment3_4cases/exp3_mental_mental_absent/data.json'
+KNOWN_INVALID_JSON = 'archive/data/study2_intention_causal_chains/adults/experiment3_4cases/exp3_mental_mental_absent/data.json'
 
 
 def digest(p):
@@ -57,7 +57,7 @@ def main():
         expected.add(r['destination'])
         p = ROOT / r['destination']
         if not p.is_file() or digest(p) != r['destination_sha256']:
-            errors.append('Import checksum mismatch (check LFS hydration): ' + r['destination'])
+            errors.append('Import checksum mismatch: ' + r['destination'])
             continue
         if p.suffix == '.csv' and src:
             original = list(csv.DictReader(src.open(newline='')))

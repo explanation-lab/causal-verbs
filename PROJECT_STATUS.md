@@ -1,33 +1,16 @@
-# Causal verbs — project status
+# Project status
 
-Last updated: 2026-09-12.
+Updated 2026-09-13. The screened import and repository organization are complete on ordinary-Git `main`; **scientific handoff acceptance remains unresolved**. This pass changes organization and documentation only. No study, CHS/Lookit or Proliferate configuration, recruitment setting, external asset hosting or scientific file contents were changed.
 
-- Stage: organized and privacy-screened handoff import; scientific handoff gaps remain.
-- Repository baseline: `main`, using ordinary Git. This baseline does not constitute scientific handoff acceptance; the gaps below remain unresolved.
-- Scientific handoff recipient: David Rose. Handoff preparer: Sunny Zhao.
-- Project Lead/Backup and study Owner/Backup operational assignments: not confirmed by this setup.
-- Repository: private `explanation-lab/causal-verbs`. No live study or recruitment setting was changed.
+| Line | Current evidence | Still needed from Sunny |
+| --- | --- | --- |
+| [Study 1](current/docs/study1_baseline_causal_chains/README.md) | Adult preregistered data (100 rows), adult/child code and protocol documents, supplied plots | Current child data, original analysis/figure scripts, cohort/deployment map |
+| [Study 2](current/docs/study2_intention_causal_chains/README.md) | Adult/child code, protocols, four older adult pilots and plots | Current preregistered adult and child datasets (child collection occurred), original analyses |
+| [Study 3](current/docs/study3_nonverbal/README.md) | Pilot/repilot gaze summaries, limited original Python analysis, processing/generation code and reports | Most downstream scripts, secure recording/export custody, current protocol/version/deployment match, timing outputs and complete asset sources |
+| [Single cause](current/docs/single_cause/README.md) | Adult pilot data and adult/child implementations, supplied plots | Analysis scripts, 32-row versus analytic-N=30 reconciliation, figure/cohort identity; standalone preregistration absent |
 
-## Current, archived and future work
+Collection claims describe the handoff, not a fresh dashboard check. Study 1 child N=26 was reported at handoff; its current dataset is absent. Study 2 child data remain missing despite substantial collection. The child gaze batch named `n80` contains 73 coded participants. Preserve these discrepancies rather than inferring exclusions.
 
-`current/` preserves the four research lines identified in [README.md](README.md). “Current” means the handoff-designated working version; deployment/recruitment state was not checked in platform dashboards. `archive/` preserves earlier code versions, pilots, analysis artifacts and materials. The standalone nonverbal single-cause pilot has its own archive entry; the combined current paradigm stays together in Study 3.
+No original R/Rmd analysis was supplied. The future master Rmd and relative-path execution cleanup are separate work, contingent on recovered inputs and documented analysis decisions. Supplied figures do not establish reproducibility. The full [handoff checklist](docs/handoff/HANDOFF_STATUS.md) and [nonverbal pipeline](docs/NONVERBAL_REPRODUCIBILITY.md) remain authoritative for unresolved gaps.
 
-Nonverbal design changes described in the handoff include an anticipatory window and changes to visual asymmetry. Some updated animation source is present, but source/output/timing/deployed-version equivalence has not been established. Do not treat proposed analyses or redesign claims as validated implementations.
-
-## Next actions and blockers
-
-The full, evidence-linked list is in [HANDOFF_STATUS.md](docs/handoff/HANDOFF_STATUS.md): recover missing statistical/figure scripts, establish secure raw-data custody and dashboard access, reconcile cohorts, resolve relative/output paths and timing JSONs, document supplementary media production, and plan lab-controlled asset hosting. No deadline or student assignment is invented here.
-
-Observed counts needing reconciliation include 73 participants in the child folder labeled `n80`, and 32 supplied single-cause verbal response rows versus the reported 30-person pilot. All rows are preserved; no exclusions were inferred.
-
-## Next milestone
-
-David reviews the import and decides when to merge. Scientific handoff acceptance requires the missing inputs and responsibilities to be resolved explicitly; this import does not certify acceptance.
-
-## Latest Friday checkpoint
-
-No operational dashboard checkpoint was recorded by this setup. This branch preserves the available safe version for review. Future checkpoints should keep appropriate work committed/pushed, distinguish current and old/future work, and update this status file.
-
-## Resume
-
-Start with [README.md](README.md), [NONVERBAL_REPRODUCIBILITY.md](docs/NONVERBAL_REPRODUCIBILITY.md) and the selected study README. `git log -1 --oneline` identifies the exact import commit. [VALIDATION.md](docs/handoff/VALIDATION.md) records verification and its limits. Preserve the original source and keep restricted exports out of this checkout.
+David and Sunny still need to confirm secure institutional data custody, an owner and backup, platform access, cohort/version mappings, immutable registrations/amendments, and the plan for lab-controlled asset hosting. No new operational checkpoint or deployment readiness is claimed. Start with the root README and the relevant study guide.

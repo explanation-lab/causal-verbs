@@ -1,49 +1,46 @@
 # Source mapping and provenance
 
-## Sources and boundaries
+## Provenance chain
 
-- Sole scientific source: local `Cause_Fault_Punishment_Handoff` working tree, supplied by David, read only.
-- Source HEAD: `4a87dc707b45c16885b6cd9356c1cbff18af5922`, dated `2026-09-12T04:57:33+00:00`; working tree clean at inspection.
-- Template: `explanation-lab/research-project-template` at `c641b4570691bb05ccd99d414d9b2b3fd6e89a1b`.
-- Existing organization convention checked read only: `explanation-lab/cookie-task` at `320637e4c7431756c3f5e5e86fa216d423492880`.
-- Destination: `explanation-lab/causal-verbs`, initially empty, branch `handoff-import`.
-- The older `Cause_Fault_Punishment` repository was not inspected or imported. No other workspace repository was modified.
+Sunny's original read-only handoff working tree was at `4a87dc707b45c16885b6cd9356c1cbff18af5922` (2026-09-12). The sole scientific source was `Cause_Fault_Punishment_Handoff`; the older `Cause_Fault_Punishment` checkout was ignored. Its unscreened Git history/configuration was not imported.
 
-## Directory routing
+The initial screened import was `98476cb106e89d1b4e9be24139d6ea4751d22e94`. The subsequently approved ordinary-Git rebuild ended at **`b38896ab5bb5a6649df58701b573612d19f7428e`**, which is the baseline for this organization pass. This pass used only that existing screened working tree: no source re-import, privacy transformation, media conversion, recompression or scientific modification was performed.
 
-| Source | Destination |
-| --- | --- |
-| `CURRENT/01_study1_causal_chains_verbal/` | `current/study1_baseline_causal_chains/` |
-| `CURRENT/02_study2_causal_chains_intention_verbal/` | `current/study2_intention_causal_chains/` |
-| `CURRENT/04_study3_nonverbal_looking_time/` | `current/study3_nonverbal_looking_time/` |
-| `CURRENT/03_single_cause_verbal/` | `current/single_cause/` |
-| `PREVIOUS_ARCHIVE/study1_verbal_archive/` | `archive/study1_verbal/` |
-| `PREVIOUS_ARCHIVE/study2_verbal_archive/` | `archive/study2_verbal/` |
-| `PREVIOUS_ARCHIVE/study3_nonverbal_archive/04_non_verbal_single_cause_standalone_pilot/` | `archive/single_cause/nonverbal_standalone_pilot/` |
-| Other `PREVIOUS_ARCHIVE/study3_nonverbal_archive/` content | `archive/study3_nonverbal/` |
-| `PREVIOUS_ARCHIVE/adult_pilot_early_handcoded/` | `archive/adult_pilot_early_handcoded/` |
-| `reference_literature/` | Same path |
-| `presentation_assets_conference_talk/` | Same path |
-| Root `README.md`, `.gitignore` | `docs/handoff/source/README.md`, `docs/handoff/source/original.gitignore` |
+Original organizational references were the [Explanation Lab template](https://github.com/explanation-lab/research-project-template) at `c641b4570691bb05ccd99d414d9b2b3fd6e89a1b` and the lab's current/archive convention (`cookie-task` at `320637e4c7431756c3f5e5e86fa216d423492880`). The present code/data/docs/figures separation follows [teleological_properties](https://github.com/cicl-stanford/teleological_properties). No other workspace repository was modified.
 
-Top-level current-study source READMEs become `HANDOFF_README.md`, alongside new navigation READMEs. Current `data/raw_data/` paths become `data/analysis_data/`, because these are sanitized derivatives, not raw exports. Other internal paths remain historical unless privacy required a renamed file. The combined nonverbal chain/single-cause experiment remains intact. Archive placement is inherited from the handoff and does not independently validate the theoretical classification of every older pilot.
+## Current destinations
 
-## File accounting
+Both `current/` and `archive/` separate `code/experiments/`, `code/python/`, `data/`, `docs/` and `figures/`. Experiments, data, docs and figures use study/population directories. Version names and original scientific filenames are retained; data do not gain raw/processed sublevels.
 
-[source_manifest.csv](source_manifest.csv) accounts for all **2,817** source working-tree files outside `.git`: **2,806 imported**, **11 excluded**. Imported files include **378 transformed files**; remaining imports are byte-for-byte copies. Data transformations and their row counts are listed in [data_transformations.json](data_transformations.json).
+| Research/source group | Destination guide | Routing qualification |
+| --- | --- | --- |
+| Baseline verbal chains | [Current Study 1](../../current/docs/study1_baseline_causal_chains/README.md), [archive](../../archive/docs/study1_baseline_causal_chains/README.md) | Current adult preregistered data versus historical adult/child pilots kept distinct |
+| Intention × verbal chains | [Current Study 2](../../current/docs/study2_intention_causal_chains/README.md), [archive](../../archive/docs/study2_intention_causal_chains/README.md) | Earlier adult pilots are not the missing current preregistered datasets; every historical version remains separate |
+| Nonverbal chains/single cause | [Current Study 3](../../current/docs/study3_nonverbal/README.md), [archive](../../archive/docs/study3_nonverbal/README.md) | Current combined paradigm remains intact; pilot/repilot batches, reports, figures and Python are separated by role |
+| Standalone single cause | [Current](../../current/docs/single_cause/README.md), [archive](../../archive/docs/single_cause/README.md) | Current verbal versus historical standalone child nonverbal material |
+| Early hand-coded adult pilots 3/4 | [Archived Study 2](../../archive/docs/study2_intention_causal_chains/README.md) | Intentional/accidental chain content inspected in the PPTX sources; pairing with original distribution PDFs retained |
+| Unassigned published-style plots/P-card support | [Unclassified historical](../../archive/docs/unclassified_historical/README.md) | No study/population or missing analysis inferred |
+| Background literature/shared talk and character assets | [Reference material](../../reference_literature/README.md), [presentation assets](../../presentation_assets_conference_talk/README.md) | Project-wide support retained |
+| Original README/source notes | [Project-wide notes](source/README.md) and study docs/source-notes areas | Verbatim bytes under `*.source.txt`, distinct from authoritative new Markdown guides |
 
-Each row records source/destination checksums and sizes, disposition and transformation. For participant-bearing filenames, `source_path` uses opaque codes so the public manifest does not disclose the original identity-bearing filename. `source_path_sha256` identifies the exact original relative path for authorized verification against the source. It is not a participant lookup table. Original bytes remain in the read-only source; transformed files are never described as original raw data.
+The archive's psychological-verb variants retain their inherited Study 1 grouping; exact Study 1/2 assignment remains unresolved. Study-level verbal plots and the archived unclassified images are not assigned to a population without adequate evidence. Operational stimuli stay with experiment implementations; cluster helpers remain together. Moving code does not fix its historical input/output paths.
 
-The source `.git` directory (28 files, including a large unscreened history pack) is excluded wholesale, outside the working-tree count. No source Git hooks/configuration/history were copied. The external ZIP was not imported. The original screened import used Git LFS. The ordinary-Git rebuild retains the approved media bytes without stimulus re-encoding; checksums refer to complete file contents, not historical LFS pointer text. The screened baseline was commit `98476cb106e89d1b4e9be24139d6ea4751d22e94`; rebuilding storage and history does not constitute scientific handoff acceptance.
+## File accounting and verification
 
-## Exclusions
+[source_manifest.csv](source_manifest.csv) accounts for all **2,817** original source working-tree files: **2,806 imported**, including **378 transformed**, and **11 excluded**. Only the destination-path column changed during reorganization. Every source hash, destination hash/size, disposition and transformation is preserved. [data_transformations.json](data_transformations.json) likewise changes destination paths only; its scientific row/column/transformation records are unchanged.
 
-Six CHS session JSON exports were withheld, including the less-obviously named `pilot1_exp1.json`. They contain identifiers, dates, consent and device/session metadata. Supplied scientific response CSV derivatives are retained after sanitization. `pilot1_participants.csv` is a lookup table with parent IDs/session UUIDs/test dates and is withheld. One Office lock file is non-scientific metadata. Three generic sample media files (`sample_video.webm`, `sample_1.mp3`, `sample_1.ogg`) are withheld: the video shows a recognizable person, and study relevance/permission were not established. Every excluded file has a manifest entry and remains in the original source.
+[reorganization_mapping.csv](reorganization_mapping.csv) records each of the 2,806 imported files' old and new repository paths, SHA-256, ordinary-Git blob ID, file mode and size at the pre-reorganization baseline. It includes every original README exhibit, report, dataset, script, stimulus, editable source and archive/supporting file. No duplicate was removed. [REORGANIZATION.md](REORGANIZATION.md) summarizes verification and unresolved routing/dependency issues.
 
-No known participant recording was imported. Numeric iCatcher frame output is retained after filename de-identification; it is not audio/video. Historical study stimuli, narration, image assets, editable decks, reference PDFs, reports, preregistration documents, code and all supplied non-lookup CSV data are retained.
+The source manifest uses opaque codes in participant-bearing source filenames, while `source_path_sha256` identifies the actual original relative path for authorized verification. It is not a participant lookup table. Historical source paths and the ledger's old paths are provenance fields, not current navigation.
 
-## Reproducible import process
+## Unchanged exclusions and privacy
 
-[import_handoff.py](../../tools/handoff/import_handoff.py) records routing and sanitation rules. A random private HMAC key generates opaque participant/recording codes; the key and any authorized re-identification process stay outside Git. The one-time local audit key is in temporary restricted audit storage, not durable institutional custody. It is not needed to use the imported datasets, and durable custody remains an owner decision if identical future re-imports are required. Source checksums and source-path checksums allow byte-provenance verification without publishing that key.
+Six identifiable CHS session JSON exports (including `pilot1_exp1.json`), the `pilot1_participants.csv` participant lookup, one Office lock file, and three generic sample media files (`sample_video.webm`, `sample_1.mp3`, `sample_1.ogg`) remain excluded. The sample video showed a recognizable person; scientific relevance/permission for the generic media was unestablished. Original Git history/configuration and private keys remain outside the working-tree inventory. The original restricted source was not modified or recopied.
 
-The historical malformed `exp3_mental_mental_absent/data.json` remains malformed after replacing `participant_id`; its valid CSV counterpart is retained. No scientific repair, data exclusion rule, missing result or claimed registration was invented.
+No known participant recording was imported. Numeric iCatcher output is gaze coding, not audio/video. Screened experimental narration/materials, all non-lookup CSV data and every numerical result are preserved. Raw nonverbal recordings/identifiable exports still require verified **secure external custody**, not GitHub storage. See [privacy review](PRIVACY_REVIEW.md).
+
+## Historical import policy and remaining gaps
+
+[import_handoff.py](../../tools/handoff/import_handoff.py) is preserved unchanged as the one-time original routing/sanitization policy. Its pre-reorganization paths are historical; do not rerun it into this repository. Opaque codes were generated with a private HMAC key outside Git; durable restricted custody of that key remains unresolved and it is unnecessary for analysis of the retained data. No transformation was rerun here.
+
+[verify_import.py](../../tools/handoff/verify_import.py) reads the updated manifest and checks current imported bytes without scientific execution. Its known-malformed-JSON path was updated to the relocated file; scientific code was not edited. The historical malformed JSON and valid CSV counterpart remain intact. Missing analyses, current verbal datasets, nonverbal protocol/deployment matches, timing/output-path fixes, supplementary asset provenance and hosting dependencies remain in [HANDOFF_STATUS.md](HANDOFF_STATUS.md). Organization and `main` do not constitute scientific handoff acceptance.
