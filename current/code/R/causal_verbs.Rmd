@@ -1,0 +1,2395 @@
+---
+title: "Causal verbs: adult and child descriptive analysis"
+output:
+  rmarkdown::html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    theme: cosmo
+    highlight: tango
+---
+
+This workflow describes how often participants answer **Yes** about the earlier
+(**distal**) and later (**proximal**) agents in two causal-chain studies. Study 1 is the baseline
+chain. Study 2 compares intentional and accidental actions by the distal agent.
+The main talk figure shows Study 2 minus the Study 1 baseline for each age,
+measure and role. A second summary pools Study 2 child ages and compares participant-level
+Distal-minus-Proximal gaps between the Intentional and Accidental conditions.
+Raw Yes-response figures remain available as backups. Single Cause adds the one-agent
+comparison using children aged 3–6 and all 32 recovered adults. A new synthesis
+compares intention effects in Single Cause and Study 2 using children aged 3–6
+in both studies. The historical Single Cause N=30 subset remains unidentified.
+Three additional stage-grouped synthesis figures show punishment by causal
+target, all four Single Cause judgments, and Caused/Lexical role mapping in
+Studies 1 and 2. They display raw Yes proportions at ages 3–4, 5–6 and Adults.
+This workflow prepares descriptive summaries and cumulative talk figures,
+without fitting models or testing hypotheses.
+
+**This is a new reproducible reconstruction from available data and documented
+design, not recovered original analysis code.** The old verbal plotting scripts
+remain missing. The new child exports are the snapshots supplied on September
+20, 2026. Study 2 collection remains ongoing, and its adult comparison is an
+earlier pilot, not the missing preregistered main adult dataset.
+
+The organization follows the read-only
+[counterfactual development Rmd](https://github.com/cicl-stanford/counterfactual_development/blob/a6aabb292549337bdeb220230f3471fd885b8fed/code/R/counterfactuals.Rmd),
+[cookie-task Rmd](https://github.com/explanation-lab/cookie-task/blob/295eb985903ec38af4f5ca07df50603729e21d8b/current/code/R/cookie_allocation.Rmd)
+and [running guide](https://github.com/explanation-lab/cookie-task/blob/295eb985903ec38af4f5ca07df50603729e21d8b/current/code/R/README.md),
+and [cause/burn development Rmd](https://github.com/davdrose/cause_burn_development/blob/48b6aa48e3dad0f3a991e0f5a4842563bfdcbb94/code/R/main.Rmd).
+Local reference revisions were respectively `a6aabb2`, `295eb98`, and `48b6aa4`.
+We follow cookie-task's principle of selecting one attempt per child and
+computing summaries once for all builds. We do not import its study-specific
+eligibility rules or the reference projects' inferential models.
+
+## Scope and decisions to review
+
+The Study 1 and Study 2 child preregistration documents require complete test responses from
+children aged 3–9 who answer without help. They also specify the first 30
+eligible children per age cell (per condition in Study 2), ordered by completion
+timestamp. **The requested descriptive snapshot below retains all otherwise
+eligible unique children; it does not apply those sample caps.** Some cells
+exceed 30 and others fall below 30. This is not a finalized preregistered
+analysis. The exports provide session creation times, not completion times,
+and cannot independently establish whether adults helped with answers.
+The supplied eligibility/exclusion flags are respected; behavioral eligibility
+and the cap rule still need confirmation for a registered analysis.
+
+Neither child preregistration nor the available study notes specifies how to
+choose among repeat attempts by the same child. We therefore use the requested
+deterministic reconstruction rule: among otherwise eligible attempts, retain
+the most answered test questions, breaking ties by the latest
+`date_created_utc`. Never combine trials across attempts. A Study 2 child who
+repeats in another condition still contributes only one attempt in total.
+
+# Load packages
+
+Knitting runs code from this file's directory, `current/code/R/`. CSV values are
+read as text first, so identifiers and export labels are not silently changed.
+No packages are installed by this document.
+
+```{r packages, message=FALSE}
+library(dplyr)       # select, filter, join, and summarize rows
+library(tidyr)       # move between wide and long tables
+library(readr)       # read CSV files
+library(ggplot2)     # figures
+library(knitr)       # report tables
+```
+
+Single Cause has no separate preregistration in the repository. Its section
+uses the supplied inclusion/withdrawal flags and audits the current snapshot.
+
+# Settings
+
+All presentation settings and snapshot expectations live here. Expected counts
+are checks on these particular exports, not values used to calculate results.
+A changed export stops the workflow so its inclusion decisions can be reviewed.
+
+```{r settings}
+knitr::opts_chunk$set(echo = TRUE, warning = TRUE, message = FALSE,
+                     error = FALSE, cache = FALSE, fig.width = 16,
+                     fig.height = 12.8, out.width = "100%")
+theme_set(theme_classic(base_family = "sans"))
+options(dplyr.summarise.inform = FALSE)
+
+measure_order = c("Caused", "Lexical", "Fault", "Punish")
+condition_order = c("Intentional", "Accidental")
+role_order = c("Distal", "Proximal")
+scenario_order = c("Bike", "Mirror")
+child_ages = 3:9
+adult_position = 10
+age_breaks = c(child_ages, adult_position)
+age_labels = c(as.character(child_ages), "Adult")
+
+# In the raw figures, color identifies causal role. Use the exact ColorBrewer values
+# directly, avoiding an extra package dependency for two fixed hex codes.
+study1_role_colors = c(Distal = "#E41A1C", Proximal = "#377EB8") # Set1
+study2_role_colors = study1_role_colors
+study1_role_shapes = c(Distal = 21, Proximal = 22)
+study1_role_offsets = c(Distal = -.06, Proximal = .06)
+study2_role_offsets = c(Distal = -.10, Proximal = .10)
+condition_shapes = c(Intentional = 21, Accidental = 24)
+condition_lines = c(Intentional = "solid", Accidental = "dashed")
+condition_offsets = c(Intentional = -.05, Accidental = .05)
+# Define intention colors once for comparison, pooled-summary and Single Cause figures.
+comparison_colors = c(Intentional = "#6A3D9A", Accidental = "#1B9E77")
+comparison_offsets = c(Intentional = -.07, Accidental = .07)
+
+bootstrap_seed = 20260920
+bootstrap_replicates = 5000
+study1_width = 16
+study1_height = 12.8
+# Keep the reference's measured 1920 x 1536 (5:4) aspect and 2 x 2 panels.
+study2_width = 16
+study2_height = 12.8
+png_dpi = 240
+study1_text_size = 30
+study2_text_size = 30
+plot_point_size = 4.2
+plot_line_width = .9
+ci_line_width = .65
+comparison_width = 16
+comparison_height = 9
+comparison_text_size = 20
+comparison_point_size = 2.8
+comparison_adult_position = 10.8
+comparison_min_y_limit = .5
+comparison_y_step = .25
+intention_width = 16
+intention_height = 9
+intention_text_size = 26
+gap_y_step = 25
+intention_offsets = c(Intentional = -.08, Accidental = .08)
+
+study1_output = "../../figures/study1_baseline_causal_chains/talk"
+study2_output = "../../figures/study2_intention_causal_chains/talk"
+comparison_output = "../../figures/study_comparison_baseline_change"
+single_output = "../../figures/single_cause/talk"
+synthesis_output = "../../figures/study_comparison"
+synthesis_ages = 3:6
+synthesis_order = c("Single Cause", "Study 2 Distal", "Study 2 Proximal")
+synthesis_colors = c("Single Cause" = "#666666",
+                     "Study 2 Distal" = study2_role_colors[["Distal"]],
+                     "Study 2 Proximal" = study2_role_colors[["Proximal"]])
+synthesis_shapes = c("Single Cause" = 15, "Study 2 Distal" = 16, "Study 2 Proximal" = 17)
+synthesis_offsets = c("Single Cause" = -.20, "Study 2 Distal" = 0, "Study 2 Proximal" = .20)
+single_child_ages = 3:6
+single_adult_position = 7.5
+single_expected_ns = tibble(
+  age = rep(3:6, each = 2), condition = rep(c("Accidental", "Intentional"), times = 4),
+  n = c(12L, 14L, 14L, 10L, 10L, 13L, 10L, 13L))
+study2_pilot_directory = paste0(
+  "../../data/study2_intention_causal_chains/adults/",
+  "adult_pilot_rounds_unordered")
+study2_pilot_files = c(
+  "adult_causation_and_punishment_new_updated_to_8_qs-responses.csv",
+  "adult_causation_and_punishment_updated_to_8_qs_for-responses.csv",
+  "causation_and_punishment_without_priming_test_verb-responses.csv",
+  "exp2_new_pilot-responses.csv")
+selected_pilot = "exp2_new_pilot-responses.csv"
+snapshot_expectations = tibble(
+  study = c("Study 1", "Study 2"), rows = c(3870L, 7523L),
+  sessions = c(215L, 422L), children = c(212L, 416L),
+  flagged_eligible = c(214L, 410L), retained_children = c(211L, 406L))
+
+study1_build_names = c("build00_orientation", "build01_caused_adults",
+                "build02_caused_children", "build03_lexical_adults",
+                "build04_lexical_children", "build05_fault_adults",
+                "build06_fault_children", "build07_punish_adults",
+                "build08_full")
+comparison_build_names = c("build00_orientation", "build01_caused",
+                           "build02_lexical", "build03_fault", "build04_full")
+single_build_names = c(
+  "build00_orientation", "build01_caused_intentional_adults", "build02_caused_intentional_children",
+  "build03_caused_accidental_adults", "build04_caused_accidental_children",
+  "build05_lexical_intentional_adults", "build06_lexical_intentional_children",
+  "build07_lexical_accidental_adults", "build08_lexical_accidental_children",
+  "build09_fault_intentional_adults", "build10_fault_intentional_children",
+  "build11_fault_accidental_adults", "build12_fault_accidental_children",
+  "build13_punish_intentional_adults", "build14_punish_intentional_children",
+  "build15_punish_accidental_adults", "build16_full")
+study2_build_names = single_build_names
+stage_order = c("3–4", "5–6", "Adults")
+stage_target_order = c("Single Cause", "Chain: Distal", "Chain: Proximal")
+stage_text_size = 22
+stage_condition_offsets = c(Intentional = -.07, Accidental = .07)
+dir.create(synthesis_output, recursive = TRUE, showWarnings = FALSE)
+for (directory in c(study1_output, study2_output, comparison_output, single_output)) {
+  dir.create(directory, recursive = TRUE, showWarnings = FALSE)
+  dir.create(file.path(directory, "builds"),
+             recursive = TRUE, showWarnings = FALSE)
+}
+```
+
+# Helper functions
+
+## Validate labels and recode yes/no
+
+Unknown labels stop the analysis. Missing values are permitted only where we
+explicitly allow them, such as the empty Study 2 session placeholder. Missing
+responses never become “no”.
+
+```{r response-helpers}
+check_labels = function(values, allowed, label, allow_missing = FALSE) {
+  if ((!allow_missing && anyNA(values)) ||
+      any(!is.na(values) & !values %in% allowed)) {
+    stop(paste("Unexpected or missing", label, "- review the input."))
+  }
+}
+
+yes_no = function(values) {
+  check_labels(values, c("yes", "no"), "yes/no response", allow_missing = TRUE)
+  case_when(values == "yes" ~ 1, values == "no" ~ 0, TRUE ~ NA_real_)
+}
+```
+
+## Keep binary responses separate and average scenarios within participant
+
+The input has one row per participant, scenario, measure, and agent: Yes = 1,
+No = 0. A response to one agent never changes the response to the other.
+“Both” contributes 1 to both role series; “neither” contributes 0 to both.
+No relative-distal transformation or endorsement-based exclusion is used.
+
+`participant_means()` averages available Bike/Mirror answers **within each
+participant × measure × role**, keeping conditions separate. Its output has one
+row per participant and role-specific measure. A person with one available
+scenario has the same group weight as one with two. A missing answer affects
+only that question; if both scenarios are missing for a role/measure, only that
+participant mean is missing. Other roles and measures remain available.
+
+`audit_patterns()` separately labels both/neither/distal-only/proximal-only
+patterns. A missing answer or absent partner row is labeled “missing answer.”
+This descriptive audit does not supply plotting values or determine inclusion.
+The existing session eligibility and repeat-attempt rules remain unchanged.
+
+```{r scoring-helpers}
+check_response_rows = function(responses) {
+  key = c("study", "population", "participant", "age", "condition",
+          "scenario", "measure")
+  check_labels(responses$population, c("Adults", "Children"), "population")
+  check_labels(responses$scenario, scenario_order, "scenario")
+  check_labels(responses$measure, measure_order, "measure")
+  check_labels(responses$role, role_order, "agent role")
+  check_labels(responses$condition, c("Baseline", condition_order), "condition")
+  stopifnot(!anyNA(responses$participant),
+            all(is.na(responses$endorsed) | responses$endorsed %in% 0:1),
+            !anyDuplicated(responses[c(key, "role")]))
+  invisible(TRUE)
+}
+
+audit_patterns = function(responses) {
+  check_response_rows(responses)
+  key = c("study", "population", "participant", "age", "condition", "scenario", "measure")
+  responses %>%
+    mutate(role = factor(role, levels = role_order)) %>%
+    pivot_wider(id_cols = all_of(key), names_from = role,
+                values_from = endorsed, names_expand = TRUE) %>%
+    rename(distal_yes = Distal, proximal_yes = Proximal) %>%
+    mutate(pattern = case_when(
+      is.na(distal_yes) | is.na(proximal_yes) ~ "missing answer",
+      distal_yes == 1 & proximal_yes == 1 ~ "both",
+      distal_yes == 0 & proximal_yes == 0 ~ "neither",
+      distal_yes == 1 ~ "distal only", TRUE ~ "proximal only"))
+}
+
+participant_means = function(responses) {
+  check_response_rows(responses)
+  responses %>%
+    group_by(study, population, participant, age, condition, measure, role) %>%
+    summarise(scenarios_available = sum(!is.na(endorsed)),
+              yes_mean = if (all(is.na(endorsed))) NA_real_
+                else mean(endorsed, na.rm = TRUE), .groups = "drop")
+}
+```
+
+## Participant bootstrap
+
+Each input row is already one participant's mean for a measure and causal role.
+Within each plotted age/role/condition group, resample those participants with replacement 5,000
+times. The 2.5th and 97.5th percentiles form the descriptive 95% interval. We do
+not resample trial rows, pool pilots, fit developmental curves, or run tests.
+Family/household dependence is not modeled by these participant intervals.
+
+```{r bootstrap-helper}
+bootstrap_mean = function(values) {
+  values = values[!is.na(values)]
+  if (!length(values)) return(tibble(n = 0L, mean = NA_real_,
+                                      lower = NA_real_, upper = NA_real_))
+  draws = replicate(bootstrap_replicates,
+                    mean(values[sample.int(length(values), replace = TRUE)]))
+  tibble(n = length(values), mean = mean(values),
+         lower = unname(quantile(draws, .025)),
+         upper = unname(quantile(draws, .975)))
+}
+
+summarize_for_talk = function(means, seed) {
+  stopifnot(!anyDuplicated(means[c("study", "population", "participant",
+                                   "condition", "measure", "role")]))
+  RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+  set.seed(seed)
+  means %>%
+    mutate(age_group = if_else(population == "Adults", "Adult", as.character(age)),
+           measure = factor(measure, levels = measure_order),
+           role = factor(role, levels = role_order)) %>%
+    arrange(measure, role, condition, age_group, participant) %>%
+    group_by(study, population, age_group, condition, measure, role) %>%
+    summarise(eligible_n = n(), summary = list(bootstrap_mean(yes_mean)),
+              .groups = "drop") %>%
+    unnest_wider(summary) %>%
+    mutate(x = match(age_group, age_labels) + min(child_ages) - 1)
+}
+```
+
+## Presentation scaffolds and cumulative builds
+
+All figures use the same computed summary rows throughout their builds. Small,
+fixed horizontal offsets separate overlapping roles/conditions; they never
+change with the number of revealed series. Child means are connected in age
+order; adults are a separate endpoint after the child ages, not part of a developmental
+line. Lines describe cross-sectional age groups, not within-child change.
+
+The full legends, limits, factor levels, facets, and whitespace are specified
+even for Build 00. The theme is set once above; this helper only adjusts it.
+
+```{r presentation-helpers}
+talk_theme = function(text_size) {
+  theme(axis.text = element_text(size = text_size, color = "#242424"),
+        axis.title = element_text(size = text_size + 2),
+        axis.title.x = element_text(margin = margin(t = 14)),
+        axis.title.y = element_text(margin = margin(r = 15)),
+        axis.line = element_line(color = "#777777", linewidth = .5),
+        axis.ticks = element_line(color = "#777777", linewidth = .5),
+        strip.background = element_blank(),
+        strip.text = element_text(size = text_size + 3, face = "bold"),
+        panel.spacing = grid::unit(1.1, "cm"),
+        legend.position = "bottom",
+        legend.title = element_text(size = text_size - 4, face = "bold"),
+        legend.text = element_text(size = text_size - 2),
+        legend.key.width = grid::unit(1.5, "cm"),
+        legend.spacing.x = grid::unit(.6, "cm"),
+        legend.margin = margin(t = 12),
+        plot.margin = margin(22, 24, 15, 18))
+}
+
+show_build = function(summary, step) {
+  stopifnot(length(step) == 1L, step %in% 0:16)
+  filter(summary, reveal_step <= step)
+}
+
+plot_study1 = function(summary, step = 8L) {
+  visible = show_build(summary, step) %>%
+    mutate(plot_x = x + unname(study1_role_offsets[as.character(role)]))
+  ggplot(visible, aes(x = plot_x, y = mean, color = role,
+                      fill = role, shape = role)) +
+    geom_hline(yintercept = c(0, .25, .75, 1), linetype = "dotted", color = "#E0E0E0", linewidth = .45) +
+    geom_hline(yintercept = .5, linetype = "dashed", color = "#888888", linewidth = .65) +
+    geom_vline(xintercept = 9.5, linetype = "dotted", color = "#C0C0C0", linewidth = .5) +
+    geom_line(data = filter(visible, population == "Children"),
+              aes(group = role), linewidth = plot_line_width, show.legend = TRUE, na.rm = TRUE) +
+    geom_linerange(aes(ymin = lower, ymax = upper),
+                   linewidth = ci_line_width, show.legend = FALSE, na.rm = TRUE) +
+    geom_point(size = plot_point_size, stroke = .8, show.legend = TRUE, na.rm = TRUE) +
+    facet_wrap(~ measure, ncol = 2, drop = FALSE, axes = "all_x", axis.labels = "all_x") +
+    scale_color_manual(name = NULL, values = study1_role_colors, limits = role_order, drop = FALSE) +
+    scale_fill_manual(name = NULL, values = study1_role_colors, limits = role_order, drop = FALSE) +
+    scale_shape_manual(name = NULL, values = study1_role_shapes, limits = role_order, drop = FALSE) +
+    scale_x_continuous(breaks = age_breaks, labels = age_labels,
+                       limits = c(2.6, 10.5), expand = expansion(mult = 0)) +
+    scale_y_continuous(breaks = c(0, .25, .5, .75, 1),
+                       labels = c("0%", "25%", "50%", "75%", "100%"),
+                       limits = c(0, 1), expand = expansion(add = .035)) +
+    labs(x = "Age", y = '"Yes" Responses (%)') +
+    talk_theme(study1_text_size)
+}
+
+plot_study2 = function(summary, step = 16L) {
+  visible = show_build(summary, step) %>%
+    mutate(condition = factor(condition, levels = condition_order),
+           plot_x = x + unname(study2_role_offsets[as.character(role)]) +
+             unname(condition_offsets[as.character(condition)]),
+           point_fill = if_else(condition == "Intentional",
+                                unname(study2_role_colors[as.character(role)]), "white"))
+  ggplot(visible, aes(x = plot_x, y = mean, color = role,
+                      shape = condition, linetype = condition)) +
+    geom_hline(yintercept = c(0, .25, .75, 1), linetype = "dotted", color = "#E0E0E0", linewidth = .45) +
+    geom_hline(yintercept = .5, linetype = "dashed", color = "#888888", linewidth = .65) +
+    geom_vline(xintercept = 9.5, linetype = "dotted", color = "#C0C0C0", linewidth = .5) +
+    geom_line(data = filter(visible, population == "Children"),
+              aes(group = interaction(role, condition)),
+              linewidth = plot_line_width, show.legend = TRUE, na.rm = TRUE) +
+    geom_linerange(aes(ymin = lower, ymax = upper),
+                   linewidth = ci_line_width, show.legend = FALSE, na.rm = TRUE) +
+    geom_point(aes(fill = point_fill), size = plot_point_size,
+                stroke = .9, show.legend = TRUE, na.rm = TRUE) +
+    facet_wrap(~ measure, ncol = 2, drop = FALSE, axes = "all_x", axis.labels = "all_x") +
+    scale_color_manual(name = "Causal role", values = study2_role_colors,
+                        limits = role_order, drop = FALSE) +
+    scale_fill_identity(guide = "none") +
+    scale_shape_manual(name = "Intention", values = condition_shapes, limits = condition_order, drop = FALSE) +
+    scale_linetype_manual(name = "Intention", values = condition_lines, limits = condition_order, drop = FALSE) +
+    guides(color = guide_legend(order = 1, override.aes = list(
+             shape = 21, linetype = "solid", fill = unname(study2_role_colors))),
+           shape = guide_legend(order = 2, override.aes = list(
+             color = "#333333", fill = c("#333333", "white"))),
+           linetype = guide_legend(order = 2)) +
+    scale_x_continuous(breaks = age_breaks, labels = age_labels,
+                       limits = c(2.6, 10.5), expand = expansion(mult = 0)) +
+    scale_y_continuous(breaks = c(0, .25, .5, .75, 1),
+                       labels = c("0%", "25%", "50%", "75%", "100%"),
+                       limits = c(0, 1), expand = expansion(add = .035)) +
+    labs(x = "Age", y = '\"Yes\" Responses (%)') +
+    talk_theme(study2_text_size)
+}
+
+save_talk = function(plot, filename, width, height) {
+  ggsave(paste0(filename, ".pdf"), plot, width = width, height = height,
+         device = grDevices::pdf, useDingbats = FALSE, bg = "white")
+  ggsave(paste0(filename, ".png"), plot, width = width, height = height,
+         device = ragg::agg_png, dpi = png_dpi, bg = "white")
+}
+
+save_builds = function(summary, plot_function, output, width, height, build_names) {
+  steps = seq_along(build_names) - 1L
+  stopifnot(identical(show_build(summary, max(steps)), summary))
+  builds = lapply(steps, function(step) plot_function(summary, step))
+  for (step in steps) {
+    save_talk(builds[[step + 1L]], file.path(output, "builds", build_names[step + 1L]),
+              width, height)
+  }
+  names(builds) = build_names
+  builds
+}
+```
+
+# Study 1 — baseline causal chains
+
+## Adults
+
+### Data
+
+The preregistered adult CSV has one row per adult and 16 yes/no fields: two
+stories × four measures × two agents. `workerid` contains the existing screened
+opaque participant code. All 100 adults are retained; this file has no error
+flags or missing test responses. Adult chronological ages are not supplied.
+
+### Read
+
+```{r study1-adults-read}
+df.study1.adults.raw = read_csv(
+  "../../data/study1_baseline_causal_chains/adults/chains_baseline_full_run-responses.csv",
+  col_types = cols(.default = col_character()))
+stopifnot(nrow(df.study1.adults.raw) == 100L,
+          !anyDuplicated(df.study1.adults.raw$workerid),
+          all(is.na(df.study1.adults.raw$error)),
+          all(df.study1.adults.raw$proliferate.condition == "all"))
+```
+
+### Wrangle
+
+The materials establish roles independently in each story. In
+`../experiments/study1_baseline_causal_chains/children/slides/chains.pptx`,
+slide 6 has Andy run into Suzy, who falls into the fence. Slides 21–30 have
+Sophia frighten Bobby, who falls into the mirror. The adult slides tell the
+same stories, and `adults/js/trial.js` maps each character to its question
+image. Thus Andy and Sophia are distal; Suzy and Bobby are proximal. Randomized
+question order does not change these roles. Study 1 is labeled Baseline despite
+an unused/misleading `condition_type = "intentional"` constant in the saved
+adult HTML; the dataset's condition is `all` and the baseline stories have no
+between-participant intention manipulation.
+
+The lookup below states those roles explicitly. `cause` becomes Caused and
+`simple` becomes Lexical. Reshaping changes each adult row into 16 response rows.
+
+```{r study1-adults-wrangle}
+df.story.roles = tribble(
+  ~scenario_key, ~character, ~scenario, ~role,
+  "bike", "andy", "Bike", "Distal",
+  "bike", "suzy", "Bike", "Proximal",
+  "mirror", "bobby", "Mirror", "Proximal",
+  "mirror", "sophia", "Mirror", "Distal")
+df.adult.measures = tibble(question = c("cause", "simple", "fault", "punish"),
+                          measure = measure_order)
+df.adult.questions = crossing(df.story.roles, df.adult.measures) %>%
+  mutate(field = paste(scenario_key, question, character, sep = "_"))
+
+stopifnot(setequal(names(df.study1.adults.raw),
+                  c("workerid", "proliferate.condition", "error", df.adult.questions$field)))
+df.study1.adults.responses = df.study1.adults.raw %>%
+  select(workerid, all_of(df.adult.questions$field)) %>%
+  pivot_longer(-workerid, names_to = "field", values_to = "response_label") %>%
+  left_join(df.adult.questions, by = "field", relationship = "many-to-one") %>%
+  transmute(study = "Study 1", population = "Adults", participant = workerid,
+            age = NA_integer_, condition = "Baseline", scenario, measure, role,
+            endorsed = yes_no(response_label))
+check_response_rows(df.study1.adults.responses)
+df.study1.adults.patterns = audit_patterns(df.study1.adults.responses)
+df.study1.adults.means = participant_means(df.study1.adults.responses)
+```
+
+### Checks and sample sizes
+
+```{r study1-adults-checks}
+kable(df.study1.adults.responses %>%
+        summarise(adults = n_distinct(participant), response_rows = n()),
+      caption = "Study 1 adults: participants, not independent trial rows")
+kable(df.story.roles, caption = "Verified story-role lookup")
+```
+
+## Children
+
+### Data
+
+`exp4_raw_responses.csv` is the current supplied collected Study 1 export,
+copied without changing any values. Each row is an answered question, including
+two warmups per session. `child_hashed_id` identifies a child;
+`participant_hashed_id` is an account and is not the child unit.
+`response_uuid` and `response_id` identify an attempt. Hash codes, session IDs,
+and exact session times remain restricted research metadata in this private
+repository. Final scientific sample acceptance is still subject to review.
+
+### Read
+
+```{r study1-children-read}
+df.study1.children.raw = read_csv(
+  "../../data/study1_baseline_causal_chains/children/exp4_raw_responses.csv",
+  col_types = cols(.default = col_character()))
+df.study1.children.raw_counts = df.study1.children.raw %>%
+  summarise(study = "Study 1", rows = n(), sessions = n_distinct(response_uuid),
+            children = n_distinct(child_hashed_id))
+stopifnot(identical(df.study1.children.raw_counts,
+                   select(filter(snapshot_expectations, study == "Study 1"),
+                          study, rows, sessions, children)))
+stopifnot(all(df.study1.children.raw$included_in_summary == "no"))
+kable(df.study1.children.raw_counts)
+```
+
+### Wrangle: validate labels and count attempts
+
+Warmup rows do not enter scientific scores. `included_in_summary` is always no
+and is ignored. The exported `completed` flag is not an inclusion criterion.
+We count actual answered Bike/Mirror questions and compare them to the recorded
+test count. Each session's metadata must be constant across its rows.
+
+```{r study1-children-attempts}
+df.study1.children.questions = crossing(
+  df.story.roles,
+  tibble(question = c("caused", "break", "fault", "punish"), measure = measure_order)) %>%
+  mutate(question_type = paste(question, character, sep = "_"))
+check_labels(df.study1.children.raw$question_type,
+             c("warmup", df.study1.children.questions$question_type), "Study 1 question")
+check_labels(df.study1.children.raw$scenario_key, c("warmup", "bike", "mirror"),
+             "Study 1 scenario")
+check_labels(df.study1.children.raw$response_label, c("yes", "no"), "Study 1 response")
+check_labels(df.study1.children.raw$include_in_analysis, c("yes", "no"), "inclusion flag")
+check_labels(df.study1.children.raw$true_completion_status, "complete", "completion status")
+check_labels(df.study1.children.raw$withdrawn, c("True", "False"), "withdrawal flag")
+stopifnot(all(df.study1.children.raw$study == "exp4"),
+          all(df.study1.children.raw$eligibility == '["Eligible"]'),
+          all(df.study1.children.raw$is_preview == "False"),
+          all(df.study1.children.raw$participant_age_years %in% as.character(child_ages)),
+          all(df.study1.children.raw$expected_test_questions_n == "16"),
+          all(df.study1.children.raw$left_label == "yes"),
+          all(df.study1.children.raw$right_label == "no"),
+          all(df.study1.children.raw$response_index == if_else(
+            df.study1.children.raw$response_label == "yes", "0", "1")))
+
+df.study1.children.attempts = df.study1.children.raw %>%
+  distinct(child_hashed_id, response_uuid, response_id, date_created_utc,
+           participant_age_years, include_in_analysis, true_completion_status,
+           withdrawn, analysis_exclusion_reason, eligibility, is_preview,
+           answered_test_questions_n, answered_all_test_questions) %>%
+  rename(participant = child_hashed_id) %>%
+  mutate(age = as.integer(participant_age_years), condition = "Baseline",
+         attempt_time = as.POSIXct(date_created_utc, format = "%Y-%m-%d %H:%M:%OS", tz = "UTC"))
+df.study1.children.test_counts = df.study1.children.raw %>%
+  group_by(response_uuid) %>%
+  summarise(answered_tests = sum(scenario_key %in% c("bike", "mirror") &
+                                  response_label %in% c("yes", "no")),
+            warmups = sum(scenario_key == "warmup"), .groups = "drop")
+df.study1.children.attempts = df.study1.children.attempts %>%
+  left_join(df.study1.children.test_counts, by = "response_uuid", relationship = "one-to-one") %>%
+  mutate(eligible = include_in_analysis == "yes" & true_completion_status == "complete" &
+           answered_tests == 16L & answered_all_test_questions == "yes" &
+           withdrawn == "False" & is.na(analysis_exclusion_reason) &
+           eligibility == '["Eligible"]' & is_preview == "False")
+stopifnot(!anyNA(df.study1.children.attempts$participant),
+          !anyNA(df.study1.children.attempts$attempt_time),
+          !anyDuplicated(df.study1.children.attempts$response_uuid),
+          !anyDuplicated(df.study1.children.attempts$response_id),
+          all(grepl("[+]00:00$", df.study1.children.attempts$date_created_utc)),
+          all(df.study1.children.attempts$answered_tests ==
+                as.integer(df.study1.children.attempts$answered_test_questions_n)),
+          all(df.study1.children.attempts$warmups == 2L),
+          identical(df.study1.children.attempts$eligible,
+                    df.study1.children.attempts$include_in_analysis == "yes"))
+```
+
+### Wrangle: select one eligible attempt per child
+
+One withdrawn session is excluded by the supplied flags. Among the remaining
+eligible attempts, sort by answered test questions and then session creation
+time, newest first. All eligible attempts here have 16 test answers, so time
+breaks the repeat-attempt ties. The output has one row per retained child.
+No age-cell cap is applied to this descriptive snapshot.
+
+```{r study1-children-selection}
+df.study1.children.eligible = filter(df.study1.children.attempts, eligible)
+stopifnot(!anyDuplicated(df.study1.children.eligible[
+  c("participant", "answered_tests", "attempt_time")]))
+df.study1.children.included = df.study1.children.eligible %>%
+  arrange(participant, desc(answered_tests), desc(attempt_time)) %>%
+  group_by(participant) %>% slice_head(n = 1) %>% ungroup()
+df.study1.children.repeats = df.study1.children.attempts %>%
+  add_count(participant, name = "attempts") %>% filter(attempts > 1L) %>%
+  mutate(selected = response_uuid %in% df.study1.children.included$response_uuid) %>%
+  arrange(participant, attempt_time) %>%
+  select(participant, response_id, date_created_utc, condition, age, answered_tests,
+         include_in_analysis, true_completion_status, withdrawn,
+         analysis_exclusion_reason, selected)
+kable(df.study1.children.repeats, caption = "All attempts by repeated Study 1 children")
+```
+
+### Wrangle: make response rows and role-specific means
+
+Keep only the selected sessions and their experimental questions. Join the
+explicit scenario/character lookup; an unexpected pairing stops the workflow.
+Each output row is one child's binary answer about one agent. Average available
+scenario responses separately for each measure and role. Pattern labels are
+computed only for the audit and never filter or transform plotting responses.
+
+```{r study1-children-responses}
+df.study1.children.responses = df.study1.children.raw %>%
+  semi_join(df.study1.children.included, by = "response_uuid") %>%
+  filter(scenario_key != "warmup") %>%
+  left_join(df.study1.children.questions,
+            by = c("scenario_key", "question_type"), relationship = "many-to-one") %>%
+  transmute(study = "Study 1", population = "Children", participant = child_hashed_id,
+            age = as.integer(participant_age_years), condition = "Baseline",
+            scenario, measure, role, endorsed = yes_no(response_label))
+stopifnot(!anyNA(select(df.study1.children.responses, -endorsed)),
+          nrow(df.study1.children.responses) == 16L * nrow(df.study1.children.included))
+df.study1.children.patterns = audit_patterns(df.study1.children.responses)
+df.study1.children.means = participant_means(df.study1.children.responses)
+```
+
+### Checks and sample sizes
+
+These Ns count unique children. “Neither” responses remain two valid no judgments.
+They are not the number of sessions or independent test trials. Snapshot
+expectations below stop a changed input for review; the displayed Ns are counted
+from the data, not assigned from those expectations.
+
+```{r study1-children-checks}
+stopifnot(nrow(df.study1.children.eligible) ==
+            snapshot_expectations$flagged_eligible[snapshot_expectations$study == "Study 1"],
+          nrow(df.study1.children.included) ==
+            snapshot_expectations$retained_children[snapshot_expectations$study == "Study 1"],
+          !anyDuplicated(df.study1.children.included$participant),
+          all(df.study1.children.included$age %in% child_ages))
+df.study1.children.age_counts = df.study1.children.included %>% count(age, name = "children")
+kable(df.study1.children.age_counts, caption = "Study 1 unique retained children by age")
+```
+
+## Combined descriptive data
+
+Adult and child schemas now match. Adults have missing chronological age, and
+are placed at the separate Adult category only for plotting. Each bootstrap
+group receives one available mean per participant, regardless of how either agent was judged or how many scenarios
+are available for that particular role and measure. The resulting table is computed once.
+
+```{r study1-combined}
+df.study1.patterns = bind_rows(df.study1.adults.patterns, df.study1.children.patterns)
+df.study1.means = bind_rows(df.study1.adults.means, df.study1.children.means)
+df.study1.summary = summarize_for_talk(df.study1.means, bootstrap_seed) %>%
+  # Reveal adults first, then children, within each measure.
+  mutate(reveal_step = 2L * match(as.character(measure), measure_order) -
+           as.integer(population == "Adults"))
+kable(df.study1.summary %>% select(population, age_group, measure, role, eligible_n, n, mean, lower, upper),
+      digits = 3, caption = "Study 1: available participant means and bootstrap 95% intervals")
+```
+
+## Talk plots
+
+The four panels show Caused, Lexical, Fault and Punish. Set1 red identifies
+Distal and Set1 blue identifies Proximal. Both child trajectories are solid
+lines; adult endpoints use the same role colors and shapes. The y-axis is the
+percentage of Yes responses for that particular agent, from 0% to 100%.
+A dashed horizontal line marks 50% in every panel and build. This is an
+endorsement percentage, with no comparison to the other agent. Numerical
+tables retain proportions from 0 to 1.
+
+```{r study1-talk}
+p.study1.full = plot_study1(df.study1.summary)
+save_talk(p.study1.full, file.path(study1_output, "study1_yes_responses_full"),
+          study1_width, study1_height)
+p.study1.full
+```
+
+## Talk builds
+
+Build 00 contains only the complete scaffold. Each following pair adds adults
+then children for Caused, Lexical, Fault, and Punish. Build 08 uses the same
+summary rows and plotting function as the full figure. Every build is saved as
+both a vector PDF and a high-resolution PNG in `talk/builds/`.
+
+```{r study1-builds}
+p.study1.builds = save_builds(df.study1.summary, plot_study1, study1_output,
+                             study1_width, study1_height, study1_build_names)
+kable(tibble(build = 0:8, filename = study1_build_names))
+```
+
+# Study 2 — intention × causal chains
+
+## Adults
+
+### Data
+
+All four files in `adult_pilot_rounds_unordered/` are earlier pilots. The
+preregistered main adult dataset remains missing. We audit each file separately
+and use **one** pilot for a talk/reference comparison. No participants are
+pooled across files and no scientific values are inferred from an image.
+
+The current intentional and accidental adult `js/trial.js` files use the same
+16 response names as Study 1. Their linked stories independently confirm Andy
+as the distal bike agent and Sophia as the distal mirror agent. See
+`../experiments/study2_intention_causal_chains/adults/slides/break_crack.pptx`:
+slides 4/11 and 30–32 describe Andy's action and Suzy falling into the fence;
+slides 48/52 and 73–74 describe Sophia's action and Bobby falling into the mirror.
+The current code is identified as v4 in the preserved source note, but a
+dataset-to-deployment revision mapping has not been recovered. Identical fields
+alone cannot establish which exact experiment version generated a pilot.
+
+### Read
+
+Each raw pilot has one row per adult. The loop reads the four explicitly named
+files and checks each file's participant keys, fields, and condition labels.
+Its output is a named list of separate pilot tables, not a combined sample.
+
+```{r study2-adults-read}
+df.study2.pilots.raw = setNames(lapply(study2_pilot_files, function(filename) {
+  read_csv(file.path(study2_pilot_directory, filename),
+            col_types = cols(.default = col_character()))
+}), study2_pilot_files)
+
+for (pilot in df.study2.pilots.raw) {
+  stopifnot(setequal(names(pilot),
+                    c("workerid", "proliferate.condition", "error", df.adult.questions$field)),
+            !anyNA(pilot$workerid), !anyDuplicated(pilot$workerid), all(is.na(pilot$error)))
+  check_labels(pilot$proliferate.condition, c("intentional", "accidental"), "adult condition")
+}
+```
+
+### Wrangle and audit the four pilots
+
+This explicit transformation repeats the adult field mapping for each pilot
+separately. `simple` is Lexical; each character keeps its verified role.
+`proliferate.condition` supplies the between-participant condition. We calculate
+role-specific yes-rates, the same outcome displayed in slide 17. Responses are
+averaged across scenarios within participant before averaging participants.
+Both/neither response patterns do not change the denominator.
+
+```{r study2-adults-audit}
+df.study2.pilots.responses = lapply(df.study2.pilots.raw, function(pilot) {
+  pilot %>%
+    select(workerid, proliferate.condition, all_of(df.adult.questions$field)) %>%
+    pivot_longer(all_of(df.adult.questions$field), names_to = "field", values_to = "response_label") %>%
+    left_join(df.adult.questions, by = "field", relationship = "many-to-one") %>%
+    transmute(study = "Study 2", population = "Adults", participant = workerid,
+              age = NA_integer_, condition = case_when(
+                proliferate.condition == "intentional" ~ "Intentional",
+                proliferate.condition == "accidental" ~ "Accidental"),
+              scenario, measure, role, endorsed = yes_no(response_label))
+})
+invisible(lapply(df.study2.pilots.responses, check_response_rows))
+df.study2.pilots.patterns = lapply(df.study2.pilots.responses, audit_patterns)
+df.study2.pilots.means = lapply(df.study2.pilots.responses, participant_means)
+
+df.study2.pilots.inventory = bind_rows(lapply(study2_pilot_files, function(filename) {
+  pilot = df.study2.pilots.raw[[filename]]
+  tibble(filename, N = nrow(pilot),
+         Intentional = sum(pilot$proliferate.condition == "intentional"),
+         Accidental = sum(pilot$proliferate.condition == "accidental"),
+         available_fields = paste(names(pilot), collapse = ", "))
+}))
+df.study2.pilots.audit = bind_rows(lapply(study2_pilot_files, function(filename) {
+  df.study2.pilots.means[[filename]] %>%
+    group_by(condition, measure, role) %>%
+    summarise(eligible_n = n(), contributing_n = sum(!is.na(yes_mean)),
+              yes_mean = mean(yes_mean, na.rm = TRUE), .groups = "drop") %>%
+    mutate(filename = filename, .before = 1)
+}))
+kable(df.study2.pilots.inventory, caption = "Separate earlier adult pilots; never pooled")
+kable(df.study2.pilots.audit, digits = 4,
+      caption = "Pilot comparison: role-specific Yes means after within-person scenario averaging")
+```
+
+### Selected talk/reference pilot and limits of the match
+
+We select **`exp2_new_pilot-responses.csv`** (N = 41: 20 Intentional and 21
+Accidental). Its adult raw yes-rates visually align with all four panels of
+`../../figures/study2_intention_causal_chains/from_lab_talk_deck/slide17_img1.png`
+more closely than the other three pilots. For example, the selected pilot's
+Intentional Caused distal/proximal rates are .95/.25, Lexical .625/.60, Fault
+.975/.025, and Punish .925/.05. The table below gives the exact values computed
+from the CSV for both conditions. These are evidence for the comparison choice,
+not recovered source-code or revision provenance.
+
+The new figures plot these separate role-specific yes-rates. In particular,
+Accidental Punish includes **all 21 adults**: the distal mean is 13/42 = .309524
+and the proximal mean is 2/42 = .047619 (two scenario responses per adult).
+Neither judgments are zeros for both roles, and are retained. These adult
+endpoints visually match the reference, although its generating script and
+exact deployment revision remain unverified. The presentation axes say only
+“Adult”; the input's pilot provenance remains documented here and in the guide.
+
+### Checks and sample sizes
+
+```{r study2-adults-selected}
+df.study2.adults.raw = df.study2.pilots.raw[[selected_pilot]]
+df.study2.adults.responses = df.study2.pilots.responses[[selected_pilot]]
+df.study2.adults.patterns = df.study2.pilots.patterns[[selected_pilot]]
+df.study2.adults.means = df.study2.pilots.means[[selected_pilot]]
+stopifnot(nrow(df.study2.adults.raw) == 41L,
+          !anyNA(df.study2.adults.responses$condition))
+kable(filter(df.study2.pilots.inventory, filename == selected_pilot) %>%
+        select(-available_fields), caption = "Selected adult pilot (not the preregistered main sample)")
+kable(filter(df.study2.pilots.audit, filename == selected_pilot) %>%
+        select(condition, measure, role, yes_mean) %>%
+        pivot_wider(names_from = role, values_from = yes_mean),
+      digits = 6, caption = "CSV-derived raw yes-rates for visual comparison to slide 17")
+```
+
+## Children
+
+### Data
+
+`exp6_raw_responses.csv` is the supplied September 2026 snapshot. Collection is
+ongoing; this file does not establish completion of the registered sample.
+The CSV is byte-identical to the supplied download; only its `(2)` filename
+suffix was removed. Each row is a question response, with one empty-session
+placeholder. Child hash codes identify children; session IDs identify attempts.
+
+### Read
+
+```{r study2-children-read}
+df.study2.children.raw = read_csv(
+  "../../data/study2_intention_causal_chains/children/exp6_raw_responses.csv",
+  col_types = cols(.default = col_character()))
+df.study2.children.raw_counts = df.study2.children.raw %>%
+  summarise(study = "Study 2", rows = n(), sessions = n_distinct(response_uuid),
+            children = n_distinct(child_hashed_id))
+stopifnot(identical(df.study2.children.raw_counts,
+                   select(filter(snapshot_expectations, study == "Study 2"),
+                          study, rows, sessions, children)))
+stopifnot(all(df.study2.children.raw$completed == "False"),
+          all(df.study2.children.raw$included_in_summary == "no"))
+kable(df.study2.children.raw_counts)
+```
+
+### Wrangle: validate labels and count attempts
+
+**Never filter Study 2 using `completed == TRUE`.** It is False even for usable
+sessions. Likewise, `included_in_summary` is no throughout and is ignored.
+Use the supplied inclusion flag, `true_completion_status`, actual and recorded
+test counts, withdrawal/exclusion information, age, eligibility, and preview
+status. All retained sessions must contain 16 answered test questions.
+One otherwise eligible session has all 16 test answers but no exported warmup
+rows; it is retained. Warmups are not test questions and their absence is not
+an additional exclusion rule. The export does not establish why they are absent.
+
+The saved child task explicitly labels proximal/distal roles. Its question
+construction is in `../experiments/study2_intention_causal_chains/children/`
+`jspsych/chains_intentional_accidental_version.js`, lines 229–250. This mapping
+does not infer roles from response frequencies. The three missing group labels
+occur only in unusable early attempts, and the one fully blank question row is
+an incomplete-session placeholder; neither is turned into a scientific response.
+
+```{r study2-children-attempts}
+df.study2.children.questions = tribble(
+  ~question_type, ~measure, ~role,
+  "cause_proximal", "Caused", "Proximal",
+  "cause_distal", "Caused", "Distal",
+  "lexical_proximal", "Lexical", "Proximal",
+  "lexical_distal", "Lexical", "Distal",
+  "fault_proximal", "Fault", "Proximal",
+  "fault_distal", "Fault", "Distal",
+  "punish_proximal", "Punish", "Proximal",
+  "punish_distal", "Punish", "Distal")
+check_labels(df.study2.children.raw$question_type,
+             c("warmup", df.study2.children.questions$question_type),
+             "Study 2 question", allow_missing = TRUE)
+check_labels(df.study2.children.raw$scenario_key, c("warmup", "bike", "mirror"),
+             "Study 2 scenario", allow_missing = TRUE)
+check_labels(df.study2.children.raw$response_label, c("yes", "no"),
+             "Study 2 response", allow_missing = TRUE)
+check_labels(df.study2.children.raw$group, c("intentional", "accidental"),
+             "Study 2 condition", allow_missing = TRUE)
+check_labels(df.study2.children.raw$include_in_analysis, c("yes", "no"), "inclusion flag")
+check_labels(df.study2.children.raw$true_completion_status, c("complete", "incomplete"),
+             "completion status")
+check_labels(df.study2.children.raw$withdrawn, c("True", "False"), "withdrawal flag")
+check_labels(df.study2.children.raw$eligibility,
+             c('["Eligible"]', '["Ineligible_Participation"]'), "eligibility")
+stopifnot(all(df.study2.children.raw$study == "exp6"),
+          all(df.study2.children.raw$is_preview == "False"),
+          all(df.study2.children.raw$participant_age_years %in% as.character(child_ages)),
+          all(df.study2.children.raw$expected_test_questions_n == "16"),
+          all(!is.na(df.study2.children.raw$group) |
+                df.study2.children.raw$include_in_analysis == "no"),
+          all(!is.na(df.study2.children.raw$question_type) |
+                df.study2.children.raw$true_completion_status == "incomplete"))
+df.study2.children.recorded = filter(df.study2.children.raw, !is.na(response_label))
+stopifnot(all(df.study2.children.recorded$left_label == "yes"),
+          all(df.study2.children.recorded$right_label == "no"),
+          all(df.study2.children.recorded$response_index == if_else(
+            df.study2.children.recorded$response_label == "yes", "0", "1")))
+
+df.study2.children.attempts = df.study2.children.raw %>%
+  distinct(child_hashed_id, response_uuid, response_id, date_created_utc, group,
+           participant_age_years, include_in_analysis, true_completion_status,
+           withdrawn, analysis_exclusion_reason, eligibility, is_preview,
+           answered_test_questions_n, answered_all_test_questions) %>%
+  rename(participant = child_hashed_id) %>%
+  mutate(age = as.integer(participant_age_years), condition = case_when(
+           group == "intentional" ~ "Intentional", group == "accidental" ~ "Accidental"),
+         attempt_time = as.POSIXct(date_created_utc, format = "%Y-%m-%d %H:%M:%OS", tz = "UTC"))
+df.study2.children.test_counts = df.study2.children.raw %>%
+  group_by(response_uuid) %>%
+  summarise(answered_tests = sum(scenario_key %in% c("bike", "mirror") &
+                                  response_label %in% c("yes", "no")),
+            warmups = sum(scenario_key %in% "warmup"), .groups = "drop")
+df.study2.children.attempts = df.study2.children.attempts %>%
+  left_join(df.study2.children.test_counts, by = "response_uuid", relationship = "one-to-one") %>%
+  mutate(eligible = include_in_analysis == "yes" & true_completion_status == "complete" &
+           answered_tests == 16L & answered_all_test_questions == "yes" &
+           withdrawn == "False" & is.na(analysis_exclusion_reason) &
+           eligibility == '["Eligible"]' & is_preview == "False")
+stopifnot(!anyNA(df.study2.children.attempts$participant),
+          !anyNA(df.study2.children.attempts$attempt_time),
+          !anyDuplicated(df.study2.children.attempts$response_uuid),
+          !anyDuplicated(df.study2.children.attempts$response_id),
+          all(grepl("[+]00:00$", df.study2.children.attempts$date_created_utc)),
+          all(df.study2.children.attempts$answered_tests ==
+                as.integer(df.study2.children.attempts$answered_test_questions_n)),
+          identical(df.study2.children.attempts$eligible,
+                    df.study2.children.attempts$include_in_analysis == "yes"))
+```
+
+### Wrangle: select one eligible attempt per child
+
+Twelve sessions fail the supplied analysis flag: six withdrawn, one ineligible,
+four with no answered tests, and one with 10 of 16 tests. The four repeated
+children with two eligible attempts each lose their earlier tied attempt.
+Two of these children crossed conditions; we retain the later eligible attempt
+only, without merging or treating the child as two people. The audit also shows
+repeated children whose other attempts were ineligible.
+
+```{r study2-children-selection}
+df.study2.children.eligible = filter(df.study2.children.attempts, eligible)
+stopifnot(!anyDuplicated(df.study2.children.eligible[
+  c("participant", "answered_tests", "attempt_time")]))
+df.study2.children.included = df.study2.children.eligible %>%
+  arrange(participant, desc(answered_tests), desc(attempt_time)) %>%
+  group_by(participant) %>% slice_head(n = 1) %>% ungroup()
+df.study2.children.repeats = df.study2.children.attempts %>%
+  add_count(participant, name = "attempts") %>% filter(attempts > 1L) %>%
+  mutate(selected = response_uuid %in% df.study2.children.included$response_uuid) %>%
+  arrange(participant, attempt_time) %>%
+  select(participant, response_id, date_created_utc, condition, age, answered_tests,
+         include_in_analysis, true_completion_status, withdrawn,
+         analysis_exclusion_reason, selected)
+kable(df.study2.children.repeats, caption = "All attempts by repeated Study 2 children")
+```
+
+### Wrangle: make response rows and role-specific means
+
+Keep experimental responses from each child's one selected session. The exact
+question lookup supplies measure and role; `scenario_key` supplies Bike/Mirror
+and `group` supplies Intentional/Accidental. Any unmapped retained value stops
+the analysis. The common response schema feeds the same independent
+measure-by-role participant averages used in Study 1. Pair labels are only
+a descriptive audit, never an input to those means.
+
+```{r study2-children-responses}
+df.study2.children.responses = df.study2.children.raw %>%
+  semi_join(df.study2.children.included, by = "response_uuid") %>%
+  filter(scenario_key %in% c("bike", "mirror")) %>%
+  left_join(df.study2.children.questions, by = "question_type", relationship = "many-to-one") %>%
+  transmute(study = "Study 2", population = "Children", participant = child_hashed_id,
+            age = as.integer(participant_age_years), condition = case_when(
+              group == "intentional" ~ "Intentional", group == "accidental" ~ "Accidental"),
+            scenario = case_when(scenario_key == "bike" ~ "Bike", scenario_key == "mirror" ~ "Mirror"),
+            measure, role, endorsed = yes_no(response_label))
+stopifnot(!anyNA(select(df.study2.children.responses, -endorsed)),
+          nrow(df.study2.children.responses) == 16L * nrow(df.study2.children.included))
+df.study2.children.patterns = audit_patterns(df.study2.children.responses)
+df.study2.children.means = participant_means(df.study2.children.responses)
+```
+
+### Checks and sample sizes
+
+Ns below are unique retained children. No participant is omitted because they
+answered no to both agents. Some cells exceed the preregistered cap of 30; this is the requested
+uncapped descriptive snapshot. Session creation dates cannot substitute for
+the completion timestamps specified by that cap rule without an agreed change.
+
+```{r study2-children-checks}
+stopifnot(nrow(df.study2.children.eligible) ==
+            snapshot_expectations$flagged_eligible[snapshot_expectations$study == "Study 2"],
+          nrow(df.study2.children.included) ==
+            snapshot_expectations$retained_children[snapshot_expectations$study == "Study 2"],
+          !anyDuplicated(df.study2.children.included$participant),
+          !anyNA(df.study2.children.included$condition),
+          all(df.study2.children.included$age %in% child_ages))
+df.study2.children.age_counts = df.study2.children.included %>% count(age, name = "children")
+df.study2.children.condition_age_counts = df.study2.children.included %>%
+  count(age, condition, name = "children")
+kable(df.study2.children.age_counts, caption = "Study 2 unique retained children by age")
+kable(df.study2.children.condition_age_counts %>%
+        pivot_wider(names_from = condition, values_from = children),
+      caption = "Study 2 unique retained children by age and selected condition")
+```
+
+## Combined descriptive data
+
+The selected adult pilot and current child snapshot are kept distinct by
+population. No adult from the other pilots enters this summary. Bootstrap
+intervals resample participant means within the displayed group, exactly as in
+Study 1. Plots label the endpoint “Adult”; the pilot source is documented here.
+
+```{r study2-combined}
+df.study2.patterns = bind_rows(df.study2.adults.patterns, df.study2.children.patterns)
+df.study2.means = bind_rows(df.study2.adults.means, df.study2.children.means)
+df.study2.summary = summarize_for_talk(df.study2.means, bootstrap_seed + 1L) %>%
+  # Within each measure: Intentional adults/children, then Accidental adults/children.
+  # Both causal roles appear together at each reveal.
+  mutate(reveal_step = 4L * (match(as.character(measure), measure_order) - 1L) +
+           2L * (match(condition, condition_order) - 1L) +
+           if_else(population == "Adults", 1L, 2L))
+kable(df.study2.summary %>%
+        select(population, age_group, condition, measure, role, eligible_n, n, mean, lower, upper),
+      digits = 3, caption = "Study 2: participant means and bootstrap 95% intervals; adults are pilot data")
+```
+
+## Talk plots
+
+The reference image is 1920 × 1536 pixels. Both new figures keep its 5:4
+aspect and 2 × 2 Caused/Lexical/Fault/Punish layout. Study 2 has four series per
+panel: Distal/Proximal crossed with Intentional/Accidental. Set1 red
+identifies Distal; Set1 blue identifies Proximal, matching Study 1. Intentional uses solid lines
+and filled circles; Accidental uses dashed lines and open triangles, with the
+same role colors. Legend keys explain role and intention separately.
+
+Values are ordinary percentages of Yes responses, not conditional relative
+scores. Both/neither judgments remain in each role's denominator. Child age
+means are connected without fitting curves, and adults remain separate
+endpoints labeled “Adult”. The y-axis runs from 0% to 100%, with a dashed
+horizontal line at 50% in every panel and build. Numerical tables retain
+proportions from 0 to 1.
+
+```{r study2-talk, fig.height=12.8}
+p.study2.full = plot_study2(df.study2.summary)
+save_talk(p.study2.full, file.path(study2_output, "study2_yes_responses_full"),
+          study2_width, study2_height)
+p.study2.full
+```
+
+## Talk builds
+
+All four facets remain present from Build 00 onward. Within each measure,
+reveal Intentional adults, Intentional children, Accidental adults, then
+Accidental children; both roles appear together. Caused occupies 01–04,
+Lexical 05–08, Fault 09–12 and Punish 13–16. Build 16 equals the full figure.
+Earlier results stay fixed. Facets never drop, and no summary or bootstrap is
+recomputed during build rendering.
+
+```{r study2-builds}
+p.study2.builds = save_builds(df.study2.summary, plot_study2, study2_output,
+                             study2_width, study2_height, study2_build_names)
+kable(tibble(build = 0:16, filename = study2_build_names))
+```
+
+# Main talk comparison — change from the Study 1 baseline
+
+Study 1 supplies the baseline judgments for the same causal-chain situations
+without an intentional/accidental manipulation. Match groups by **population,
+age category, measure and role**. Subtract that Study 1 mean from each Study 2
+condition mean: `change = Study 2 proportion Yes - Study 1 proportion Yes`.
+The two conditions use exactly the same matching baseline. Never pair people
+across studies, pool age groups, or divide by the baseline.
+
+The raw quantity is still each participant's mean of available Bike/Mirror
+binary answers for that role and measure. Both/neither remain included, and
+missingness stays question-specific. Inclusion and repeat-attempt decisions
+are unchanged. The raw figures above remain backup outputs.
+
+The percentage tick labels display changes in **percentage points**: 10% means ten points
+more Yes responses than baseline, 0 means the same mean, and -10 means ten
+points fewer. This is not percent change relative to the baseline denominator.
+Only Intentional and Accidental are drawn; the zero line represents Study 1.
+
+This is a descriptive comparison of different study samples, not within-person
+change or an isolated causal estimate of adding intention information. Cohort
+or deployment differences can also contribute. In particular, Adult compares
+Study 1's N=100 dataset with the selected Study 2 pilot (20 Intentional,
+21 Accidental); the Study 2 preregistered adult dataset is still missing.
+
+## Bootstrap both studies
+
+For each age/measure/role cell, independently resample participants from Study 1,
+Study 2 Intentional and Study 2 Accidental, with replacement and the original
+sample size in each group. Each sampled value is already a participant mean.
+Reuse the same Study 1 bootstrap draw for both condition contrasts in each
+replicate. Subtract bootstrap means and take their 2.5th/97.5th percentiles.
+These are pointwise descriptive 95% intervals that include uncertainty in both
+studies; do not subtract the endpoints of the existing raw-mean intervals.
+
+We treat the study samples as independent. Their retained participant codes do
+not overlap; the check below stops if this changes. Different anonymization
+schemes could still conceal shared people, and household dependence is not
+modeled. No confidence statement about an entire trajectory or a difference
+between the two change curves is made from these pointwise intervals.
+
+```{r comparison-bootstrap}
+bootstrap_draws = function(values) {
+  values = values[!is.na(values)]
+  if (!length(values)) return(rep(NA_real_, bootstrap_replicates))
+  replicate(bootstrap_replicates,
+            mean(values[sample.int(length(values), replace = TRUE)]))
+}
+
+bootstrap_changes = function(baseline, intentional, accidental) {
+  baseline_draws = bootstrap_draws(baseline)
+  condition_values = list(Intentional = intentional, Accidental = accidental)
+  bind_rows(lapply(condition_order, function(condition) {
+    changes = bootstrap_draws(condition_values[[condition]]) - baseline_draws
+    if (all(is.na(changes))) {
+      return(tibble(condition, lower = NA_real_, upper = NA_real_))
+    }
+    tibble(condition, lower = unname(quantile(changes, .025)),
+           upper = unname(quantile(changes, .975)))
+  }))
+}
+
+df.comparison.id_overlap = tibble(population = c("Adults", "Children")) %>%
+  rowwise() %>%
+  mutate(shared_codes = length(intersect(
+    df.study1.means$participant[df.study1.means$population == population],
+    df.study2.means$participant[df.study2.means$population == population]))) %>%
+  ungroup()
+stopifnot(all(df.comparison.id_overlap$shared_codes == 0L))
+
+# One row per matching cell, with separate lists of participant means.
+df.comparison.samples = bind_rows(df.study1.means, df.study2.means) %>%
+  mutate(age_group = if_else(population == "Adults", "Adult", as.character(age))) %>%
+  arrange(study, population, age_group, measure, role, condition, participant) %>%
+  group_by(population, age_group, measure, role) %>%
+  summarise(baseline = list(yes_mean[study == "Study 1"]),
+            intentional = list(yes_mean[study == "Study 2" & condition == "Intentional"]),
+            accidental = list(yes_mean[study == "Study 2" & condition == "Accidental"]),
+            .groups = "drop")
+
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 2L)
+df.comparison.intervals = bind_rows(lapply(seq_len(nrow(df.comparison.samples)), function(i) {
+  cell = df.comparison.samples[i, ]
+  bind_cols(select(cell, population, age_group, measure, role),
+            bootstrap_changes(cell$baseline[[1]], cell$intentional[[1]], cell$accidental[[1]]))
+}))
+```
+
+## Compute and save every plotted value
+
+The matching keys below prevent, for example, a distal adult comparison from
+using a proximal or child baseline. Means remain in proportion units in the
+CSV; columns ending in `_pp` multiply by 100 for the figure's percentage-point
+units. The CSV contains all 128 plotted values, their two source means, both
+sample sizes, and bootstrap limits, written without display rounding. The
+compact table shows the same means to six decimal places.
+
+```{r comparison-means}
+df.comparison.baseline = df.study1.summary %>%
+  select(population, age_group, measure, role, baseline_n = n, baseline = mean)
+df.comparison.summary = df.study2.summary %>%
+  select(population, age_group, measure, role, condition, study2_n = n, study2_yes = mean) %>%
+  left_join(df.comparison.baseline,
+            by = c("population", "age_group", "measure", "role"), relationship = "many-to-one") %>%
+  mutate(change = study2_yes - baseline) %>%
+  left_join(df.comparison.intervals,
+            by = c("population", "age_group", "measure", "role", "condition"),
+            relationship = "one-to-one") %>%
+  mutate(measure = factor(measure, levels = measure_order),
+         role = factor(role, levels = role_order),
+         condition = factor(condition, levels = condition_order),
+         x = if_else(age_group == "Adult", comparison_adult_position,
+                     as.numeric(match(age_group, age_labels) + min(child_ages) - 1)),
+         reveal_step = match(as.character(measure), measure_order)) %>%
+  arrange(role, measure, match(age_group, age_labels), condition)
+stopifnot(nrow(df.comparison.summary) == 128L,
+          !anyDuplicated(df.comparison.summary[c("population", "age_group", "measure", "role", "condition")]),
+          all(is.finite(df.comparison.summary$change)),
+          all(df.comparison.summary$baseline_n > 0), all(df.comparison.summary$study2_n > 0),
+          all(df.comparison.summary$lower <= df.comparison.summary$upper))
+# Use -50% to 50% unless an observed mean requires a wider symmetric range.
+# Interval endpoints do not determine this requested display range.
+comparison_y_limit = max(comparison_min_y_limit,
+                         ceiling(max(abs(df.comparison.summary$change)) / comparison_y_step) * comparison_y_step)
+comparison_y_breaks = seq(-comparison_y_limit, comparison_y_limit, comparison_y_step)
+
+df.comparison.plotted_values = df.comparison.summary %>%
+  select(population, age_group, measure, role, condition, baseline_n, study2_n,
+         baseline, study2_yes, change, lower, upper) %>%
+  mutate(change_pp = 100 * change, lower_pp = 100 * lower, upper_pp = 100 * upper)
+write_csv(df.comparison.plotted_values,
+          file.path(comparison_output, "baseline_change_plotted_means.csv"))
+
+df.comparison.mean_table = df.comparison.summary %>%
+  select(age_group, measure, role, baseline, condition, study2_yes, change) %>%
+  pivot_wider(names_from = condition, values_from = c(study2_yes, change))
+kable(df.comparison.mean_table, digits = 6,
+      caption = "Study 2 minus Study 1: source means and changes in proportion units; CSV includes full precision, Ns and intervals")
+```
+
+## Full comparison and cumulative builds
+
+Columns are Caused, Lexical, Fault and Punish; rows are Distal and Proximal.
+Purple solid lines with filled circles show Intentional, and teal dashed lines
+with open triangles show Accidental. Child age means are connected; the Adult
+endpoint stays separate. All eight panels share a symmetric scale and a zero
+reference line. The role rows make a third baseline trajectory unnecessary.
+The current observed differences all fit within -50% to 50%. Four interval
+ends extend beyond this range and are simply clipped at the panel boundary,
+without arrowheads. The full interval bounds remain in the CSV. Coordinate
+zooming clips only the display; it never deletes the point or its entire interval.
+
+Build 00 is the complete empty scaffold. Builds 01–04 add Caused, Lexical,
+Fault and Punish, respectively, for both roles and both conditions. Summaries,
+intervals, legend, offsets and geometry are fixed throughout; Build 04 equals
+the full figure. The comparison is the main talk figure; the two raw figures
+remain available for checking absolute endorsement levels.
+
+```{r comparison-plots, fig.width=16, fig.height=9}
+plot_comparison = function(summary, step = 4L) {
+  stopifnot(step %in% 0:4)
+  visible = show_build(summary, step) %>%
+    mutate(plot_x = x + unname(comparison_offsets[as.character(condition)]))
+  ggplot(visible, aes(x = plot_x, y = change, color = condition,
+                      fill = condition, shape = condition, linetype = condition)) +
+    geom_hline(yintercept = 0, color = "#666666", linewidth = .6) +
+    geom_line(data = filter(visible, population == "Children"),
+              aes(group = condition), linewidth = .8, show.legend = TRUE, na.rm = TRUE) +
+    geom_linerange(aes(ymin = lower, ymax = upper), linetype = "solid",
+                   linewidth = .45, alpha = .55, show.legend = FALSE, na.rm = TRUE) +
+    geom_point(size = comparison_point_size, stroke = .75, show.legend = TRUE, na.rm = TRUE) +
+    facet_grid(role ~ measure, drop = FALSE) +
+    scale_color_manual(name = NULL, values = comparison_colors, limits = condition_order, drop = FALSE) +
+    scale_fill_manual(name = NULL, values = c(Intentional = comparison_colors[["Intentional"]],
+                                              Accidental = "white"),
+                      limits = condition_order, drop = FALSE) +
+    scale_shape_manual(name = NULL, values = condition_shapes, limits = condition_order, drop = FALSE) +
+    scale_linetype_manual(name = NULL, values = condition_lines, limits = condition_order, drop = FALSE) +
+    scale_x_continuous(breaks = c(child_ages, comparison_adult_position), labels = age_labels,
+                       limits = c(2.6, comparison_adult_position + .9), expand = expansion(mult = 0)) +
+    scale_y_continuous(breaks = comparison_y_breaks,
+                       labels = paste0(100 * comparison_y_breaks, "%"),
+                       expand = expansion(mult = 0)) +
+    coord_cartesian(ylim = c(-comparison_y_limit, comparison_y_limit), expand = FALSE) +
+    labs(x = "Age", y = "Change from baseline (%)") +
+    talk_theme(comparison_text_size) +
+    theme(panel.spacing = grid::unit(.6, "cm"),
+          strip.text = element_text(size = comparison_text_size + 3, face = "bold"),
+          strip.text.y = element_text(angle = 0),
+          legend.title = element_blank(), legend.text = element_text(size = comparison_text_size))
+}
+p.comparison.full = plot_comparison(df.comparison.summary)
+save_talk(p.comparison.full, file.path(comparison_output, "baseline_change_full"),
+          comparison_width, comparison_height)
+p.comparison.builds = save_builds(df.comparison.summary, plot_comparison, comparison_output,
+                                  comparison_width, comparison_height, comparison_build_names)
+kable(tibble(build = 0:4, filename = comparison_build_names))
+p.comparison.full
+```
+
+# Study 2 distal-minus-proximal gaps — summary across child ages
+
+This single-panel summary pools **Study 2 children aged 3–9**: 206 Intentional
+and 200 Accidental. The adult pilot remains in the raw and baseline-change
+figures and is excluded here. First average available Bike/Mirror Yes=1/No=0
+responses within each child × measure × role. Then subtract that same child's
+Proximal mean from their Distal mean and multiply by 100:
+
+`gap_pp = 100 × (participant Distal Yes mean − participant Proximal Yes mean)`.
+
+Zero means equal endorsement, positive values favor Distal, and negative
+values favor Proximal. Both/neither remain included. We never divide by total
+endorsement or by the Proximal mean. If either role has no available scenario
+responses, that child's gap for that measure is missing; it is not replaced
+with zero. The current snapshot has both roles available for every child and
+measure. Source role means in the CSV use the same paired contributors.
+
+Each child receives equal weight within condition, regardless of age. The
+conditions have different observed age compositions, so this remains an
+unadjusted pooled summary, not an age-standardized effect. Roles are paired
+within children; Intentional and Accidental are separate groups of children.
+
+## Pair roles within child, then bootstrap participant gaps
+
+Each bootstrap row contains all four gaps from one child. Independently
+resample child rows within each condition 5,000 times, keeping the role pairing
+and four judgments together. Percentile limits describe uncertainty in each
+condition's mean Distal-minus-Proximal gap. Do not bootstrap the roles
+independently or subtract their marginal confidence-interval endpoints.
+
+```{r gap-summary-bootstrap}
+df.gap.role_means = df.study2.means %>%
+  filter(population == "Children", age %in% child_ages) %>%
+  select(participant, age, condition, measure, role, yes_mean) %>%
+  arrange(condition, participant, measure, role)
+stopifnot(!anyDuplicated(df.gap.role_means[c("participant", "measure", "role")]))
+df.gap.participants = df.gap.role_means %>%
+  pivot_wider(names_from = role, values_from = yes_mean) %>%
+  mutate(gap_pp = 100 * (Distal - Proximal))
+df.gap.wide = df.gap.participants %>%
+  select(participant, age, condition, measure, gap_pp) %>%
+  pivot_wider(names_from = measure, values_from = gap_pp)
+stopifnot(!anyDuplicated(df.gap.wide$participant),
+          nrow(df.gap.wide) == nrow(df.study2.children.included),
+          all(is.na(df.gap.participants$gap_pp) | abs(df.gap.participants$gap_pp) <= 100))
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 3L)
+df.gap.intervals = bind_rows(lapply(condition_order, function(condition_name) {
+  scores = df.gap.wide %>% filter(condition == condition_name) %>%
+    select(all_of(measure_order)) %>% as.matrix()
+  draws = replicate(bootstrap_replicates, {
+    sampled = scores[sample.int(nrow(scores), replace = TRUE), , drop = FALSE]
+    colMeans(sampled, na.rm = TRUE)
+  })
+  stopifnot(all(is.finite(draws)))
+  tibble(condition = condition_name, measure = measure_order,
+         lower_pp = apply(draws, 1, quantile, probs = .025),
+         upper_pp = apply(draws, 1, quantile, probs = .975))
+}))
+```
+
+## Exact values for all eight points
+
+The CSV saves eligible and paired Ns, the paired contributors' two source
+Yes proportions, the mean gap and its 95% limits. Columns ending in `_pp` are
+percentage points. Percentage tick labels denote these absolute differences,
+not relative percentage changes. No display rounding is applied to the CSV.
+
+```{r gap-summary-means}
+df.gap.summary = df.gap.participants %>%
+  group_by(measure, condition) %>%
+  summarise(eligible_n = n(), n = sum(!is.na(gap_pp)),
+            distal_yes = mean(Distal[!is.na(gap_pp)]),
+            proximal_yes = mean(Proximal[!is.na(gap_pp)]),
+            gap_pp = mean(gap_pp, na.rm = TRUE), .groups = "drop") %>%
+  left_join(df.gap.intervals, by = c("measure", "condition"), relationship = "one-to-one") %>%
+  mutate(population = "Children ages 3–9",
+         measure = factor(measure, levels = measure_order),
+         condition = factor(condition, levels = condition_order)) %>%
+  select(population, measure, condition, eligible_n, n, distal_yes, proximal_yes,
+         gap_pp, lower_pp, upper_pp) %>% arrange(measure, condition)
+stopifnot(nrow(df.gap.summary) == 8L, all(df.gap.summary$n == df.gap.summary$eligible_n),
+          all(is.finite(df.gap.summary$gap_pp)),
+          all(df.gap.summary$lower_pp <= df.gap.summary$upper_pp),
+          all(abs(df.gap.summary$gap_pp -
+                    100 * (df.gap.summary$distal_yes - df.gap.summary$proximal_yes)) < 1e-12))
+write_csv(df.gap.summary, file.path(comparison_output, "study2_distal_proximal_gap_summary_values.csv"))
+kable(select(df.gap.summary, -population), digits = 6,
+      caption = "Paired Distal-minus-Proximal gaps within each condition: source proportions and percentage-point estimates/95% intervals")
+```
+
+## Single-panel paired-point plot
+
+Purple filled circles show Intentional and teal open triangles show Accidental.
+A thin neutral connector joins the two condition-specific gaps within each
+measure; no line joins different measures. The zero reference marks equal
+Distal and Proximal endorsement. Both means and all interval ends fit inside
+the displayed range, rounded outward to 25-point steps.
+
+```{r gap-summary-plot, fig.width=16, fig.height=9}
+df.gap.plot = df.gap.summary %>%
+  mutate(plot_x = as.numeric(measure) + unname(intention_offsets[as.character(condition)]))
+df.gap.pairs = df.gap.plot %>% select(measure, condition, gap_pp, plot_x) %>%
+  pivot_wider(names_from = condition, values_from = c(gap_pp, plot_x)) %>%
+  mutate(intentional_minus_accidental_pp = gap_pp_Intentional - gap_pp_Accidental)
+gap_y_lower = floor(min(0, df.gap.summary$lower_pp) / gap_y_step) * gap_y_step
+gap_y_upper = ceiling(max(0, df.gap.summary$upper_pp) / gap_y_step) * gap_y_step
+p.gap.summary = ggplot(df.gap.plot,
+  aes(x = plot_x, y = gap_pp, color = condition, fill = condition, shape = condition)) +
+  geom_hline(yintercept = 0, color = "#777777", linewidth = .6) +
+  geom_segment(data = df.gap.pairs,
+                aes(x = plot_x_Intentional, xend = plot_x_Accidental,
+                    y = gap_pp_Intentional, yend = gap_pp_Accidental),
+                inherit.aes = FALSE, color = "#A0A0A0", linewidth = .6) +
+  geom_errorbar(aes(ymin = lower_pp, ymax = upper_pp), width = .055,
+                linewidth = .55, alpha = .65, show.legend = FALSE) +
+  geom_point(size = 4.3, stroke = 1, show.legend = TRUE) +
+  scale_color_manual(name = NULL, values = comparison_colors, limits = condition_order, drop = FALSE) +
+  scale_fill_manual(name = NULL, values = c(Intentional = comparison_colors[["Intentional"]], Accidental = "white"),
+                    limits = condition_order, drop = FALSE) +
+  scale_shape_manual(name = NULL, values = condition_shapes, limits = condition_order, drop = FALSE) +
+  scale_x_continuous(breaks = seq_along(measure_order), labels = measure_order,
+                     limits = c(.5, length(measure_order) + .5), expand = expansion(mult = 0)) +
+  scale_y_continuous(breaks = seq(gap_y_lower, gap_y_upper, gap_y_step),
+                     labels = function(x) paste0(x, "%"), limits = c(gap_y_lower, gap_y_upper),
+                     expand = expansion(mult = 0)) +
+  labs(x = NULL, y = expression(plain("Distal") - plain("Proximal") ~ plain("(percentage points)"))) +
+  talk_theme(intention_text_size)
+save_talk(p.gap.summary, file.path(comparison_output, "study2_distal_proximal_gap_summary"),
+          intention_width, intention_height)
+p.gap.summary
+```
+
+## What the summary supports
+
+Intentional has a larger (more positive) Distal-minus-Proximal gap than
+Accidental for every measure. The between-condition separation is greatest
+for Punish (39.60 percentage points), followed by Lexical (27.95), Fault
+(22.88) and Caused (16.20). Fault has a large positive Intentional gap, but
+the intentionality-related widening is not especially large for Fault
+relative to Lexical. Lexical gaps are negative in both conditions: children
+endorse Proximal more often there, although less strongly under Intentional.
+These are descriptive comparisons; the pointwise intervals do not formally
+test whether the between-condition separation differs across measures.
+
+# Single Cause — one direct causal agent
+
+The Single Cause comparison uses the same Intentional/Accidental manipulation
+and four judgments as Study 2, but one agent directly brings about the outcome.
+There is no distal/proximal choice or relative-attribution score. This section
+adds the supplied `exp7` child snapshot to the shared workflow. Historical
+figures, experiment files and adult data are left unchanged.
+
+## Children: read and audit the export
+
+The supplied raw CSV is copied without changing values. `child_hashed_id` is
+the participant unit; `response_uuid` identifies a session. Hash codes, session
+IDs and session dates remain restricted research metadata in the private repo.
+The export has two warmup answers plus eight test answers per session.
+`completed` is False throughout and is not an inclusion filter.
+`included_in_summary` is a row-level export flag and is never used for inclusion.
+The exported `expected_test_questions_n` and `answered_test_questions_n` both
+say 2, although actual Bike/Mirror rows show eight answers per session. Their
+meaning is unverified; we audit that discrepancy and count actual response
+rows rather than using these two fields as test-question totals.
+
+```{r single-read-audit}
+df.single.raw = read_csv("../../data/single_cause/children/exp7_raw_responses.csv",
+                          col_types = cols(.default = col_character()))
+df.single.raw_counts = df.single.raw %>%
+  summarise(rows = n(), sessions = n_distinct(response_uuid),
+            children = n_distinct(child_hashed_id))
+if (!identical(as.integer(unlist(df.single.raw_counts[1, ], use.names = FALSE)), c(970L, 97L, 97L))) {
+  stop("Single Cause export counts differ from the supplied snapshot; stop for review.")
+}
+check_labels(df.single.raw$study, "exp7", "Single Cause study")
+check_labels(df.single.raw$group, tolower(condition_order), "Single Cause condition")
+check_labels(df.single.raw$participant_age_years, as.character(single_child_ages), "Single Cause age")
+check_labels(df.single.raw$scenario_key, c("warmup", "bike", "mirror"), "Single Cause scenario")
+check_labels(df.single.raw$question_type, c("warmup", "cause", "lexical", "fault", "punish"), "Single Cause question")
+check_labels(df.single.raw$response_label, c("yes", "no"), "Single Cause response", allow_missing = TRUE)
+check_labels(df.single.raw$include_in_analysis, c("yes", "no"), "Single Cause inclusion flag")
+check_labels(df.single.raw$withdrawn, c("True", "False"), "Single Cause withdrawal")
+check_labels(df.single.raw$true_completion_status, "complete", "Single Cause completion")
+stopifnot(all(df.single.raw$completed == "False"),
+          all(df.single.raw$eligibility == '["Eligible"]'),
+          all(df.single.raw$is_preview == "False"),
+          all(df.single.raw$expected_test_questions_n == "2"),
+          all(df.single.raw$left_label == "yes"), all(df.single.raw$right_label == "no"),
+          all(df.single.raw$response_index == if_else(df.single.raw$response_label == "yes", "0", "1")),
+          all((df.single.raw$scenario_key == "warmup") == (df.single.raw$question_type == "warmup")))
+kable(df.single.raw_counts, caption = "Single Cause raw export: rows, sessions and unique children")
+
+# Distinct metadata must reduce to exactly one row per session.
+df.single.sessions = df.single.raw %>%
+  distinct(response_uuid, response_id, child_hashed_id, participant_age_years, group,
+           include_in_analysis, true_completion_status, withdrawn, analysis_exclusion_reason,
+           eligibility, is_preview, answered_test_questions_n, answered_all_test_questions) %>%
+  rename(participant = child_hashed_id) %>%
+  mutate(age = as.integer(participant_age_years),
+         condition = if_else(group == "intentional", "Intentional", "Accidental"))
+stopifnot(!anyDuplicated(df.single.sessions$response_uuid),
+          !anyDuplicated(df.single.sessions$response_id), !anyNA(df.single.sessions$participant))
+df.single.trial_counts = df.single.raw %>%
+  group_by(response_uuid) %>%
+  summarise(warmups = sum(scenario_key == "warmup"),
+            test_rows = sum(scenario_key %in% c("bike", "mirror")),
+            answered_tests = sum(scenario_key %in% c("bike", "mirror") & response_label %in% c("yes", "no")),
+            .groups = "drop")
+df.single.sessions = df.single.sessions %>%
+  left_join(df.single.trial_counts, by = "response_uuid", relationship = "one-to-one") %>%
+  mutate(included = include_in_analysis == "yes" & withdrawn == "False" &
+           is.na(analysis_exclusion_reason) & true_completion_status == "complete" &
+           eligibility == '["Eligible"]' & is_preview == "False")
+stopifnot(all(df.single.sessions$warmups == 2L), all(df.single.sessions$test_rows == 8L),
+          all(df.single.sessions$answered_tests == 8L),
+          all(df.single.sessions$answered_test_questions_n == "2"),
+          all(df.single.sessions$answered_all_test_questions == "yes"),
+          identical(df.single.sessions$included, df.single.sessions$include_in_analysis == "yes"),
+          sum(df.single.sessions$included) == 96L,
+          sum(df.single.sessions$withdrawn == "True") == 1L,
+          all(df.single.sessions$analysis_exclusion_reason[!df.single.sessions$included] == "withdrawn"))
+
+# Do not silently select a new repeat-attempt rule if this export changes.
+df.single.repeats = df.single.sessions %>% count(participant, name = "sessions") %>% filter(sessions > 1L)
+kable(tibble(repeated_child_ids = nrow(df.single.repeats)), caption = "Repeat-child audit (all sessions, including excluded)")
+if (nrow(df.single.repeats) > 0L) stop("Single Cause repeat children found; stop for review.")
+df.single.included = filter(df.single.sessions, included)
+df.single.flow = tibble(
+  stage = c("Raw sessions / unique children", "Withdrawn and flagged for exclusion", "Included sessions / unique children"),
+  n = c(nrow(df.single.sessions), sum(!df.single.sessions$included), nrow(df.single.included)))
+kable(df.single.flow, caption = "Single Cause inclusion flow")
+df.single.ns = df.single.included %>% count(age, condition, name = "n") %>% arrange(age, condition)
+if (nrow(anti_join(df.single.ns, single_expected_ns, by = c("age", "condition", "n"))) > 0L ||
+    nrow(anti_join(single_expected_ns, df.single.ns, by = c("age", "condition", "n"))) > 0L) {
+  stop("Single Cause age-by-condition Ns differ from the supplied snapshot; stop for review.")
+}
+kable(df.single.ns, caption = "Included children by age and condition")
+kable(df.single.raw %>% count(completed, true_completion_status, included_in_summary,
+                             expected_test_questions_n, answered_test_questions_n),
+      caption = "Export flag audit only: completed and included_in_summary do not select participants")
+```
+
+## Recode and average within child
+
+Only Bike/Mirror test rows from included sessions enter scores. The 194 raw
+warmup rows are excluded, including 192 from included sessions. The withdrawn
+session's eight test answers are also excluded. This leaves 768 scientific
+response rows. Each child contributes four scenario-averaged scores. Missing
+answers would remain missing for that question and never become No; the current
+snapshot has both scenarios available for all 384 child-by-measure means.
+
+```{r single-participant-means}
+df.single.questions = tibble(question_type = c("cause", "lexical", "fault", "punish"),
+                              measure = measure_order)
+df.single.responses = df.single.raw %>%
+  filter(scenario_key %in% c("bike", "mirror")) %>%
+  inner_join(select(df.single.included, response_uuid, participant, age, condition),
+             by = "response_uuid", relationship = "many-to-one") %>%
+  left_join(df.single.questions, by = "question_type", relationship = "many-to-one") %>%
+  transmute(participant, age, condition, scenario = scenario_key, measure,
+            endorsed = yes_no(response_label))
+stopifnot(nrow(df.single.responses) == 768L, !anyNA(df.single.responses$measure),
+          !anyDuplicated(df.single.responses[c("participant", "scenario", "measure")]))
+df.single.means = df.single.responses %>%
+  group_by(participant, age, condition, measure) %>%
+  summarise(scenarios_available = sum(!is.na(endorsed)),
+            yes_mean = if (all(is.na(endorsed))) NA_real_ else mean(endorsed, na.rm = TRUE),
+            .groups = "drop")
+stopifnot(nrow(df.single.means) == 384L, all(df.single.means$scenarios_available == 2L))
+kable(tibble(raw_warmup_rows_excluded = sum(df.single.raw$scenario_key == "warmup"),
+             included_test_rows = nrow(df.single.responses), participant_measure_means = nrow(df.single.means)))
+```
+
+## Adults: use all 32 recovered complete records
+
+The adult CSV has 32 unique participant codes, 16 per condition. All eight
+answers are present for every row, and every `error` field is blank. No row
+is identified as excluded or incomplete. The source note calls two rows
+"likely excluded/incomplete" but provides no IDs or rule. Slide 20 reports
+30 adults, 15 per condition. Its embedded plot supplies no participant-level
+exclusion information. The saved experiment and conversion code define the
+eight questions but do not recover the historical exclusion decision.
+
+We cannot defensibly identify the historical 30-person subset. **By explicit
+review decision, the current working plots use all 32 complete adults, 16 per
+condition.** We do not fabricate an exclusion rule or reverse-select rows to
+match the old slide. This is a documented working sample, not a recovered
+historical N=30 analysis. All source rows and historical images remain unchanged.
+Adults appear as a separate endpoint; they are not pooled into the child summaries.
+See the [adult audit](../../docs/single_cause/adults/ANALYSIS_AUDIT.md) for inspected sources.
+
+```{r single-adult-audit}
+df.single.adults.raw = read_csv("../../data/single_cause/adults/single_cause_pilot1-responses.csv",
+                               col_types = cols(.default = col_character()))
+single_adult_fields = c("bike_cause_andy", "bike_simple_andy", "bike_fault_andy", "bike_punish_andy",
+                        "mirror_cause_sophia", "mirror_simple_sophia", "mirror_fault_sophia", "mirror_punish_sophia")
+df.single.adults.audit = df.single.adults.raw %>%
+  mutate(answered_tests = rowSums(as.data.frame(lapply(select(., all_of(single_adult_fields)),
+                                                      function(x) x %in% c("yes", "no"))))) %>%
+  group_by(condition = proliferate.condition) %>%
+  summarise(rows = n(), unique_ids = n_distinct(workerid),
+            complete_eight_answers = sum(answered_tests == 8L),
+            nonblank_errors = sum(!is.na(error)), .groups = "drop")
+stopifnot(nrow(df.single.adults.raw) == 32L, !anyDuplicated(df.single.adults.raw$workerid),
+          all(df.single.adults.audit$rows == 16L), all(df.single.adults.audit$complete_eight_answers == 16L),
+          all(df.single.adults.audit$nonblank_errors == 0L))
+kable(df.single.adults.audit, caption = "Working adult sample: all 32 complete records, 16 per condition")
+check_labels(df.single.adults.raw$proliferate.condition, tolower(condition_order), "Single Cause adult condition")
+df.single.adults.responses = df.single.adults.raw %>%
+  select(participant = workerid, condition = proliferate.condition, all_of(single_adult_fields)) %>%
+  pivot_longer(all_of(single_adult_fields), names_to = c("scenario", "question", "agent"),
+               names_sep = "_", values_to = "response") %>%
+  mutate(condition = if_else(condition == "intentional", "Intentional", "Accidental"),
+         measure = recode(question, cause = "Caused", simple = "Lexical", fault = "Fault", punish = "Punish"),
+         endorsed = yes_no(response))
+df.single.adults.means = df.single.adults.responses %>%
+  group_by(participant, condition, measure) %>%
+  summarise(scenarios_available = sum(!is.na(endorsed)),
+            yes_mean = mean(endorsed), .groups = "drop")
+stopifnot(nrow(df.single.adults.means) == 128L,
+          all(df.single.adults.means$scenarios_available == 2L),
+          !anyNA(df.single.adults.means$yes_mean))
+```
+
+## Age-group summaries and developmental figure
+
+Bootstrap the participant means within age × condition × measure with the
+shared 5,000-replicate helper and a fixed seed. Every child receives equal
+weight within their age/condition group. The figure uses four panels, 0–100%
+Yes responses and ages 3–6 plus an Adult endpoint (16 participants per condition).
+There are no empty ages 7–9. A dashed 50% reference matches Study 2; it is a
+visual midpoint, not a chance-model assumption. Adults and children are
+bootstrapped separately; the existing child estimates and intervals are unchanged.
+Intentional uses the existing named purple color, a solid line and filled
+circle; Accidental uses the existing teal color, a dashed line and open triangle.
+The shared 16 × 12.8-inch dimensions and typography match the raw chain figures.
+
+```{r single-developmental-summary}
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 4L)
+df.single.children.summary = df.single.means %>%
+  mutate(measure = factor(measure, levels = measure_order),
+         condition = factor(condition, levels = condition_order)) %>%
+  arrange(measure, condition, age, participant) %>%
+  group_by(age, condition, measure) %>%
+  summarise(summary = list(bootstrap_mean(yes_mean)), .groups = "drop") %>% unnest_wider(summary) %>%
+  mutate(population = "Children", age_group = as.character(age), x = as.numeric(age))
+set.seed(bootstrap_seed + 7L)
+df.single.adults.summary = df.single.adults.means %>%
+  mutate(measure = factor(measure, levels = measure_order),
+         condition = factor(condition, levels = condition_order)) %>%
+  arrange(measure, condition, participant) %>% group_by(condition, measure) %>%
+  summarise(summary = list(bootstrap_mean(yes_mean)), .groups = "drop") %>% unnest_wider(summary) %>%
+  mutate(population = "Adults", age = NA_integer_, age_group = "Adult", x = single_adult_position)
+df.single.summary = bind_rows(df.single.children.summary, df.single.adults.summary) %>%
+  mutate(reveal_step = (as.integer(measure) - 1L) * 4L +
+           (as.integer(condition) - 1L) * 2L + if_else(population == "Adults", 1L, 2L))
+stopifnot(nrow(df.single.summary) == 40L, all(df.single.adults.summary$n == 16L))
+write_csv(select(df.single.summary, population, age_group, age, condition, measure, n, mean, lower, upper),
+          file.path(single_output, "single_cause_developmental_values.csv"))
+kable(select(df.single.summary, population, age_group, condition, measure, n, mean, lower, upper), digits = 6,
+      caption = "Every plotted child/adult mean and N (proportion units); CSV preserves full precision")
+
+plot_single = function(summary, step = 16L) {
+  visible = show_build(summary, step) %>%
+    mutate(plot_x = x + unname(comparison_offsets[as.character(condition)]))
+  ggplot(visible, aes(x = plot_x, y = mean, color = condition, fill = condition,
+                     shape = condition, linetype = condition)) +
+    geom_hline(yintercept = c(0, .25, .75, 1), linetype = "dotted", color = "#E0E0E0", linewidth = .45) +
+    geom_hline(yintercept = .5, linetype = "dashed", color = "#888888", linewidth = .65) +
+    geom_vline(xintercept = 6.75, linetype = "dotted", color = "#C0C0C0", linewidth = .5) +
+    geom_line(data = filter(visible, population == "Children"), aes(group = condition),
+              linewidth = plot_line_width, show.legend = TRUE) +
+    geom_linerange(aes(ymin = lower, ymax = upper), linetype = "solid",
+                   linewidth = ci_line_width, show.legend = FALSE) +
+    geom_point(size = plot_point_size, stroke = .9, show.legend = TRUE) +
+    facet_wrap(~ measure, ncol = 2, drop = FALSE, axes = "all_x", axis.labels = "all_x") +
+    scale_color_manual(name = NULL, values = comparison_colors, limits = condition_order, drop = FALSE) +
+    scale_fill_manual(name = NULL, values = c(Intentional = comparison_colors[["Intentional"]], Accidental = "white"),
+                      limits = condition_order, drop = FALSE) +
+    scale_shape_manual(name = NULL, values = condition_shapes, limits = condition_order, drop = FALSE) +
+    scale_linetype_manual(name = NULL, values = condition_lines, limits = condition_order, drop = FALSE) +
+    scale_x_continuous(breaks = c(single_child_ages, single_adult_position),
+                       labels = c(as.character(single_child_ages), "Adult"),
+                       limits = c(2.6, single_adult_position + .5), expand = expansion(mult = 0)) +
+    scale_y_continuous(breaks = seq(0, 1, .25), labels = function(x) paste0(100 * x, "%"),
+                       limits = c(0, 1), expand = expansion(add = .035)) +
+    labs(x = "Age", y = '\"Yes\" Responses (%)') + talk_theme(study2_text_size)
+}
+p.single.full = plot_single(df.single.summary)
+save_talk(p.single.full, file.path(single_output, "single_cause_yes_responses_full"), study2_width, study2_height)
+p.single.builds = save_builds(df.single.summary, plot_single, single_output,
+                              study2_width, study2_height, single_build_names)
+p.single.full
+```
+
+Build 00 is the blank scaffold. Each measure adds Intentional adults, then
+Intentional children, then Accidental adults, then Accidental children.
+Caused occupies 01–04, Lexical 05–08, Fault 09–12 and Punish 13–16.
+Axes, legends, panels and whitespace are fixed across all 17 builds;
+Build 16 is the full figure.
+
+## Secondary summary: children pooled across ages 3–6
+
+Pool the same participant means within condition and measure, without giving
+equal weight to age groups. This is an unadjusted summary of the supplied
+child sample (50 Intentional, 46 Accidental). Each point's interval bootstraps
+participants, not trials. The thin connectors join condition means within each
+measure only; conditions are between participants, not within-child pairs.
+
+```{r single-collapsed-summary}
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 5L)
+df.single.collapsed = df.single.means %>%
+  mutate(measure = factor(measure, levels = measure_order),
+         condition = factor(condition, levels = condition_order)) %>%
+  arrange(measure, condition, participant) %>% group_by(measure, condition) %>%
+  summarise(summary = list(bootstrap_mean(yes_mean)), .groups = "drop") %>% unnest_wider(summary) %>%
+  mutate(plot_x = as.numeric(measure) + unname(intention_offsets[as.character(condition)]))
+write_csv(select(df.single.collapsed, measure, condition, n, mean, lower, upper),
+          file.path(single_output, "single_cause_intentionality_summary_values.csv"))
+kable(select(df.single.collapsed, measure, condition, n, mean, lower, upper), digits = 6,
+      caption = "Pooled child Yes proportions and pointwise 95% intervals")
+df.single.pairs = df.single.collapsed %>% select(measure, condition, mean, plot_x) %>%
+  pivot_wider(names_from = condition, values_from = c(mean, plot_x))
+p.single.collapsed = ggplot(df.single.collapsed,
+  aes(x = plot_x, y = mean, color = condition, fill = condition, shape = condition)) +
+  geom_segment(data = df.single.pairs,
+                aes(x = plot_x_Intentional, xend = plot_x_Accidental,
+                    y = mean_Intentional, yend = mean_Accidental),
+                inherit.aes = FALSE, color = "#A0A0A0", linewidth = .6) +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = .055,
+                linewidth = .55, alpha = .55, show.legend = FALSE) +
+  geom_point(size = 4.3, stroke = 1, show.legend = TRUE) +
+  scale_color_manual(name = NULL, values = comparison_colors, limits = condition_order, drop = FALSE) +
+  scale_fill_manual(name = NULL, values = c(Intentional = comparison_colors[["Intentional"]], Accidental = "white"),
+                    limits = condition_order, drop = FALSE) +
+  scale_shape_manual(name = NULL, values = condition_shapes, limits = condition_order, drop = FALSE) +
+  scale_x_continuous(breaks = seq_along(measure_order), labels = measure_order,
+                     limits = c(.5, 4.5), expand = expansion(mult = 0)) +
+  scale_y_continuous(breaks = seq(0, 1, .25), labels = function(x) paste0(100 * x, "%"),
+                     limits = c(0, 1), expand = expansion(add = .035)) +
+  labs(x = NULL, y = "Proportion yes (%)") + talk_theme(intention_text_size)
+save_talk(p.single.collapsed, file.path(single_output, "single_cause_intentionality_summary"),
+          intention_width, intention_height)
+p.single.collapsed
+```
+
+# Cross-study synthesis: where intention changes judgments
+
+This comparison uses **children aged 3–6 in both studies**: Single Cause
+(50 Intentional, 46 Accidental) and Study 2 (107 Intentional, 116 Accidental).
+Matching the available age range avoids comparing Single Cause ages 3–6 with
+Study 2 ages 3–9. Adults remain separate endpoints in the developmental plots;
+Study 1 is absent because it has no intentionality manipulation.
+
+For each measure and causal structure, the plotted quantity is
+**100 × (mean Intentional Yes − mean Accidental Yes)**, in percentage points.
+Each child's Yes/No responses are first averaged across available scenarios.
+We then weight participants equally within study and condition, not age groups
+equally. These are unadjusted descriptive effects for the matched age range;
+the studies still have different age compositions and cohorts. The plot does
+not isolate causal structure from all other between-study differences.
+
+The two conditions contain different participants, so no individual child
+has an Intentional-minus-Accidental score. For each bootstrap replicate we
+sample participants independently within each study and condition, preserving
+all measures and both Study 2 roles together on each sampled participant row.
+We subtract the two bootstrapped condition means, using 5,000 replicates and
+their 2.5th and 97.5th percentiles for the 95% interval. Thus both conditions'
+uncertainty enters each interval; trial rows are never independently resampled.
+
+```{r synthesis-summary}
+df.synthesis.means = bind_rows(
+  df.single.means %>% filter(age %in% synthesis_ages) %>%
+    transmute(study = "Single Cause", structure = "Single Cause", participant, age,
+              condition, measure, yes_mean),
+  df.study2.means %>% filter(population == "Children", age %in% synthesis_ages) %>%
+    transmute(study = "Study 2", structure = paste("Study 2", role), participant, age,
+              condition, measure, yes_mean)) %>%
+  mutate(structure = factor(structure, levels = synthesis_order),
+         measure = factor(measure, levels = measure_order),
+         condition = factor(condition, levels = condition_order))
+stopifnot(!anyNA(df.synthesis.means$yes_mean),
+          !anyDuplicated(df.synthesis.means[c("study", "participant", "condition", "structure", "measure")]))
+df.synthesis.ns = df.synthesis.means %>% distinct(study, participant, age, condition) %>%
+  count(study, condition, name = "n")
+stopifnot(identical(df.synthesis.ns$n, c(50L, 46L, 107L, 116L)))
+kable(df.synthesis.ns, caption = "Synthesis sample: children aged 3–6 only, equally weighted within condition")
+
+# Wide rows keep each participant's four measures and (in Study 2) both roles together.
+df.synthesis.wide = df.synthesis.means %>%
+  mutate(score = paste(structure, measure, sep = "__")) %>%
+  select(study, participant, condition, score, yes_mean) %>%
+  pivot_wider(names_from = score, values_from = yes_mean) %>%
+  arrange(study, condition, participant)
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 6L)
+synthesis_intervals = list()
+for (study_name in c("Single Cause", "Study 2")) {
+  sample_rows = filter(df.synthesis.wide, study == study_name)
+  score_columns = df.synthesis.means %>% filter(study == study_name) %>%
+    transmute(score = paste(structure, measure, sep = "__")) %>% distinct() %>% pull(score)
+  intentional = sample_rows %>% filter(condition == "Intentional") %>%
+    select(all_of(score_columns)) %>% as.matrix()
+  accidental = sample_rows %>% filter(condition == "Accidental") %>%
+    select(all_of(score_columns)) %>% as.matrix()
+  stopifnot(!anyNA(intentional), !anyNA(accidental))
+  draws = replicate(bootstrap_replicates, {
+    intentional_rows = sample.int(nrow(intentional), replace = TRUE)
+    accidental_rows = sample.int(nrow(accidental), replace = TRUE)
+    100 * (colMeans(intentional[intentional_rows, , drop = FALSE]) -
+             colMeans(accidental[accidental_rows, , drop = FALSE]))
+  })
+  synthesis_intervals[[study_name]] = tibble(
+    score = score_columns,
+    lower_pp = apply(draws, 1, quantile, probs = .025),
+    upper_pp = apply(draws, 1, quantile, probs = .975))
+}
+df.synthesis.intervals = bind_rows(synthesis_intervals) %>%
+  separate_wider_delim(score, delim = "__", names = c("structure", "measure"))
+df.synthesis.summary = df.synthesis.means %>% group_by(structure, measure, condition) %>%
+  summarise(n = n(), yes = mean(yes_mean), .groups = "drop") %>%
+  pivot_wider(names_from = condition, values_from = c(n, yes)) %>%
+  mutate(effect_pp = 100 * (yes_Intentional - yes_Accidental)) %>%
+  left_join(df.synthesis.intervals, by = c("structure", "measure"), relationship = "one-to-one") %>%
+  mutate(population = "Children ages 3–6",
+         structure = factor(structure, levels = synthesis_order),
+         measure = factor(measure, levels = measure_order)) %>%
+  select(population, measure, structure, n_Intentional, n_Accidental,
+         yes_Intentional, yes_Accidental, effect_pp, lower_pp, upper_pp) %>%
+  arrange(measure, structure)
+stopifnot(nrow(df.synthesis.summary) == 12L,
+          all(is.finite(df.synthesis.summary$effect_pp)),
+          all(df.synthesis.summary$lower_pp <= df.synthesis.summary$upper_pp))
+write_csv(df.synthesis.summary,
+          file.path(synthesis_output, "study2_singlecause_intention_effect_comparison_values.csv"))
+kable(df.synthesis.summary, digits = 6,
+      caption = "Exact plotted intention effects: source Yes proportions, Ns and percentage-point estimates/95% intervals")
+```
+
+## Grouped point-range figure
+
+Single Cause uses gray squares, Study 2 Distal uses the existing red circles,
+and Study 2 Proximal uses the existing blue triangles. Offsets separate the
+three structures within each measure; there are no connecting lines. Zero
+means equal Yes endorsement between conditions. The range contains every
+point and interval end.
+
+```{r synthesis-plot, fig.width=16, fig.height=9}
+df.synthesis.plot = df.synthesis.summary %>%
+  mutate(plot_x = as.numeric(measure) + unname(synthesis_offsets[as.character(structure)]))
+synthesis_y_lower = floor(min(0, df.synthesis.plot$lower_pp) / gap_y_step) * gap_y_step
+synthesis_y_upper = ceiling(max(0, df.synthesis.plot$upper_pp) / gap_y_step) * gap_y_step
+p.synthesis = ggplot(df.synthesis.plot, aes(x = plot_x, y = effect_pp, color = structure, shape = structure)) +
+  geom_hline(yintercept = 0, color = "#777777", linewidth = .6) +
+  geom_linerange(aes(ymin = lower_pp, ymax = upper_pp), linewidth = ci_line_width, show.legend = FALSE) +
+  geom_point(size = 4.5, show.legend = TRUE) +
+  scale_color_manual(name = NULL, values = synthesis_colors, limits = synthesis_order, drop = FALSE) +
+  scale_shape_manual(name = NULL, values = synthesis_shapes, limits = synthesis_order, drop = FALSE) +
+  scale_x_continuous(breaks = seq_along(measure_order), labels = measure_order,
+                     limits = c(.5, 4.5), expand = expansion(mult = 0)) +
+  scale_y_continuous(breaks = seq(synthesis_y_lower, synthesis_y_upper, gap_y_step),
+                     labels = function(x) paste0(x, "%"), limits = c(synthesis_y_lower, synthesis_y_upper),
+                     expand = expansion(mult = 0)) +
+  labs(x = NULL, y = "Effect of intention\n(percentage points)") + talk_theme(intention_text_size)
+save_talk(p.synthesis, file.path(synthesis_output, "study2_singlecause_intention_effect_comparison"),
+          intention_width, intention_height)
+p.synthesis
+```
+
+The intervals are pointwise, descriptive participant bootstraps. Their overlap
+or separation does not test whether effects differ across studies or measures.
+In this matched-age sample, Single Cause has the largest positive point estimate
+for Caused, Fault and Punish. Study 2 Distal is positive for all four measures,
+with Lexical slightly larger than Punish. Study 2 Proximal is negative for all
+four; its Lexical interval is below zero, so Proximal is not uniformly near zero.
+Punish therefore does not uniquely dominate this synthesis. These patterns do
+not establish a significant ordering of structures or measures.
+
+# Developmental-stage synthesis figures
+
+These **additional** figures show ordinary Yes-response proportions. They do
+not replace the baseline-change, Study 2 role-gap, pooled Single Cause or
+cross-study intention-effect figures above. None uses relative attribution.
+Both Yes contributes 1 to each role and Neither contributes 0 to each role.
+
+## Samples, stages and source datasets
+
+**3–4** includes only children aged 3 or 4; **5–6** includes only ages 5 or 6.
+Children aged 7–9 stay in the developmental figures but are not included in
+these new stage summaries. **Adults** remain a separate category, never pooled
+with children. Participants receive equal weights within study, stage and
+condition; the individual ages within a stage do not receive equal weights.
+Stages describe cross-sectional samples, not longitudinal change.
+
+The same screened samples and selection rules used above are retained:
+
+- Study 1 Baseline: [exp4 child snapshot](../../data/study1_baseline_causal_chains/children/exp4_raw_responses.csv)
+  and [preregistered adult data](../../data/study1_baseline_causal_chains/adults/chains_baseline_full_run-responses.csv), N=100 adults.
+- Study 2 Intentional/Accidental: [exp6 child snapshot](../../data/study2_intention_causal_chains/children/exp6_raw_responses.csv)
+  and the selected [earlier adult pilot](../../data/study2_intention_causal_chains/adults/adult_pilot_rounds_unordered/exp2_new_pilot-responses.csv),
+  N=20 Intentional and 21 Accidental adults. The main preregistered adult data remain missing.
+- Single Cause: [exp7 child snapshot](../../data/single_cause/children/exp7_raw_responses.csv)
+  and [all 32 recovered complete adults](../../data/single_cause/adults/single_cause_pilot1-responses.csv),
+  N=16 in each condition. The historical N=30 subset remains unidentified.
+
+Each participant's available Bike/Mirror responses are averaged **before**
+group averaging. One missing scenario answer does not become No or discard
+another role's answer: the available scenario supplies that participant mean.
+If both scenarios are missing, that participant contributes no mean for that
+particular measure/role. Tables report both eligible and contributing Ns.
+The current samples have both scenarios for every plotted participant mean.
+
+Intervals are the 2.5th and 97.5th percentiles of 5,000 bootstrap means,
+resampling participants within each displayed study/stage/condition/measure/role
+cell. They are pointwise intervals for individual means, not intervals or tests
+for the separation between endpoints. Thin connectors pair **group means**;
+Intentional and Accidental are different participants. Distal and Proximal are
+judgments made by the same participants within each chain condition. No trial
+rows are treated as independent observations.
+
+```{r developmental-stage-summaries}
+stage_group = function(population, age) {
+  factor(case_when(population == "Adults" ~ "Adults",
+                   age %in% 3:4 ~ "3–4", age %in% 5:6 ~ "5–6"), levels = stage_order)
+}
+df.stage.means = bind_rows(
+  df.study1.means, df.study2.means,
+  df.single.means %>% mutate(study = "Single Cause", population = "Children", role = "Direct"),
+  df.single.adults.means %>% mutate(study = "Single Cause", population = "Adults", age = NA_integer_, role = "Direct")) %>%
+  mutate(stage = stage_group(population, age)) %>% filter(!is.na(stage)) %>%
+  mutate(measure = factor(measure, levels = measure_order),
+         condition = factor(condition, levels = c("Baseline", condition_order)))
+stopifnot(!anyDuplicated(df.stage.means[c("study", "participant", "condition", "measure", "role")]),
+          all(df.stage.means$scenarios_available == 2L))
+df.stage.ns = df.stage.means %>% distinct(study, stage, condition, participant) %>%
+  count(study, stage, condition, name = "n")
+kable(df.stage.ns, caption = "Exact participants by source study, developmental stage and condition")
+
+# Compute each group once; shared endpoints use identical estimates and intervals
+# wherever they appear in the three synthesis figures.
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 8L)
+df.stage.summary = df.stage.means %>%
+  arrange(study, stage, condition, measure, role, participant) %>%
+  group_by(study, population, stage, condition, measure, role) %>%
+  summarise(eligible_n = n(), summary = list(bootstrap_mean(yes_mean)), .groups = "drop") %>%
+  unnest_wider(summary) %>%
+  mutate(yes_pct = 100 * mean, lower_pct = 100 * lower, upper_pct = 100 * upper)
+stopifnot(all(df.stage.summary$n == df.stage.summary$eligible_n),
+          all(df.stage.summary$lower >= 0), all(df.stage.summary$upper <= 1))
+
+# Reuse the established intention palette and filled-circle/open-triangle keys.
+stage_condition_scales = function() {
+  list(scale_color_manual(name = NULL, values = comparison_colors, limits = condition_order, drop = FALSE),
+       scale_fill_manual(name = NULL, values = c(Intentional = comparison_colors[["Intentional"]], Accidental = "white"),
+                         limits = condition_order, drop = FALSE),
+       scale_shape_manual(name = NULL, values = condition_shapes, limits = condition_order, drop = FALSE))
+}
+percent_labels = function(x) paste0(100 * x, "%")
+```
+
+## Intention and causal role in punishment
+
+For Single Cause and Chain: Distal, the condition varies the judged person's
+own intention. For **Chain: Proximal**, it varies the **distal person's intention**,
+not the proximal producer's own intention. That distinction is essential to
+reading the three targets. The separate adult cohorts have the provenance and
+sample limitations above; this is not an isolated causal-structure experiment.
+
+```{r punishment-stage-table}
+df.punishment.summary = df.stage.summary %>%
+  filter(study %in% c("Single Cause", "Study 2"), measure == "Punish") %>%
+  mutate(target = factor(if_else(study == "Single Cause", "Single Cause", paste0("Chain: ", role)),
+                         levels = stage_target_order)) %>% arrange(stage, target, condition)
+stopifnot(nrow(df.punishment.summary) == 18L)
+write_csv(df.punishment.summary, file.path(synthesis_output, "punishment_causal_structure_intention_values.csv"))
+kable(select(df.punishment.summary, stage, target, condition, eligible_n, n, yes_pct, lower_pct, upper_pct),
+      digits = 6, caption = "Punishment: exact group means, Ns and 95% intervals (%); CSV retains full precision")
+```
+
+```{r punishment-stage-plot, fig.width=16, fig.height=9}
+df.punishment.plot = df.punishment.summary %>%
+  mutate(plot_x = as.numeric(target) + unname(stage_condition_offsets[as.character(condition)]))
+df.punishment.pairs = df.punishment.plot %>% select(stage, target, condition, mean, plot_x) %>%
+  pivot_wider(names_from = condition, values_from = c(mean, plot_x))
+p.punishment = ggplot(df.punishment.plot,
+  aes(x = plot_x, y = mean, color = condition, fill = condition, shape = condition)) +
+  geom_hline(yintercept = .5, linetype = "dashed", color = "#B0B0B0", linewidth = .5) +
+  geom_segment(data = df.punishment.pairs,
+               aes(x = plot_x_Intentional, xend = plot_x_Accidental, y = mean_Intentional, yend = mean_Accidental),
+               inherit.aes = FALSE, color = "#A0A0A0", linewidth = .55) +
+  geom_linerange(aes(ymin = lower, ymax = upper), linewidth = .45, alpha = .65, show.legend = FALSE) +
+  geom_point(size = 3.8, stroke = .9) + stage_condition_scales() +
+  facet_wrap(~ stage, nrow = 1, drop = FALSE) +
+  scale_x_continuous(breaks = 1:3, labels = c("Single\nCause", "Chain:\nDistal", "Chain:\nProximal"),
+                     limits = c(.5, 3.5), expand = expansion(mult = 0)) +
+  scale_y_continuous(breaks = seq(0, 1, .25), labels = percent_labels,
+                     limits = c(0, 1), expand = expansion(add = .035)) +
+  labs(x = NULL, y = 'Punish: "Yes" Responses (%)') + talk_theme(stage_text_size) +
+  theme(axis.text.x = element_text(size = 19))
+save_talk(p.punishment, file.path(synthesis_output, "punishment_causal_structure_intention"),
+          intention_width, intention_height)
+p.punishment
+```
+
+## What changes when intention changes in Single Cause?
+
+Direct physical production remains part of the Single Cause design in both
+conditions. Each horizontal connector joins Intentional and Accidental group
+means for one judgment, without connecting different measures. This displays
+the raw endorsement pattern rather than a derived effect score.
+
+```{r single-stage-table}
+df.single.stage.summary = df.stage.summary %>% filter(study == "Single Cause") %>%
+  arrange(stage, measure, condition)
+stopifnot(nrow(df.single.stage.summary) == 24L)
+write_csv(df.single.stage.summary, file.path(synthesis_output, "single_cause_intention_dumbbells_values.csv"))
+kable(select(df.single.stage.summary, stage, measure, condition, eligible_n, n, yes_pct, lower_pct, upper_pct),
+      digits = 6, caption = "Single Cause: exact group means, Ns and 95% intervals (%); CSV retains full precision")
+```
+
+```{r single-stage-plot, fig.width=16, fig.height=9}
+df.single.stage.plot = df.single.stage.summary %>%
+  mutate(plot_y = 5 - as.numeric(measure) - unname(stage_condition_offsets[as.character(condition)]))
+df.single.stage.pairs = df.single.stage.plot %>% select(stage, measure, condition, mean, plot_y) %>%
+  pivot_wider(names_from = condition, values_from = c(mean, plot_y))
+p.single.stage = ggplot(df.single.stage.plot,
+  aes(x = mean, y = plot_y, color = condition, fill = condition, shape = condition)) +
+  geom_segment(data = df.single.stage.pairs,
+               aes(x = mean_Intentional, xend = mean_Accidental, y = plot_y_Intentional, yend = plot_y_Accidental),
+               inherit.aes = FALSE, color = "#A0A0A0", linewidth = .55) +
+  geom_segment(aes(x = lower, xend = upper, yend = plot_y), linewidth = .45, alpha = .65, show.legend = FALSE) +
+  geom_point(size = 3.8, stroke = .9) + stage_condition_scales() +
+  facet_wrap(~ stage, nrow = 1, drop = FALSE) +
+  scale_x_continuous(breaks = seq(0, 1, .25), labels = percent_labels,
+                     limits = c(0, 1), expand = expansion(add = .035)) +
+  scale_y_continuous(breaks = 1:4, labels = rev(measure_order),
+                     limits = c(.5, 4.5), expand = expansion(mult = 0)) +
+  labs(x = '"Yes" Responses (%)', y = NULL) + talk_theme(stage_text_size) +
+  theme(axis.text.x = element_text(size = 18))
+save_talk(p.single.stage, file.path(synthesis_output, "single_cause_intention_dumbbells"),
+          intention_width, intention_height)
+p.single.stage
+```
+
+## Causal language across structure and intention
+
+Baseline is Study 1; Intentional and Accidental are Study 2. Each connector
+joins the Distal and Proximal group means at a single condition position.
+There are no lines between Baseline, Intentional and Accidental. Existing
+role colors identify Distal (red) and Proximal (blue), with role shapes only.
+This preserves the distinction between the earlier initiator and the direct
+producer without imposing a predicted Caused/Lexical mapping.
+
+```{r role-mapping-stage-table}
+df.role.mapping.summary = df.stage.summary %>%
+  filter(study %in% c("Study 1", "Study 2"), measure %in% c("Caused", "Lexical")) %>%
+  mutate(measure = factor(measure, levels = c("Caused", "Lexical")),
+         role = factor(role, levels = role_order)) %>% arrange(measure, stage, condition, role)
+stopifnot(nrow(df.role.mapping.summary) == 36L)
+write_csv(df.role.mapping.summary, file.path(synthesis_output, "caused_lexical_role_mapping_values.csv"))
+kable(select(df.role.mapping.summary, study, stage, measure, condition, role, eligible_n, n, yes_pct, lower_pct, upper_pct),
+      digits = 6, caption = "Caused/Lexical role mapping: exact means, Ns and 95% intervals (%); CSV retains full precision")
+```
+
+```{r role-mapping-stage-plot, fig.width=16, fig.height=10.5}
+df.role.mapping.plot = df.role.mapping.summary %>%
+  mutate(plot_x = as.numeric(condition) + unname(study1_role_offsets[as.character(role)]))
+df.role.mapping.pairs = df.role.mapping.plot %>% select(stage, measure, condition, role, mean, plot_x) %>%
+  pivot_wider(names_from = role, values_from = c(mean, plot_x))
+p.role.mapping = ggplot(df.role.mapping.plot, aes(x = plot_x, y = mean, color = role, fill = role, shape = role)) +
+  geom_hline(yintercept = .5, linetype = "dashed", color = "#B0B0B0", linewidth = .5) +
+  geom_segment(data = df.role.mapping.pairs,
+               aes(x = plot_x_Distal, xend = plot_x_Proximal, y = mean_Distal, yend = mean_Proximal),
+               inherit.aes = FALSE, color = "#A0A0A0", linewidth = .55) +
+  geom_linerange(aes(ymin = lower, ymax = upper), linewidth = .45, alpha = .65, show.legend = FALSE) +
+  geom_point(size = 3.4, stroke = .8) +
+  scale_color_manual(name = NULL, values = study2_role_colors, limits = role_order, drop = FALSE) +
+  scale_fill_manual(name = NULL, values = study2_role_colors, limits = role_order, drop = FALSE) +
+  scale_shape_manual(name = NULL, values = study1_role_shapes, limits = role_order, drop = FALSE) +
+  facet_grid(measure ~ stage, drop = FALSE) +
+  scale_x_continuous(breaks = 1:3, labels = c("Baseline", "Intentional", "Accidental"),
+                     limits = c(.5, 3.5), expand = expansion(mult = 0)) +
+  scale_y_continuous(breaks = seq(0, 1, .25), labels = percent_labels,
+                     limits = c(0, 1), expand = expansion(add = .035)) +
+  labs(x = NULL, y = '"Yes" Responses (%)') + talk_theme(stage_text_size) +
+  theme(axis.text.x = element_text(size = 16))
+save_talk(p.role.mapping, file.path(synthesis_output, "caused_lexical_role_mapping"), intention_width, 10.5)
+p.role.mapping
+```
+
+# Compact validation tables and checks
+
+## Inclusion flow and exclusion reasons
+
+Raw counts distinguish sessions from children. The flow below removes
+ineligible sessions before repeat-attempt selection. A child with an excluded
+attempt can still contribute through a different eligible attempt.
+
+```{r inclusion-flow}
+df.children.flow = bind_rows(
+  tibble(study = "Study 1", raw_sessions = nrow(df.study1.children.attempts),
+         eligible_sessions = nrow(df.study1.children.eligible),
+         retained_children = nrow(df.study1.children.included)),
+  tibble(study = "Study 2", raw_sessions = nrow(df.study2.children.attempts),
+         eligible_sessions = nrow(df.study2.children.eligible),
+         retained_children = nrow(df.study2.children.included))) %>%
+  mutate(excluded_sessions = raw_sessions - eligible_sessions,
+         repeat_sessions_removed = eligible_sessions - retained_children)
+kable(bind_rows(df.study1.children.raw_counts, df.study2.children.raw_counts))
+kable(df.children.flow)
+kable(bind_rows(mutate(df.study1.children.attempts, study = "Study 1"),
+                mutate(df.study2.children.attempts, study = "Study 2")) %>%
+        filter(!eligible) %>% count(study, analysis_exclusion_reason, name = "sessions"))
+```
+
+## Check plotted means directly against binary response rows
+
+This second calculation starts from individual binary response rows. For each
+participant and role/measure it divides the number of Yes answers by the number
+of available questions, then averages those fractions across participants.
+It does not use the participant-mean helper or the pattern audit. Every plotted
+mean and contributing N must match. The compact table shows both role-specific
+means and Ns at each age/condition; adult rows use the category Adult.
+
+```{r direct-binary-validation}
+df.validation.participants = bind_rows(
+  df.study1.adults.responses, df.study1.children.responses,
+  df.study2.adults.responses, df.study2.children.responses) %>%
+  mutate(age_group = if_else(population == "Adults", "Adult", as.character(age))) %>%
+  group_by(study, population, age_group, condition, measure, role, participant) %>%
+  summarise(yes_answers = sum(endorsed, na.rm = TRUE),
+            available_questions = sum(!is.na(endorsed)), .groups = "drop") %>%
+  mutate(participant_yes = if_else(available_questions > 0,
+                                  yes_answers / available_questions, NA_real_))
+df.validation.means = df.validation.participants %>%
+  group_by(study, population, age_group, condition, measure, role) %>%
+  summarise(checked_n = sum(!is.na(participant_yes)),
+            checked_mean = mean(participant_yes, na.rm = TRUE), .groups = "drop")
+df.plotted.checks = bind_rows(df.study1.summary, df.study2.summary) %>%
+  left_join(df.validation.means,
+            by = c("study", "population", "age_group", "condition", "measure", "role"),
+            relationship = "one-to-one")
+stopifnot(all(df.plotted.checks$n == df.plotted.checks$checked_n),
+          all(abs(df.plotted.checks$mean - df.plotted.checks$checked_mean) < 1e-12),
+          nrow(df.plotted.checks) == nrow(df.validation.means))
+df.plotted.means = df.plotted.checks %>%
+  select(study, age_group, condition, measure, role, n, mean) %>%
+  pivot_wider(names_from = role, values_from = c(n, mean)) %>%
+  arrange(study, measure, condition, match(age_group, age_labels))
+kable(df.plotted.means, digits = 6,
+      caption = "Verified plotted proportions: participant-weighted Yes means and Ns by role")
+```
+
+The comparison is checked against that independent calculation from binary
+response rows, not just against the plotting summary. Both source means and
+Ns must match, and every displayed change must equal Study 2 minus Study 1.
+
+```{r comparison-direct-validation}
+df.comparison.checked_baseline = df.validation.means %>%
+  filter(study == "Study 1") %>%
+  select(population, age_group, measure, role,
+         checked_baseline = checked_mean, checked_baseline_n = checked_n)
+df.comparison.checked_study2 = df.validation.means %>%
+  filter(study == "Study 2") %>%
+  select(population, age_group, measure, role, condition,
+         checked_study2 = checked_mean, checked_study2_n = checked_n)
+df.comparison.checks = df.comparison.plotted_values %>%
+  left_join(df.comparison.checked_baseline,
+            by = c("population", "age_group", "measure", "role"), relationship = "many-to-one") %>%
+  left_join(df.comparison.checked_study2,
+            by = c("population", "age_group", "measure", "role", "condition"),
+            relationship = "one-to-one")
+stopifnot(all(df.comparison.checks$baseline_n == df.comparison.checks$checked_baseline_n),
+          all(df.comparison.checks$study2_n == df.comparison.checks$checked_study2_n),
+          all(abs(df.comparison.checks$baseline - df.comparison.checks$checked_baseline) < 1e-12),
+          all(abs(df.comparison.checks$study2_yes - df.comparison.checks$checked_study2) < 1e-12),
+          all(abs(df.comparison.checks$change -
+                    (df.comparison.checks$checked_study2 - df.comparison.checks$checked_baseline)) < 1e-12))
+```
+
+The age-pooled gap summary is independently checked from binary response
+rows: average each child's scenarios, pair their roles within measure, subtract
+Proximal from Distal, then average the paired differences within condition.
+All eight plotted gaps and paired Ns must match.
+
+```{r gap-summary-direct-validation}
+df.gap.checked_binary = df.validation.participants %>%
+  filter(study == "Study 2", population == "Children") %>%
+  select(participant, age_group, condition, measure, role, participant_yes) %>%
+  pivot_wider(names_from = role, values_from = participant_yes) %>%
+  mutate(checked_gap_pp = 100 * (Distal - Proximal)) %>%
+  group_by(measure, condition) %>%
+  summarise(checked_n = sum(!is.na(checked_gap_pp)),
+            checked_gap_pp = mean(checked_gap_pp, na.rm = TRUE), .groups = "drop")
+df.gap.checks = df.gap.summary %>%
+  left_join(df.gap.checked_binary, by = c("measure", "condition"), relationship = "one-to-one")
+stopifnot(all(df.gap.checks$n == df.gap.checks$checked_n),
+          all(abs(df.gap.checks$gap_pp - df.gap.checks$checked_gap_pp) < 1e-12))
+```
+
+Single Cause means and the 12 synthesis effects are also checked directly from
+binary answers. These checks recalculate each participant's Yes fraction
+without the participant-mean tables used by the plots.
+
+```{r single-and-synthesis-direct-validation}
+df.single.checked_participants = bind_rows(
+  df.single.responses %>% mutate(population = "Children", age_group = as.character(age)),
+  df.single.adults.responses %>% mutate(population = "Adults", age_group = "Adult", age = NA_integer_)) %>%
+  group_by(population, age_group, age, participant, condition, measure) %>%
+  summarise(participant_yes = sum(endorsed, na.rm = TRUE) / sum(!is.na(endorsed)), .groups = "drop")
+df.single.checked_means = df.single.checked_participants %>%
+  group_by(population, age_group, condition, measure) %>%
+  summarise(checked_n = sum(!is.na(participant_yes)),
+            checked_mean = mean(participant_yes, na.rm = TRUE), .groups = "drop")
+df.single.checks = df.single.summary %>%
+  left_join(df.single.checked_means, by = c("population", "age_group", "condition", "measure"),
+            relationship = "one-to-one")
+stopifnot(nrow(df.single.checks) == nrow(df.single.checked_means),
+          all(df.single.checks$n == df.single.checks$checked_n),
+          all(abs(df.single.checks$mean - df.single.checks$checked_mean) < 1e-12))
+df.synthesis.checked = bind_rows(
+  df.single.checked_participants %>% filter(population == "Children", age %in% synthesis_ages) %>%
+    transmute(structure = "Single Cause", participant, condition, measure, participant_yes),
+  df.validation.participants %>% filter(study == "Study 2", population == "Children",
+                                         age_group %in% as.character(synthesis_ages)) %>%
+    transmute(structure = paste("Study 2", role), participant, condition, measure, participant_yes)) %>%
+  group_by(structure, measure, condition) %>%
+  summarise(checked_n = sum(!is.na(participant_yes)),
+            checked_yes = mean(participant_yes, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = condition, values_from = c(checked_n, checked_yes)) %>%
+  mutate(checked_effect = 100 * (checked_yes_Intentional - checked_yes_Accidental))
+df.synthesis.checks = df.synthesis.summary %>%
+  left_join(df.synthesis.checked, by = c("structure", "measure"), relationship = "one-to-one")
+stopifnot(nrow(df.synthesis.checks) == nrow(df.synthesis.checked),
+          all(df.synthesis.checks$n_Intentional == df.synthesis.checks$checked_n_Intentional),
+          all(df.synthesis.checks$n_Accidental == df.synthesis.checks$checked_n_Accidental),
+          all(abs(df.synthesis.checks$yes_Intentional - df.synthesis.checks$checked_yes_Intentional) < 1e-12),
+          all(abs(df.synthesis.checks$yes_Accidental - df.synthesis.checks$checked_yes_Accidental) < 1e-12),
+          all(abs(df.synthesis.checks$effect_pp - df.synthesis.checks$checked_effect) < 1e-12))
+```
+
+The developmental-stage tables are checked against the independently counted
+binary-answer fractions above, including both source condition/role means and
+all eligible/contributing Ns. This covers every endpoint used in the three new
+figures and verifies that no ages 7–9 enter the stage summaries.
+
+```{r stage-direct-validation}
+df.stage.checked = bind_rows(
+  df.validation.participants %>%
+    transmute(study, population, age = as.integer(replace(age_group, age_group == "Adult", NA_character_)), participant,
+              condition, measure, role, participant_yes),
+  df.single.checked_participants %>%
+    transmute(study = "Single Cause", population, age, participant, condition, measure,
+              role = "Direct", participant_yes)) %>%
+  mutate(stage = stage_group(population, age)) %>% filter(!is.na(stage)) %>%
+  group_by(study, population, stage, condition, measure, role) %>%
+  summarise(checked_eligible_n = n(), checked_n = sum(!is.na(participant_yes)),
+            checked_mean = mean(participant_yes, na.rm = TRUE), .groups = "drop")
+df.stage.checks = df.stage.summary %>%
+  left_join(df.stage.checked, by = c("study", "population", "stage", "condition", "measure", "role"),
+            relationship = "one-to-one")
+stopifnot(nrow(df.stage.checks) == 96L, nrow(df.stage.checked) == 96L,
+          all(df.stage.checks$eligible_n == df.stage.checks$checked_eligible_n),
+          all(df.stage.checks$n == df.stage.checks$checked_n),
+          all(abs(df.stage.checks$mean - df.stage.checks$checked_mean) < 1e-12))
+```
+
+The following small **synthetic validation example**, separate from all study
+data, checks the four binary response patterns and question-specific missingness.
+The final example has Bike Distal=1, Bike Proximal=missing, Mirror Distal=0,
+Mirror Proximal=1. Its distal mean must be .5 and proximal mean 1; the missing
+proximal answer must not discard the bike distal answer.
+
+```{r scoring-validation}
+df.scoring.examples = tibble(
+  study = "Validation", population = "Adults",
+  participant = rep(c("both", "neither", "distal_only", "proximal_only", "missing"), each = 4),
+  age = NA_integer_, condition = "Baseline", measure = "Caused",
+  scenario = rep(c("Bike", "Bike", "Mirror", "Mirror"), 5),
+  role = rep(role_order, 10),
+  endorsed = c(1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, NA, 0, 1))
+df.scoring.expected = tibble(
+  participant = c("both", "neither", "distal_only", "proximal_only", "missing"),
+  expected_distal = c(1, 0, 1, 0, .5), expected_proximal = c(1, 0, 0, 1, 1))
+df.scoring.checked = participant_means(df.scoring.examples) %>%
+  select(participant, role, yes_mean) %>%
+  pivot_wider(names_from = role, values_from = yes_mean) %>%
+  left_join(df.scoring.expected, by = "participant", relationship = "one-to-one")
+stopifnot(all(df.scoring.checked$Distal == df.scoring.checked$expected_distal),
+          all(df.scoring.checked$Proximal == df.scoring.checked$expected_proximal))
+```
+
+## Both/neither response patterns
+
+Each count is a **participant × scenario × measure pair**, not a unique child.
+Both contributes two yes judgments; neither contributes two no judgments.
+Distal-only and proximal-only each contribute one yes and one no. Pattern
+labels do not filter the plots or change their values. Counts are grouped by
+study, population, age, condition and measure. The scenario table separately
+shows the number of available questions per participant, measure and role.
+A missing answer affects only its own role-specific mean.
+
+```{r pattern-audit, results='asis'}
+df.all.patterns = bind_rows(df.study1.patterns, df.study2.patterns)
+df.pattern.audit = df.all.patterns %>%
+  mutate(age_group = if_else(population == "Adults", "Adult", as.character(age))) %>%
+  count(study, population, age_group, condition, measure, pattern, name = "pairs") %>%
+  pivot_wider(names_from = pattern, values_from = pairs, values_fill = 0)
+cat("<details><summary>Show all response-pattern counts</summary>\n\n")
+print(kable(df.pattern.audit))
+cat("\n</details>\n")
+df.scenario.audit = bind_rows(df.study1.means, df.study2.means) %>%
+  count(study, population, condition, measure, role, scenarios_available, name = "participants")
+cat("<details><summary>Show available scenarios per participant mean</summary>\n\n")
+print(kable(df.scenario.audit))
+cat("\n</details>\n")
+```
+
+## Build identity and fixed geometry
+
+These checks compare every build's layout and numeric layer coordinates. For
+each revealed data layer, its rows must equal the corresponding rows of the
+full plot. We separately check each full plot against its final build (08 for Study 1, 04 for baseline change, 16 for Study 2 and Single Cause). The saved PNGs
+are also visually reviewed in sequence before acceptance.
+
+```{r build-checks}
+check_builds = function(full, builds) {
+  full_built = ggplot_build(full)
+  full_grob = ggplotGrob(full)
+  for (build in builds) {
+    built = ggplot_build(build)
+    grob = ggplotGrob(build)
+    # Compare physical dimensions, not internal grid object names, which R
+    # regenerates even for identical plots.
+    stopifnot(identical(built$layout$layout, full_built$layout$layout),
+              identical(grob$layout, full_grob$layout),
+              isTRUE(all.equal(grid::convertWidth(grob$widths, "cm", valueOnly = TRUE),
+                               grid::convertWidth(full_grob$widths, "cm", valueOnly = TRUE))),
+              isTRUE(all.equal(grid::convertHeight(grob$heights, "cm", valueOnly = TRUE),
+                               grid::convertHeight(full_grob$heights, "cm", valueOnly = TRUE))))
+    for (panel in seq_along(built$layout$panel_params)) {
+      stopifnot(identical(built$layout$panel_params[[panel]]$x.range,
+                          full_built$layout$panel_params[[panel]]$x.range),
+                identical(built$layout$panel_params[[panel]]$y.range,
+                          full_built$layout$panel_params[[panel]]$y.range))
+    }
+    for (layer in seq_along(built$data)) {
+      visible = built$data[[layer]]
+      reference = full_built$data[[layer]]
+      columns = intersect(c("PANEL", "x", "y", "xend", "yend", "ymin", "ymax", "colour", "fill",
+                            "shape", "linetype", "xintercept", "yintercept"), names(visible))
+      if (nrow(visible)) {
+        stopifnot(nrow(anti_join(as_tibble(visible[columns]),
+                                as_tibble(reference[columns]), by = columns)) == 0L)
+      }
+    }
+  }
+  stopifnot(identical(ggplot_build(builds[[length(builds)]])$data, full_built$data))
+  TRUE
+}
+# Each reveal adds the expected adult/child points without moving existing data.
+point_counts = function(builds) {
+  vapply(builds, function(plot) {
+    layer = which(vapply(plot$layers, function(x) inherits(x$geom, "GeomPoint"), logical(1)))
+    nrow(ggplot_build(plot)$data[[layer]])
+  }, integer(1))
+}
+stopifnot(identical(unname(point_counts(p.study1.builds)), c(0L, cumsum(rep(c(2L, 14L), 4)))),
+          identical(unname(point_counts(p.study2.builds)), c(0L, cumsum(rep(c(2L, 14L, 2L, 14L), 4)))),
+          identical(unname(point_counts(p.single.builds)), c(0L, cumsum(rep(c(1L, 4L, 1L, 4L), 4)))))
+stopifnot(check_builds(p.study1.full, p.study1.builds),
+          check_builds(p.study2.full, p.study2.builds),
+          check_builds(p.comparison.full, p.comparison.builds),
+          check_builds(p.single.full, p.single.builds),
+          identical(show_build(df.study1.summary, 8L), df.study1.summary),
+          identical(show_build(df.study2.summary, 16L), df.study2.summary),
+          all(is.na(df.study1.means$yes_mean) | df.study1.means$yes_mean %in% c(0, .5, 1)),
+          all(is.na(df.study2.means$yes_mean) | df.study2.means$yes_mean %in% c(0, .5, 1)),
+          all(df.study1.means$scenarios_available %in% 0:2),
+          all(df.study2.means$scenarios_available %in% 0:2))
+kable(tibble(figure = c("Study 1 raw", "Study 2 raw", "Baseline change", "Single Cause"),
+             builds = c(length(p.study1.builds), length(p.study2.builds), length(p.comparison.builds), length(p.single.builds)),
+             png_width = c(study1_width, study2_width, comparison_width, study2_width) * png_dpi,
+             png_height = c(study1_height, study2_height, comparison_height, study2_height) * png_dpi,
+             full_equals_final_build = TRUE))
+```
+
+## Environment and remaining questions
+
+This workflow preserves all original files and writes only new talk outputs.
+The source data remain unmodified. The original handoff audit records are
+historical and are not rewritten by this analysis. Remaining questions include
+the missing original scripts, exact deployment/cohort mapping, preregistration
+registration/amendment records and cap implementation, confirmation of
+unassisted child responses, and the missing Study 2 main adult dataset.
+The scientific handoff is not accepted by creating this workflow.
+
+```{r session-information}
+sessionInfo()
+```

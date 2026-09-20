@@ -1,7 +1,7 @@
-# Single cause — children figures
+# Single Cause — children figures
 
-The existing plots are in the [study figure folder](../), one level above this folder. The existing child pilot plots show ages 3–6; the data behind them still need to be located.
+The preserved historical age plots remain in the [study figure folder](../). Their original plotting script and exact input snapshot are unverified.
 
-We do not yet have the scripts that created those figures. Keep the existing images unchanged; use this folder for future children figures once the analysis is agreed.
+The supplied exp7 child dataset is now available. New outputs from the shared workflow are in [talk/](../talk/README.md): a developmental figure, 17 builds and an age-pooled summary. Historical images are not overwritten.
 
 [Study guide](../../../docs/single_cause/README.md).

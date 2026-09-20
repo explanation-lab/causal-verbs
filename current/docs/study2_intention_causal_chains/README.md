@@ -22,7 +22,7 @@ The [adult experiment folder](../../code/experiments/study2_intention_causal_cha
 
 ## Children
 
-**Child data collection is currently ongoing.** Continue collecting the planned sample. The project lead will add the child dataset to the [child data folder](../../data/study2_intention_causal_chains/children/) after collection is complete.
+**Child data collection is currently ongoing.** The [current supplied interim export](../../data/study2_intention_causal_chains/children/) is now here. The new [descriptive workflow](../../code/R/README.md) retains 406 unique children after eligibility checks and repeat-attempt selection. Continue collecting the planned sample; this uncapped snapshot is not a finalized preregistered analysis. Its [talk figures](../../figures/study2_intention_causal_chains/talk/) use one earlier adult pilot for comparison, not the missing main adult sample.
 
 Use the [child preregistration](children/preregistration/exp2_children.docx) to understand the study plan and the [child experiment folder](../../code/experiments/study2_intention_causal_chains/children/) to inspect the code and materials. Coordinate work on the running study with the project lead; do not edit the live study simply to inspect it.
 
@@ -30,10 +30,10 @@ Use the [child preregistration](children/preregistration/exp2_children.docx) to 
 
 - [ ] Add the current adult preregistered dataset when it is received.
 - [ ] Continue collecting the child sample.
-- [ ] Have the project lead add the child dataset after collection is complete.
-- [ ] Confirm which experiment version produced each main-study dataset and whether the registered plan changed.
+- [x] Add the current supplied child snapshot unchanged; collection remains ongoing.
+- [ ] Confirm deployed versions, registered-plan changes, first-30-per-age/condition rules, completion-time ordering and unassisted-response eligibility.
 - [ ] Recover the original statistical and plotting code if available, and identify the data behind the existing figures.
-- [ ] Plan the [shared R analysis](../../code/R/README.md) once the datasets and analysis decisions are confirmed.
+- [ ] Review the new [shared descriptive R analysis](../../code/R/README.md), repeat-attempt selection and adult-pilot provenance.
 
 ## Where to find things
 
@@ -43,6 +43,6 @@ Use the [child preregistration](children/preregistration/exp2_children.docx) to 
 | Participant datasets | [Adults](../../data/study2_intention_causal_chains/adults/) · [Children](../../data/study2_intention_causal_chains/children/) |
 | Study information and preregistrations | [Adults](adults/README.md) · [Children](children/README.md) |
 | Plots and results | [Study figure folder](../../figures/study2_intention_causal_chains/) |
-| Future shared analysis | [R analysis plan](../../code/R/README.md) |
+| Shared descriptive analysis | [R running guide](../../code/R/README.md) |
 
 [Back to the project overview](../../../README.md). Work on the files assigned by the project lead; keep existing data, figures, protocols and stimuli unchanged unless a specific update has been agreed.

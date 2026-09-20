@@ -1,25 +1,25 @@
 # Project status and next tasks
 
-Updated September 13, 2026. Start with the [project overview](README.md), then use the study guide for your assignment. The project lead coordinates data additions and changes to studies that participants can access.
+Updated September 20, 2026. Start with the [project overview](README.md), then use the study guide for your assignment. The project lead coordinates data additions and changes to studies that participants can access.
 
 | Study | Adults | Children | Main next step |
 | --- | --- | --- | --- |
-| [Study 1: Baseline causal chains](current/docs/study1_baseline_causal_chains/README.md) | Data collected; adult preregistered data are here | Data collected; current dataset needs to be added | Add and analyze child data |
-| [Study 2: Intention × causal chains](current/docs/study2_intention_causal_chains/README.md) | Data collected; current preregistered dataset needs to be added | Data collection ongoing | Finish child collection and analyze |
+| [Study 1: Baseline causal chains](current/docs/study1_baseline_causal_chains/README.md) | Data collected; adult preregistered data are here | Current supplied dataset added | Review descriptive plots and final sample rules |
+| [Study 2: Intention × causal chains](current/docs/study2_intention_causal_chains/README.md) | Data collected; current preregistered dataset needs to be added | Collection ongoing; interim snapshot added | Continue collection; review descriptive plots |
 | [Study 3: Nonverbal](current/docs/study3_nonverbal/README.md) | Adult pilot data available | Child pilot/repilot data available | Clarify and document the analysis steps before the next study |
-| [Single cause](current/docs/single_cause/README.md) | Adult pilot data available | Child pilot was run; underlying dataset still needs to be located | Locate child data and organize analyses |
+| [Single cause](current/docs/single_cause/README.md) | Adult pilot data available | exp7 available: 96 included children, ages 3–6 | Review working N=32 adult/child figures; historical N=30 subset unresolved |
 
 ## Immediate priorities
 
-- **Study 1:** add the collected child dataset; confirm which experiment version produced it; recover the code behind the existing figures if available.
-- **Study 2:** add the collected adult preregistered dataset. Child collection is currently ongoing; continue that work, and the project lead will add the child dataset after collection is complete. The four adult files already here are earlier pilots.
+- **Study 1:** review the new descriptive workflow using the supplied child dataset (211 unique retained children). Confirm the exact deployed version and final sample rules, including the preregistered age-cell cap; recover the original figure code if available.
+- **Study 2:** add the collected adult preregistered dataset and continue child collection. The supplied interim child snapshot is now here (406 unique retained children). Review its descriptive plots, age/condition cell caps and repeat-attempt decisions. The adult comparison uses one of four earlier pilots, not the main sample.
 - **Study 3:** confirm secure access to the original videos, identify the experiment version for each pilot dataset, and document the steps from video to looking measures to analysis. Check the scripts that create the stimuli and prepare lab-controlled asset hosting before another deployment.
-- **Single cause:** locate the child pilot dataset and identify the version it came from. An earlier pilot included at least 26 unique 3-year-olds, and existing figures show results for ages 3–6. The adult file is already here with 32 rows; determine which two rows were excluded from the reported 30-person analysis and why.
+- **Single cause:** the supplied exp7 child snapshot is now available and analyzed in the shared workflow (96 included children, no repeats). Confirm its deployment revision and relationship to historical age plots. The adult file has 32 complete rows. The current working plots use all 32 (16 per condition), as explicitly requested, because no defensible exclusion rule was recovered. The historical N=30 subset remains unidentified. See the [adult audit](current/docs/single_cause/adults/ANALYSIS_AUDIT.md).
 
 ## Analysis work
 
-We have several figures without the scripts that created them. Recover the original code where possible. For the verbal studies, build the planned shared R Markdown analysis only after the data, exclusions and analysis decisions are confirmed. For Study 3, document and check the available Python processing steps before choosing analyses for the next version.
+The new [shared R Markdown workflow](current/code/R/README.md) provides transparent descriptive summaries and cumulative talk plots for Studies 1 and 2. Its main talk figure now shows change from the matching Study 1 baseline to each Study 2 condition, with uncertainty from both studies; raw Yes-response figures remain backups. It uses the supplied inclusion flags, one eligible attempt per child, participant-level role-specific Yes means and bootstrap intervals. It is a reconstruction, not recovered original code or a finalized preregistered analysis. The requested descriptive child samples are uncapped; the preregistered first-30 rules, completion-time order and unassisted-response eligibility still need review. Recover the original scripts where possible. For Study 3, document and check the available Python processing steps before choosing analyses for the next version.
 
-Some existing counts need explanation: the child gaze folder named `n80` contains 73 different participant codes, and the adult single-cause file has 32 rows although 30 participants were analyzed. Keep every existing row until the reasons for exclusions are established.
+Some existing counts need explanation: the child gaze folder named `n80` contains 73 different participant codes, and the adult single-cause file has 32 complete rows although the historical notes report 30 participants. The working plots use all 32 without guessing exclusions. Keep every existing row until the reasons for exclusions are established.
 
 When a task or collection status changes, update this page and the relevant study guide. Do not upload original participant recordings or identifying information with the update.

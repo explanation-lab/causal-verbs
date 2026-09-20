@@ -18,27 +18,28 @@ The experiment code uses **jsPsych**, a JavaScript library for presenting studie
 
 The adult pilot has been run, and its dataset is **already present**: [single_cause_pilot1-responses.csv](../../data/single_cause/adults/single_cause_pilot1-responses.csv). A pilot is an early study used to try out the design.
 
-The file contains **32 rows**, while the reported analysis used **30 participants** (15 per condition). We need to determine which two rows were excluded and why. Leave all rows in the existing file until this is clarified.
+The file contains **32 complete rows**, 16 per condition, while the reported analysis used **30 participants** (15 per condition). The [adult audit](adults/ANALYSIS_AUDIT.md) found no defensible exclusion rule or analytic participant list. All source rows remain unchanged. By explicit review decision, the current working developmental figure uses all 32 adults, 16 per condition, because no defensible exclusion rule was recovered; it does not claim to reconstruct the historical N=30 analysis.
 
 The [adult experiment folder](../../code/experiments/single_cause/adults/) contains separate intentional and accidental versions. The [figure folder](../../figures/single_cause/) contains plots and images from a lab presentation. We do not yet have the code that created the figures. No separate preregistration—a document recording the hypotheses, sample size and analysis plan in advance—is currently available for this study.
 
 ## Children
 
-**An earlier child single-cause pilot was run.** It included at least **26 unique 3-year-olds**, and existing child figures show results broken down by ages **3–6**. The underlying child participant dataset is not currently in the repository.
+The [supplied exp7 child export](../../data/single_cause/children/exp7_raw_responses.csv) is now available: 970 rows, 97 sessions and 97 unique children aged 3–6. One withdrawn session is excluded, leaving **96 children** (50 Intentional, 46 Accidental). No repeat child IDs occur. The [data guide](../../data/single_cause/children/README.md) gives exact counts and export quirks.
 
-The age plots, including [plot_age_3.png](../../figures/single_cause/plot_age_3.png) through [plot_age_6.png](../../figures/single_cause/plot_age_6.png), remain in the study-level figure folder. Locate the data behind these plots and confirm which child experiment version produced them. We still need to clarify how that earlier pilot relates to the [code and materials currently here](../../code/experiments/single_cause/children/).
+The [shared R Markdown workflow](../../code/R/causal_verbs.Rmd) now averages Bike/Mirror Yes/No responses within child and measure, then generates age-group means, participant-bootstrap intervals, cumulative builds and a children-only pooled summary. [New talk figures](../../figures/single_cause/talk/README.md) preserve the intentionality colors and style of Studies 1 and 2.
 
-The [child data folder](../../data/single_cause/children/) is where the participant dataset will go once it is located and prepared for the repository. There is no separate child preregistration here.
+The existing [historical age plots](../../figures/single_cause/) remain unchanged. Their precise input snapshot and the exact deployed code revision are still unconfirmed; the new export's availability does not establish that provenance. There is no separate child preregistration here.
 
 This guide covers the verbal single-cause study. The current nonverbal single-cause condition, which measures looking instead of verbal judgments, is part of [Study 3](../study3_nonverbal/README.md).
 
 ## What still needs to be done
 
-- [ ] Locate and add the child pilot dataset underlying the existing child figures.
+- [x] Add the supplied exp7 child snapshot without changing raw values.
+- [ ] Establish its exact relationship to the preserved historical child figures.
 - [ ] Confirm which child experiment version produced those data and how it relates to later versions.
 - [ ] Determine which two adult rows were excluded from the reported 30-person analysis and why.
 - [ ] Recover the original statistical and plotting code if available.
-- [ ] Build the new [shared analysis workflow](../../code/R/README.md) after these points are clarified.
+- [x] Add the child analysis and talk outputs to the [shared workflow](../../code/R/README.md). The current working adult endpoint uses all 32 complete records; the historical N=30 exclusion decision remains unresolved.
 
 ## Where to find things
 
@@ -48,6 +49,6 @@ This guide covers the verbal single-cause study. The current nonverbal single-ca
 | Participant datasets | [Adults](../../data/single_cause/adults/) · [Children](../../data/single_cause/children/) |
 | Study information and population notes | [Adults](adults/README.md) · [Children](children/README.md) |
 | Plots and results | [Study figure folder](../../figures/single_cause/) |
-| Future shared analysis | [R analysis plan](../../code/R/README.md) |
+| Shared descriptive analysis | [R running guide](../../code/R/README.md) |
 
 [Back to the project overview](../../../README.md). Work on the files assigned by the project lead; keep existing data, figures, protocols and stimuli unchanged unless a specific update has been agreed.

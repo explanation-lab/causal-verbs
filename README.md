@@ -24,14 +24,14 @@ Each part uses the same study names and has adult and child folders. Experiment 
 
 ## Where the studies stand
 
-Updated September 13, 2026. The links below take you directly to the four study guides.
+Updated September 20, 2026. The links below take you directly to the four study guides.
 
 | Study | Adults | Children | Main next step |
 | --- | --- | --- | --- |
-| [Study 1: Baseline causal chains](current/docs/study1_baseline_causal_chains/README.md) | Data collected; adult preregistered data are here | Data collected; current dataset needs to be added | Add and analyze child data |
-| [Study 2: Intention × causal chains](current/docs/study2_intention_causal_chains/README.md) | Data collected; current preregistered dataset needs to be added | Data collection ongoing | Finish child collection and analyze |
+| [Study 1: Baseline causal chains](current/docs/study1_baseline_causal_chains/README.md) | Data collected; adult preregistered data are here | Current supplied dataset added | Review the descriptive analysis and final sample rules |
+| [Study 2: Intention × causal chains](current/docs/study2_intention_causal_chains/README.md) | Data collected; current preregistered dataset needs to be added | Collection ongoing; interim snapshot added | Continue collection; review descriptive plots |
 | [Study 3: Nonverbal](current/docs/study3_nonverbal/README.md) | Adult pilot data available | Child pilot/repilot data available | Clarify and document the analysis steps before the next study |
-| [Single cause](current/docs/single_cause/README.md) | Adult pilot data available | Child pilot was run; underlying dataset still needs to be located | Locate child data and organize analyses |
+| [Single cause](current/docs/single_cause/README.md) | Adult pilot data available | exp7 available: 96 included children, ages 3–6 | Review working N=32 adult/child figures; historical N=30 subset unresolved |
 
 A **pilot** is an early study used to try out a design or method; a repilot tests a revised version. A **preregistration** records the study's hypotheses, planned sample size and analysis plan before the main data are analyzed. Study 1 and Study 2 have adult and child preregistration documents. Study 3 has earlier protocol documents that need to be checked against the next planned version. Single cause has no separate preregistration here.
 
@@ -41,7 +41,7 @@ A **pilot** is an early study used to try out a design or method; a repilot test
 2. Open the experiment materials, dataset descriptions and figures linked there. You can read code and documents on GitHub without running an experiment.
 3. Review the study's checklist with the project lead and choose a specific task. [PROJECT_STATUS.md](PROJECT_STATUS.md) lists the immediate priorities.
 
-We have result figures for the verbal studies, but we do not yet have the code that created them. No R or R Markdown analysis files are currently available. R is a programming language used for statistics; R Markdown combines written explanations, R code and results in one document. The planned [shared R analysis](current/code/R/README.md) will be built after the relevant datasets and analysis decisions are confirmed. Do not guess the original analysis from the plots.
+The [shared R Markdown workflow](current/code/R/README.md) now reads the supplied Study 1/2 child exports and generates descriptive talk figures. The [main comparison figure](current/figures/study_comparison_baseline_change/README.md) shows Study 2 minus the Study 1 baseline; raw Yes-response figures remain available as backups. R Markdown combines explanations, code and results. This is a new reproducible reconstruction; the original verbal plotting scripts remain missing. Study 2 adults are a single earlier pilot comparison, and the requested uncapped child summaries are not finalized preregistered samples. Review the documented sample rules and limitations before using the plots.
 
 ## Working on files
 

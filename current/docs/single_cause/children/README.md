@@ -1,9 +1,9 @@
-# Single cause — children
+# Single Cause — children
 
-Start with the [study guide](../README.md) for the scientific question and what participants do.
+The [supplied exp7 dataset](../../../data/single_cause/children/exp7_raw_responses.csv) is now available. It contains 97 unique children aged 3–6; one withdrawn session is excluded, leaving 96 (50 Intentional, 46 Accidental). No repeated child IDs occur. The [data guide](../../../data/single_cause/children/README.md) documents inclusion and export quirks.
 
-An earlier child intentional/accidental pilot was run, including at least 26 unique 3-year-olds. Existing child figures show ages 3–6, but the participant dataset behind them has not yet been located in the repository.
+The [shared R Markdown workflow](../../../code/R/causal_verbs.Rmd) produces a four-panel developmental plot, 17 cumulative builds and a children-only pooled summary. It scores the one direct causal agent's Yes/No judgments, with participant-level averaging and bootstrap intervals. [Review the new figures](../../../figures/single_cause/talk/README.md).
 
-Next: locate that dataset and confirm which experiment version produced it and how it relates to later versions. No separate child preregistration is available here.
+Historical age plots remain unchanged. Matching this export to their exact generating dataset and deployment revision remains unresolved. No separate child preregistration or original plotting script is available here.
 
-[Experiment files](../../../code/experiments/single_cause/children) · [Data](../../../data/single_cause/children) · [Figures](../../../figures/single_cause)
+[Study guide](../README.md) · [Experiment files](../../../code/experiments/single_cause/children) · [Data](../../../data/single_cause/children)

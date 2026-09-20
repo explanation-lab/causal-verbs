@@ -29,17 +29,17 @@ The [existing figures](../../figures/study1_baseline_causal_chains/) are availab
 
 ## Children
 
-Current child data **were collected**, but that dataset is not yet in the repository. It will be added to the [child data folder](../../data/study1_baseline_causal_chains/children/) when received. Older pilot files should not be used in its place.
+The [current supplied child export](../../data/study1_baseline_causal_chains/children/) is now available, unchanged from the supplied file. The new [descriptive workflow](../../code/R/README.md) retains 211 unique children after eligibility checks and repeat-attempt selection. This uncapped snapshot is not the finalized preregistered sample.
 
-The [child experiment code and videos](../../code/experiments/study1_baseline_causal_chains/children/) and [child preregistration](children/preregistration/exp1_children.docx) are available. We still need to confirm which experiment version produced the collected child data. The [study figures](../../figures/study1_baseline_causal_chains/) can be inspected while that dataset is being located.
+The [child experiment code and videos](../../code/experiments/study1_baseline_causal_chains/children/) and [child preregistration](children/preregistration/exp1_children.docx) are available. We still need to confirm which experiment version produced the collected child data. New [talk figures](../../figures/study1_baseline_causal_chains/talk/) are separate from the unchanged historical figures.
 
 ## What still needs to be done
 
-- [ ] Add the current child dataset when it is received.
+- [x] Add the current supplied child dataset without changing its values.
 - [ ] Confirm which experiment version produced the child dataset.
 - [ ] Recover the original statistical and plotting code if available, and identify the data behind each figure.
-- [ ] Confirm the registered study plan and any later changes before starting the analysis.
-- [ ] Build the [shared R analysis](../../code/R/README.md) only after the data and analysis decisions are confirmed.
+- [ ] Confirm the registered plan and amendments, first-30-per-age rule, completion-time ordering and unassisted-response eligibility before a registered analysis.
+- [ ] Review the new [shared descriptive R analysis](../../code/R/README.md) and cumulative talk figures. Original plotting-code recovery remains unresolved.
 
 ## Where to find things
 
@@ -49,6 +49,6 @@ The [child experiment code and videos](../../code/experiments/study1_baseline_ca
 | Participant datasets | [Adults](../../data/study1_baseline_causal_chains/adults/) · [Children](../../data/study1_baseline_causal_chains/children/) |
 | Study information and preregistrations | [Adults](adults/README.md) · [Children](children/README.md) |
 | Plots and results | [Study figure folder](../../figures/study1_baseline_causal_chains/) |
-| Future shared analysis | [R analysis plan](../../code/R/README.md) |
+| Shared descriptive analysis | [R running guide](../../code/R/README.md) |
 
 [Back to the project overview](../../../README.md). Work on the files assigned by the project lead; keep existing data, figures, protocols and stimuli unchanged unless a specific update has been agreed.
