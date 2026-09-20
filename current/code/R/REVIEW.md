@@ -2,6 +2,28 @@
 
 Prepared September 20, 2026. The earlier plotting update was committed and pushed to `main` as `3b0869ff747164112b7f33558c8c98344b0ea761`. The additional candidate syntheses below are developed directly on `main`; the delivery message records their pushed commit. This reconstructed descriptive workflow does not recover the original analysis scripts or establish scientific handoff acceptance.
 
+## Presentation V2 — September 20, 2026
+
+V2 is an additive visual redesign developed on `main` after candidate commit `7f7d4eb52845e69d2690adf59e27531c7ed7842b`. The delivery message records the V2 commit. No analysis choices or numerical values changed, and no old figure was replaced.
+
+The [V2 guide and exact design constants](../../figures/study_comparison/presentation_v2/README.md) link every final, CI backup and build. [OUTPUTS.csv](../../figures/study_comparison/presentation_v2/OUTPUTS.csv) lists all 42 PDF/PNG paths and the three unchanged numerical tables. The helper intentionally matches cookie-task's final Study 1 victim design, after inspecting both its final/build PDFs and its effective R theme settings. All three V2 scaffolds and full figures were compared side by side with that reference.
+
+| Family | Main PNG | Main PDF | CI backup PDF | Builds |
+| --- | --- | --- | --- | --- |
+| Punishment by causal target | [PNG](../../figures/study_comparison/presentation_v2/punishment_causal_structure_talk_v2.png) | [PDF](../../figures/study_comparison/presentation_v2/punishment_causal_structure_talk_v2.pdf) | [CI PDF](../../figures/study_comparison/presentation_v2/punishment_causal_structure_talk_v2_with_ci.pdf) | [00–03](../../figures/study_comparison/presentation_v2/builds/punishment_causal_structure/) |
+| Caused/Lexical role preference | [PNG](../../figures/study_comparison/presentation_v2/caused_lexical_role_preference_talk_v2.png) | [PDF](../../figures/study_comparison/presentation_v2/caused_lexical_role_preference_talk_v2.pdf) | [CI PDF](../../figures/study_comparison/presentation_v2/caused_lexical_role_preference_talk_v2_with_ci.pdf) | [00–04](../../figures/study_comparison/presentation_v2/builds/caused_lexical_role_preference/) |
+| Single Cause intention sensitivity | [PNG](../../figures/study_comparison/presentation_v2/single_cause_intention_sensitivity_talk_v2.png) | [PDF](../../figures/study_comparison/presentation_v2/single_cause_intention_sensitivity_talk_v2.pdf) | [CI PDF](../../figures/study_comparison/presentation_v2/single_cause_intention_sensitivity_talk_v2_with_ci.pdf) | [00–05](../../figures/study_comparison/presentation_v2/builds/single_cause_intention_sensitivity/) |
+
+Every panel develops 3–4 → 5–6 → Adults, with childhood shading ending at 5–6. A has causal-target panels and two intention trajectories; B has Caused/Lexical panels and three experimental-context trajectories; C separates the four measure trajectories into four adjacent panels. Main figures/builds have no intervals. The CI backups preserve all bounds; B expands its ±80% main scale to ±100%, and C expands its −25% lower limit to −30% for the existing −25.320513 bound.
+
+The clean-process knit completed without warnings or errors using:
+
+```sh
+Rscript --vanilla -e 'rmarkdown::render("current/code/R/causal_verbs.Rmd", quiet = TRUE)'
+```
+
+Validation matched all 48 estimates and intervals to the previous candidates; V2 CSVs retain identical bytes. All 15 build PNGs and six main/CI outputs were visually inspected, and all six full PDFs were separately rasterized and checked. R checks confirmed cumulative reveals and identical panel/axis geometry across each series. Final Builds 03/04/05 are byte-for-byte identical to their respective full main PDFs/PNGs. All 175 existing PDF/PNG files, 11 existing figure-value CSVs and 2,806 imported files remain byte-for-byte unchanged. The cookie-task Rmd and inspected reference PDFs were read only and remain unchanged.
+
 ## Additional candidate syntheses — September 20, 2026
 
 These six main/CI figures are additions. Every earlier figure and build remains available with identical bytes. The three source tables below retain full CSV precision; values are percentages for punishment and percentage points for the two contrasts. Eligible and contributing Ns are identical in the present samples. All backup intervals are pointwise 95% participant-bootstrap percentile intervals from 5,000 draws. Ages 3 and 4 form 3–4; ages 5 and 6 form 5–6; Adults remain separate. Ages 7–9 are excluded from these grouped figures only.

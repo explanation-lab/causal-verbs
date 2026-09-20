@@ -1,0 +1,19 @@
+study,population,stage,target,condition,measure,eligible_n,n,yes_pct,lower_pct,upper_pct
+Single Cause,Children,3–4,Single Cause,Intentional,Punish,24,24,60.416666666666664,43.75,75
+Single Cause,Children,3–4,Single Cause,Accidental,Punish,26,26,57.692307692307686,42.30769230769231,73.07692307692307
+Study 2,Children,3–4,Chain: Distal,Intentional,Punish,60,60,54.16666666666667,43.333333333333336,64.16666666666667
+Study 2,Children,3–4,Chain: Distal,Accidental,Punish,67,67,45.522388059701484,35.820895522388064,55.223880597014926
+Study 2,Children,3–4,Chain: Proximal,Intentional,Punish,60,60,38.333333333333336,28.33333333333334,48.33333333333333
+Study 2,Children,3–4,Chain: Proximal,Accidental,Punish,67,67,40.29850746268656,30.597014925373134,50
+Single Cause,Children,5–6,Single Cause,Intentional,Punish,26,26,80.76923076923077,67.3076923076923,92.3076923076923
+Single Cause,Children,5–6,Single Cause,Accidental,Punish,20,20,37.5,20,55.00000000000001
+Study 2,Children,5–6,Chain: Distal,Intentional,Punish,47,47,68.08510638297872,56.38297872340425,79.7872340425532
+Study 2,Children,5–6,Chain: Distal,Accidental,Punish,49,49,39.795918367346935,28.571428571428577,51.02040816326531
+Study 2,Children,5–6,Chain: Proximal,Intentional,Punish,47,47,13.82978723404255,6.382978723404256,22.340425531914896
+Study 2,Children,5–6,Chain: Proximal,Accidental,Punish,49,49,26.530612244897956,16.3265306122449,36.734693877551024
+Single Cause,Adults,Adults,Single Cause,Intentional,Punish,16,16,93.75,84.375,100
+Single Cause,Adults,Adults,Single Cause,Accidental,Punish,16,16,3.125,0,9.375
+Study 2,Adults,Adults,Chain: Distal,Intentional,Punish,20,20,92.5,80,100
+Study 2,Adults,Adults,Chain: Distal,Accidental,Punish,21,21,30.952380952380953,14.28571428571429,47.61904761904761
+Study 2,Adults,Adults,Chain: Proximal,Intentional,Punish,20,20,5,0,12.5
+Study 2,Adults,Adults,Chain: Proximal,Accidental,Punish,21,21,4.761904761904762,0,14.28571428571429

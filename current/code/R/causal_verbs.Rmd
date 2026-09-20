@@ -2384,6 +2384,323 @@ kable(select(df.single.sensitivity.summary, study, stage, contrast, measure,
       caption = "Single Cause intention sensitivity: mean difference and backup 95% CI in percentage points; separate condition Ns")
 ```
 
+# Presentation V2 — development from left to right
+
+These are additional presentation versions of the three candidates above. The
+participant-first calculations, inclusion rules, age groups, source datasets,
+weights, adult samples and bootstrap intervals are unchanged. Each V2 table is
+checked against its earlier candidate CSV. No old figure or build is replaced.
+All new files go to `../../figures/study_comparison/presentation_v2/`.
+
+The visual reference is cookie-task's final Study 1 victim figure and Builds
+00–04 in `current/figures/study1/change_from_45_final/`. Before implementing
+this section, both those PDFs and the actual `conference_theme()`,
+`plot_change_from_45_v2()`, `plot_change_from_45_final()` and
+`plot_final_developmental_change()` helpers in its `cookie_allocation.Rmd`
+were inspected. The resolved final theme, not an earlier prototype, supplies
+the constants below. This Rmd has no runtime dependency on cookie-task.
+
+## Shared presentation settings and helper
+
+The reference scales its 12-inch conference typography by **22/12** for the
+22 × 8.5-inch canvas. This gives 44 pt base/tick/panel text, 47⅔ pt long axis
+titles, and 42⅙ pt legends. Panels have equal flexible widths with 1⅚ cm gaps.
+The childhood band ends exactly at the second child tick; Adults have the same
+one-unit spacing as the two childhood groups. No extra gap or opacity reduction
+is introduced. The reference's final line figure uses no gtable edits; its
+separate bar helper's .45-inch top spacer is not used here.
+
+Long axis titles are wrapped over two lines to retain the reference's large
+font. V2 C keeps the existing measure colors and geometric shapes, using their
+fillable equivalents so all marks can have the reference's black outlines.
+The complete legend stays visible even when every data mark has alpha zero.
+
+```{r presentation-v2-settings}
+talk_v2 = list(
+  width = 22, height = 8.5, dpi = png_dpi, text_scale = 22 / 12,
+  base_size = 11 * 22 / 12, tick_size = 24 * 22 / 12,
+  panel_title_size = 24 * 22 / 12, axis_title_size = 26 * 22 / 12,
+  legend_size = 23 * 22 / 12, panel_spacing_cm = 22 / 12,
+  legend_key_cm = .85 * 22 / 12,
+  line_width = 2.1, point_size = 6.2, point_stroke = 1.15,
+  reference_width = 1, axis_width = .65, ci_width = .85,
+  childhood_fill = "#F3F3F3", childhood_end = 2, x_padding = .25)
+presentation_v2_output = file.path(synthesis_output, "presentation_v2")
+dir.create(presentation_v2_output, recursive = TRUE, showWarnings = FALSE)
+
+# Intentionally matched to cookie-task's FINAL conference-figure design:
+# conference_theme(long_axis_title = TRUE, figure_width = 22), followed by
+# plot_final_developmental_change()'s strip size, right margin and panel spacing.
+theme_causal_verbs_talk = function() {
+  s = talk_v2$text_scale
+  theme_classic(base_family = "", base_size = talk_v2$base_size,
+                base_line_size = .5, base_rect_size = .5) +
+    theme(text = element_text(size = talk_v2$tick_size),
+          axis.text = element_text(size = talk_v2$tick_size, color = "black"),
+          axis.title = element_text(size = talk_v2$axis_title_size),
+          strip.text = element_text(size = talk_v2$panel_title_size),
+          strip.background = element_blank(),
+          axis.line = element_line(linewidth = talk_v2$axis_width),
+          axis.ticks = element_line(linewidth = talk_v2$axis_width),
+          panel.spacing = grid::unit(talk_v2$panel_spacing_cm, "cm"),
+          legend.position = "bottom", legend.justification = "center", legend.box.just = "center",
+          legend.text = element_text(size = talk_v2$legend_size),
+          legend.key.size = grid::unit(talk_v2$legend_key_cm, "cm"),
+          plot.margin = margin(5, 14, 12, 12) * s + margin(r = talk_v2$tick_size / 2))
+}
+
+talk_v2_conditions = list(
+  order = condition_order, colors = comparison_colors,
+  fills = c(Intentional = comparison_colors[["Intentional"]], Accidental = NA),
+  shapes = condition_shapes, lines = condition_lines)
+talk_v2_contexts = list(
+  order = c("Baseline", condition_order),
+  colors = c(Baseline = "#666666", comparison_colors),
+  fills = c(Baseline = "#666666", Intentional = comparison_colors[["Intentional"]], Accidental = NA),
+  shapes = c(Baseline = 22, condition_shapes),
+  lines = c(Baseline = "dotted", condition_lines))
+talk_v2_measures = list(
+  order = measure_order, colors = measure_colors, fills = measure_colors,
+  shapes = c(Caused = 21, Lexical = 24, Fault = 22, Punish = 23),
+  lines = setNames(rep("solid", 4), measure_order))
+```
+
+Every plot uses the same helper. Build visibility is encoded as alpha, leaving
+all panel levels, scales, legends and positions fixed. A connecting segment
+appears only when **both** its endpoints have been revealed. Main builds never
+contain an interval layer. CI backups use the same stored intervals and are
+saved separately; their ranges expand only when necessary to show every bound.
+
+```{r presentation-v2-helper}
+plot_causal_verbs_talk = function(values, panel_order, style, y_limits, y_breaks,
+                                  y_label, reference, step, with_ci = FALSE) {
+  stopifnot(!anyDuplicated(values[c("panel", "series", "stage")]),
+            setequal(as.character(values$stage), stage_order),
+            all(values$series %in% style$order), all(values$panel %in% panel_order),
+            all(dplyr::between(values$mean, y_limits[1], y_limits[2])))
+  if (with_ci) stopifnot(all(values$lower >= y_limits[1]), all(values$upper <= y_limits[2]))
+  points = values %>%
+    mutate(panel = factor(panel, levels = panel_order),
+           series = factor(series, levels = style$order),
+           x = match(as.character(stage), stage_order), visible = as.numeric(reveal_step <= step))
+  segments = points %>% arrange(panel, series, x) %>% group_by(panel, series) %>%
+    mutate(end_x = lead(x), end_y = lead(mean), end_step = lead(reveal_step)) %>% ungroup() %>%
+    filter(!is.na(end_x)) %>% mutate(visible = as.numeric(pmax(reveal_step, end_step) <= step))
+  p = ggplot(points, aes(x = x, y = mean, group = series)) +
+    annotate("rect", xmin = -Inf, xmax = talk_v2$childhood_end, ymin = -Inf, ymax = Inf,
+             fill = talk_v2$childhood_fill, color = NA) +
+    geom_hline(yintercept = reference, color = "black", linetype = "dashed",
+               linewidth = talk_v2$reference_width) +
+    geom_segment(data = segments,
+                 aes(xend = end_x, yend = end_y, color = series, linetype = series, alpha = visible),
+                 linewidth = talk_v2$line_width, show.legend = TRUE)
+  if (with_ci) {
+    p = p + geom_linerange(aes(ymin = lower, ymax = upper, color = series, alpha = visible),
+                            linewidth = talk_v2$ci_width, show.legend = FALSE)
+  }
+  p + geom_point(aes(fill = series, shape = series, alpha = visible),
+                 size = talk_v2$point_size, color = "black", stroke = talk_v2$point_stroke,
+                 show.legend = TRUE) +
+    facet_wrap(~ panel, nrow = 1, drop = FALSE) +
+    scale_alpha_identity(guide = "none") +
+    scale_color_manual(NULL, values = style$colors, limits = style$order, drop = FALSE) +
+    scale_fill_manual(NULL, values = style$fills, limits = style$order, drop = FALSE) +
+    scale_shape_manual(NULL, values = style$shapes, limits = style$order, drop = FALSE) +
+    scale_linetype_manual(NULL, values = style$lines, limits = style$order, drop = FALSE) +
+    scale_x_continuous(breaks = 1:3, labels = stage_order, limits = c(1, 3),
+                       expand = expansion(add = talk_v2$x_padding)) +
+    scale_y_continuous(limits = y_limits, breaks = y_breaks,
+                       labels = function(x) paste0(x, "%"), expand = expansion(mult = 0)) +
+    labs(x = NULL, y = y_label) +
+    guides(color = guide_legend(nrow = 1, override.aes = list(alpha = 1)),
+           fill = guide_legend(nrow = 1), shape = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1)) +
+    theme_causal_verbs_talk()
+}
+
+save_presentation_v2 = function(plot, filename) {
+  ggsave(paste0(filename, ".pdf"), plot = plot, width = talk_v2$width, height = talk_v2$height,
+         device = grDevices::cairo_pdf, bg = "white")
+  ggsave(paste0(filename, ".png"), plot = plot, width = talk_v2$width, height = talk_v2$height,
+         device = ragg::agg_png, dpi = talk_v2$dpi, bg = "white")
+}
+
+save_presentation_v2_family = function(plot_function, stem, build_folder, build_names) {
+  directory = file.path(presentation_v2_output, "builds", build_folder)
+  dir.create(directory, recursive = TRUE, showWarnings = FALSE)
+  final_step = length(build_names) - 1L
+  main = plot_function(final_step)
+  backup = plot_function(final_step, with_ci = TRUE)
+  filename = file.path(presentation_v2_output, stem)
+  save_presentation_v2(main, filename)
+  save_presentation_v2(backup, paste0(filename, "_with_ci"))
+  builds = lapply(0:final_step, function(step) {
+    plot = plot_function(step)
+    build_filename = file.path(directory, build_names[step + 1L])
+    if (step == final_step) {
+      stopifnot(identical(ggplot_build(plot)$data, ggplot_build(main)$data))
+      # The last reveal is the full figure, including identical exported bytes.
+      for (extension in c(".pdf", ".png")) {
+        stopifnot(file.copy(paste0(filename, extension), paste0(build_filename, extension), overwrite = TRUE))
+      }
+    } else save_presentation_v2(plot, build_filename)
+    plot
+  })
+  list(main = main, backup = backup, builds = builds)
+}
+```
+
+## V2 A: punishment by causal target
+
+Panels are Single Cause, Chain: Distal and Chain: Proximal. The unchanged 18
+punishment means are percentages of Yes responses. Intention refers to the
+distal agent in the Proximal panel, as before. The axis spans 0–100%, with a
+50% reference. Intentional and Accidental childhood trajectories enter first;
+the last reveal adds adult points and their connecting segments.
+
+```{r presentation-v2-punishment, fig.width=22, fig.height=8.5}
+df.v2.punishment = df.punishment.horizontal.values %>%
+  transmute(panel = as.character(target), series = as.character(condition), stage,
+            mean = yes_pct, lower = lower_pct, upper = upper_pct,
+            reveal_step = if_else(stage == "Adults", 3L, match(condition, condition_order)))
+plot_punishment_talk_v2 = function(step = 3L, with_ci = FALSE) {
+  plot_causal_verbs_talk(df.v2.punishment, stage_target_order, talk_v2_conditions,
+                         c(0, 100), seq(0, 100, 25), 'Punish: "Yes"\nResponses (%)', 50, step, with_ci)
+}
+p.v2.punishment = save_presentation_v2_family(
+  plot_punishment_talk_v2, "punishment_causal_structure_talk_v2", "punishment_causal_structure",
+  c("build00_blank", "build01_intentional_childhood", "build02_add_accidental_childhood", "build03_add_adults_full"))
+p.v2.punishment$main
+p.v2.punishment$backup
+p.v2.punishment$builds[[1]]
+```
+
+## V2 B: Caused and Lexical role preference
+
+The unchanged role preference is participant/scenario paired Distal minus
+Proximal, expressed in percentage points. The two panels separate measures;
+Baseline, Intentional and Accidental now develop from left to right. The main
+range is ±80% (five major ticks), containing every mean with at least 10 points
+of padding. The CI backup expands to ±100% to show all existing bounds intact.
+No interval is truncated and no numerical value is changed.
+
+```{r presentation-v2-role-preference, fig.width=22, fig.height=8.5}
+df.v2.preference = df.role.preference.summary %>%
+  transmute(panel = as.character(measure), series = as.character(condition), stage,
+            mean = mean_pp, lower = lower_pp, upper = upper_pp,
+            reveal_step = if_else(stage == "Adults", 4L, match(condition, talk_v2_contexts$order)))
+plot_role_preference_talk_v2 = function(step = 4L, with_ci = FALSE) {
+  limit = if (with_ci) 100 else 80
+  plot_causal_verbs_talk(df.v2.preference, c("Caused", "Lexical"), talk_v2_contexts,
+                         c(-limit, limit), seq(-limit, limit, length.out = 5),
+                         "Distal − Proximal\nendorsement (%)", 0, step, with_ci)
+}
+p.v2.preference = save_presentation_v2_family(
+  plot_role_preference_talk_v2, "caused_lexical_role_preference_talk_v2", "caused_lexical_role_preference",
+  c("build00_blank", "build01_baseline_childhood", "build02_add_intentional_childhood",
+    "build03_add_accidental_childhood", "build04_add_adults_full"))
+p.v2.preference$main
+p.v2.preference$backup
+p.v2.preference$builds[[1]]
+```
+
+## V2 C: Single Cause intention sensitivity
+
+The unchanged Intentional-minus-Accidental contrasts have one trajectory per
+measure panel. The main range is −25% to +100%, which contains all observed
+means. The separate CI backup starts at −30%, since one existing lower bound
+is −25.320513 percentage points; all bounds remain visible. Main builds reveal
+the four childhood trajectories in measure order, then all adults together.
+
+```{r presentation-v2-single-cause, fig.width=22, fig.height=8.5}
+df.v2.sensitivity = df.single.sensitivity.summary %>%
+  transmute(panel = as.character(measure), series = as.character(measure), stage,
+            mean = mean_pp, lower = lower_pp, upper = upper_pp,
+            reveal_step = if_else(stage == "Adults", 5L, match(measure, measure_order)))
+plot_single_sensitivity_talk_v2 = function(step = 5L, with_ci = FALSE) {
+  plot_causal_verbs_talk(df.v2.sensitivity, measure_order, talk_v2_measures,
+                         c(if (with_ci) -30 else -25, 100), seq(-25, 100, 25),
+                         "Intentional −\nAccidental (%)", 0, step, with_ci)
+}
+p.v2.sensitivity = save_presentation_v2_family(
+  plot_single_sensitivity_talk_v2, "single_cause_intention_sensitivity_talk_v2", "single_cause_intention_sensitivity",
+  c("build00_blank", "build01_caused_childhood", "build02_add_lexical_childhood",
+    "build03_add_fault_childhood", "build04_add_punish_childhood", "build05_add_adults_full"))
+p.v2.sensitivity$main
+p.v2.sensitivity$backup
+p.v2.sensitivity$builds[[1]]
+```
+
+## V2 numerical identity and fixed-build checks
+
+These files repeat the earlier candidate tables exactly, retaining their means,
+Ns and 95% intervals. They are included beside the V2 figures for convenience;
+the Rmd does not rerun scoring or bootstrapping for the redesign.
+
+```{r presentation-v2-validation}
+v2_tables = list(
+  punishment_causal_structure = df.punishment.horizontal.values,
+  caused_lexical_role_preference = df.role.preference.summary,
+  single_cause_intention_sensitivity = df.single.sensitivity.summary)
+v2_source_stems = c("punishment_causal_structure_horizontal", "caused_lexical_role_preference", "single_cause_intention_sensitivity")
+for (i in seq_along(v2_tables)) {
+  destination = file.path(presentation_v2_output, paste0(names(v2_tables)[i], "_talk_v2_values.csv"))
+  source = file.path(synthesis_output, paste0(v2_source_stems[i], "_values.csv"))
+  original = read_csv(source, show_col_types = FALSE)
+  stopifnot(identical(names(original), names(v2_tables[[i]])))
+  for (column in names(original)) {
+    value = v2_tables[[i]][[column]]
+    if (is.factor(value)) value = as.character(value)
+    same_value = all.equal(unname(value), unname(original[[column]]), tolerance = 1e-12)
+    if (!isTRUE(same_value)) stop("V2 numerical mismatch in ", names(v2_tables)[i], ": ", column,
+                                 " — ", paste(same_value, collapse = "; "))
+  }
+  # Keep the original full-precision CSV bytes rather than round-trip its decimals.
+  stopifnot(file.copy(source, destination, overwrite = TRUE),
+            identical(readLines(source), readLines(destination)))
+}
+# Check all visibility transitions while retaining identical physical geometry.
+check_presentation_builds = function(family, expected_points) {
+  full_built = ggplot_build(family$main)
+  full_grob = ggplotGrob(family$main)
+  counts = integer(length(family$builds))
+  for (i in seq_along(family$builds)) {
+    plot = family$builds[[i]]
+    built = ggplot_build(plot)
+    grob = ggplotGrob(plot)
+    stopifnot(identical(built$layout$layout, full_built$layout$layout),
+              identical(grob$layout, full_grob$layout),
+              isTRUE(all.equal(grid::convertWidth(grob$widths, "cm", valueOnly = TRUE),
+                               grid::convertWidth(full_grob$widths, "cm", valueOnly = TRUE))),
+              isTRUE(all.equal(grid::convertHeight(grob$heights, "cm", valueOnly = TRUE),
+                               grid::convertHeight(full_grob$heights, "cm", valueOnly = TRUE))))
+    for (panel in seq_along(built$layout$panel_params)) {
+      stopifnot(identical(built$layout$panel_params[[panel]]$x.range, full_built$layout$panel_params[[panel]]$x.range),
+                identical(built$layout$panel_params[[panel]]$y.range, full_built$layout$panel_params[[panel]]$y.range))
+    }
+    for (layer in seq_along(built$data)) {
+      a = built$data[[layer]]
+      b = full_built$data[[layer]]
+      stopifnot(identical(a[setdiff(names(a), "alpha")], b[setdiff(names(b), "alpha")]))
+      if ("alpha" %in% names(a) && !all(is.na(a$alpha))) {
+        stopifnot(all(a$alpha %in% c(0, 1)))
+        if (i > 1) stopifnot(all(a$alpha >= ggplot_build(family$builds[[i - 1]])$data[[layer]]$alpha))
+      }
+    }
+    point_layer = which(vapply(plot$layers, function(x) inherits(x$geom, "GeomPoint"), logical(1)))
+    counts[i] = sum(built$data[[point_layer]]$alpha == 1)
+    stopifnot(!any(vapply(plot$layers, function(x) inherits(x$geom, "GeomLinerange"), logical(1))))
+  }
+  stopifnot(identical(counts, expected_points),
+            identical(ggplot_build(family$builds[[length(family$builds)]])$data, full_built$data))
+  TRUE
+}
+stopifnot(check_presentation_builds(p.v2.punishment, c(0L, 6L, 12L, 18L)),
+          check_presentation_builds(p.v2.preference, c(0L, 4L, 8L, 12L, 18L)),
+          check_presentation_builds(p.v2.sensitivity, c(0L, 2L, 4L, 6L, 8L, 12L)))
+kable(tibble(figure = names(v2_tables), points = c(18, 18, 12), builds = c(4, 5, 6),
+             numerical_values_unchanged = TRUE, fixed_build_geometry = TRUE, final_build_equals_full = TRUE))
+```
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons
