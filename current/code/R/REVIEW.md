@@ -1,6 +1,107 @@
 # Verbal analysis and talk figures — review packet
 
-Prepared September 20, 2026 on `verbal-analysis-talk-builds`, based on `9617b39e0d545242aa52992a32beaac58c42d336`. This packet accompanies the working-branch plotting update. Main is not merged or changed; the delivery message records the pushed commit. This new reconstructed descriptive workflow does not recover the original analysis scripts or establish scientific handoff acceptance.
+Prepared September 20, 2026. The earlier plotting update was committed and pushed to `main` as `3b0869ff747164112b7f33558c8c98344b0ea761`. The additional candidate syntheses below are developed directly on `main`; the delivery message records their pushed commit. This reconstructed descriptive workflow does not recover the original analysis scripts or establish scientific handoff acceptance.
+
+## Additional candidate syntheses — September 20, 2026
+
+These six main/CI figures are additions. Every earlier figure and build remains available with identical bytes. The three source tables below retain full CSV precision; values are percentages for punishment and percentage points for the two contrasts. Eligible and contributing Ns are identical in the present samples. All backup intervals are pointwise 95% participant-bootstrap percentile intervals from 5,000 draws. Ages 3 and 4 form 3–4; ages 5 and 6 form 5–6; Adults remain separate. Ages 7–9 are excluded from these grouped figures only.
+
+The same earlier source limitations remain: Study 2 adults are the selected N=41 pilot, not the missing main adult sample; Single Cause uses all 32 recovered adults because the historical N=30 exclusions are unidentified. Condition comparisons are between participants. These are descriptive cross-sectional patterns, not confirmed developmental change within individuals or tests of differences between measures.
+
+### Horizontal punishment by causal target
+
+[Main PNG](../../figures/study_comparison/punishment_causal_structure_horizontal.png) · [Main PDF](../../figures/study_comparison/punishment_causal_structure_horizontal.pdf) · [CI PNG](../../figures/study_comparison/punishment_causal_structure_horizontal_with_ci.png) · [CI PDF](../../figures/study_comparison/punishment_causal_structure_horizontal_with_ci.pdf) · [Full-precision CSV](../../figures/study_comparison/punishment_causal_structure_horizontal_values.csv)
+
+Punishment means are similar between conditions at ages 3–4, separate more at ages 5–6 for Single Cause and Distal, and separate strongly for those targets in adults. Proximal punishment stays low in older children and adults; at ages 5–6 its Intentional mean is lower than Accidental. For Proximal, the manipulation changes the distal agent’s intention.
+
+![Horizontal punishment by causal target](../../figures/study_comparison/punishment_causal_structure_horizontal.png)
+
+| Stage | Target | Condition | N | Mean (%) | 95% CI (%) |
+| --- | --- | --- | ---: | ---: | --- |
+| 3–4 | Single Cause | Intentional | 24 | 60.416666666666664 | [43.75, 75] |
+| 3–4 | Single Cause | Accidental | 26 | 57.692307692307686 | [42.30769230769231, 73.07692307692307] |
+| 3–4 | Chain: Distal | Intentional | 60 | 54.16666666666667 | [43.333333333333336, 64.16666666666667] |
+| 3–4 | Chain: Distal | Accidental | 67 | 45.522388059701484 | [35.820895522388064, 55.223880597014926] |
+| 3–4 | Chain: Proximal | Intentional | 60 | 38.333333333333336 | [28.33333333333334, 48.33333333333333] |
+| 3–4 | Chain: Proximal | Accidental | 67 | 40.29850746268656 | [30.597014925373134, 50] |
+| 5–6 | Single Cause | Intentional | 26 | 80.76923076923077 | [67.3076923076923, 92.3076923076923] |
+| 5–6 | Single Cause | Accidental | 20 | 37.5 | [20, 55.00000000000001] |
+| 5–6 | Chain: Distal | Intentional | 47 | 68.08510638297872 | [56.38297872340425, 79.7872340425532] |
+| 5–6 | Chain: Distal | Accidental | 49 | 39.795918367346935 | [28.571428571428577, 51.02040816326531] |
+| 5–6 | Chain: Proximal | Intentional | 47 | 13.82978723404255 | [6.382978723404256, 22.340425531914896] |
+| 5–6 | Chain: Proximal | Accidental | 49 | 26.530612244897956 | [16.3265306122449, 36.734693877551024] |
+| Adults | Single Cause | Intentional | 16 | 93.75 | [84.375, 100] |
+| Adults | Single Cause | Accidental | 16 | 3.125 | [0, 9.375] |
+| Adults | Chain: Distal | Intentional | 20 | 92.5 | [80, 100] |
+| Adults | Chain: Distal | Accidental | 21 | 30.952380952380953 | [14.28571428571429, 47.61904761904761] |
+| Adults | Chain: Proximal | Intentional | 20 | 5 | [0, 12.5] |
+| Adults | Chain: Proximal | Accidental | 21 | 4.761904761904762 | [0, 14.28571428571429] |
+
+### Caused/Lexical role preference
+
+[Main PNG](../../figures/study_comparison/caused_lexical_role_preference.png) · [Main PDF](../../figures/study_comparison/caused_lexical_role_preference.pdf) · [CI PNG](../../figures/study_comparison/caused_lexical_role_preference_with_ci.png) · [CI PDF](../../figures/study_comparison/caused_lexical_role_preference_with_ci.pdf) · [Full-precision CSV](../../figures/study_comparison/caused_lexical_role_preference_values.csv)
+
+Caused favors Distal in every displayed cell. Lexical favors Proximal in Baseline and Accidental, but Intentional ages 3–4 are tied and Intentional adults have a small positive estimate. Thus the directional distinction is visible but is not invariant across contexts. The calculation pairs roles within scenario before participant averaging; missing either role removes only that scenario’s contrast.
+
+![Caused/Lexical role preference](../../figures/study_comparison/caused_lexical_role_preference.png)
+
+| Stage | Study | Condition | Measure | N | Mean (pp) | 95% CI (pp) |
+| --- | --- | --- | --- | ---: | ---: | --- |
+| 3–4 | Study 1 | Baseline | Caused | 63 | 3.968253968253974 | [-11.111111111111107, 19.047619047619037] |
+| 3–4 | Study 2 | Intentional | Caused | 60 | 14.166666666666671 | [-3.3333333333333366, 30.833333333333336] |
+| 3–4 | Study 2 | Accidental | Caused | 67 | 5.97014925373134 | [-6.716417910447762, 18.65671641791045] |
+| 3–4 | Study 1 | Baseline | Lexical | 63 | -23.809523809523807 | [-35.71428571428571, -11.111111111111107] |
+| 3–4 | Study 2 | Intentional | Lexical | 60 | 0 | [-15.85416666666667, 17.5] |
+| 3–4 | Study 2 | Accidental | Lexical | 67 | -37.3134328358209 | [-49.25373134328358, -24.626865671641795] |
+| 5–6 | Study 1 | Baseline | Caused | 59 | 26.271186440677972 | [7.627118644067796, 43.22033898305085] |
+| 5–6 | Study 2 | Intentional | Caused | 47 | 56.38297872340425 | [39.361702127659576, 72.3404255319149] |
+| 5–6 | Study 2 | Accidental | Caused | 49 | 30.61224489795918 | [13.265306122448978, 47.95918367346938] |
+| 5–6 | Study 1 | Baseline | Lexical | 59 | -57.62711864406778 | [-70.33898305084746, -44.067796610169495] |
+| 5–6 | Study 2 | Intentional | Lexical | 47 | -17.021276595744677 | [-38.297872340425535, 4.255319148936171] |
+| 5–6 | Study 2 | Accidental | Lexical | 49 | -52.04081632653062 | [-66.3265306122449, -37.75510204081633] |
+| Adults | Study 1 | Baseline | Caused | 100 | 45 | [34.50000000000001, 55.49999999999999] |
+| Adults | Study 2 | Intentional | Caused | 20 | 70 | [47.5, 90] |
+| Adults | Study 2 | Accidental | Caused | 21 | 16.666666666666668 | [-9.52380952380952, 42.857142857142854] |
+| Adults | Study 1 | Baseline | Lexical | 100 | -22.000000000000007 | [-36.00000000000001, -8.500000000000004] |
+| Adults | Study 2 | Intentional | Lexical | 20 | 2.5000000000000058 | [-32.5, 35] |
+| Adults | Study 2 | Accidental | Lexical | 21 | -45.23809523809524 | [-76.19047619047619, -11.904761904761902] |
+
+### Single Cause intention sensitivity
+
+[Main PNG](../../figures/study_comparison/single_cause_intention_sensitivity.png) · [Main PDF](../../figures/study_comparison/single_cause_intention_sensitivity.pdf) · [CI PNG](../../figures/study_comparison/single_cause_intention_sensitivity_with_ci.png) · [CI PDF](../../figures/study_comparison/single_cause_intention_sensitivity_with_ci.pdf) · [Full-precision CSV](../../figures/study_comparison/single_cause_intention_sensitivity_values.csv)
+
+Punishment sensitivity is 2.72, 43.27 and 90.63 percentage points across the displayed stages. Fault rises from 3.69 to roughly 37, while Caused peaks at ages 5–6 (47.31) and falls to 9.38 in adults. Lexical estimates are −11.06, −2.88 and 0, and all three pointwise intervals include zero; that does not establish equivalence. Both independent condition groups contribute bootstrap uncertainty.
+
+![Single Cause intention sensitivity](../../figures/study_comparison/single_cause_intention_sensitivity.png)
+
+| Stage | Measure | Intentional N | Accidental N | Intentional − Accidental (pp) | 95% CI (pp) |
+| --- | --- | ---: | ---: | ---: | --- |
+| 3–4 | Caused | 24 | 26 | 14.423076923076927 | [-8.012820512820518, 37.5] |
+| 3–4 | Lexical | 24 | 26 | -11.057692307692314 | [-25.320512820512818, 1.2820512820512775] |
+| 3–4 | Fault | 24 | 26 | 3.685897435897434 | [-16.830929487179482, 25.16426282051276] |
+| 3–4 | Punish | 24 | 26 | 2.724358974358976 | [-20.993589743589737, 25.961538461538463] |
+| 5–6 | Caused | 26 | 20 | 47.307692307692314 | [26.730769230769226, 67.88461538461539] |
+| 5–6 | Lexical | 26 | 20 | -2.8846153846153855 | [-18.08173076923076, 12.884615384615383] |
+| 5–6 | Fault | 26 | 20 | 36.53846153846154 | [13.846153846153852, 59.03846153846154] |
+| 5–6 | Punish | 26 | 20 | 43.269230769230774 | [22.302884615384617, 63.26923076923077] |
+| Adults | Caused | 16 | 16 | 9.375 | [-3.125, 25] |
+| Adults | Lexical | 16 | 16 | 0 | [-9.375, 9.375] |
+| Adults | Fault | 16 | 16 | 37.5 | [12.5, 62.5] |
+| Adults | Punish | 16 | 16 | 90.625 | [81.25, 100] |
+
+### Candidate validation
+
+The full workflow completed cleanly from a fresh R process with no warnings or errors:
+
+```sh
+Rscript --vanilla -e 'rmarkdown::render("current/code/R/causal_verbs.Rmd", quiet = TRUE)'
+```
+
+All six saved PNGs were visually inspected. They are 3840 × 2160; the six one-page PDFs contain vector graphics at 16 × 9 inches. Main and backup versions have identical point coordinates, scales and physical panel geometry. The horizontal punishment figure has exactly nine within-target connectors and no connections across targets.
+
+An independent Python calculation reread the original child/adult CSVs, applied eligibility and repeat-session selection, paired scenario responses where required, and matched all 48 point estimates and contributing Ns. Punishment estimates and interval bounds exactly match the existing vertical figure. The new contrast intervals were independently checked against the exact nonparametric bootstrap distributions; Monte Carlo endpoints differed by at most 3.125 percentage points, within one discrete participant-response step for the affected small adult cell. Synthetic examples verify both/neither = zero for role preference, preserve the complete scenario when the other pair is incomplete, and retain a different valid measure for the same participant.
+
+All **124 pre-existing generated PDF/PNG/CSV outputs** remain byte-for-byte identical. Re-rendered PDFs were checked for identical page contents and resources before restoring their original metadata bytes. All **2,806 original imported files** match the screened source manifest. No input datasets, privacy exclusions, previous figure designs, LFS settings or handoff conclusions changed. The only numerical artifacts added are three aggregate CSVs.
 
 ## Main comparison figure
 

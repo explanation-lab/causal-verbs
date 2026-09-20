@@ -191,6 +191,11 @@ study2_build_names = single_build_names
 stage_order = c("3–4", "5–6", "Adults")
 stage_target_order = c("Single Cause", "Chain: Distal", "Chain: Proximal")
 stage_text_size = 22
+# One fixed Set1 measure palette for the additional candidate syntheses.
+# Existing role and condition palettes are unchanged.
+measure_colors = c(Caused = "#E41A1C", Lexical = "#377EB8", Fault = "#4DAF4A", Punish = "#984EA3")
+measure_shapes = c(Caused = 16, Lexical = 17, Fault = 15, Punish = 18)
+sensitivity_offsets = c(Caused = -.06, Lexical = -.02, Fault = .02, Punish = .06)
 stage_condition_offsets = c(Intentional = -.07, Accidental = .07)
 dir.create(synthesis_output, recursive = TRUE, showWarnings = FALSE)
 for (directory in c(study1_output, study2_output, comparison_output, single_output)) {
@@ -2083,6 +2088,302 @@ save_talk(p.role.mapping, file.path(synthesis_output, "caused_lexical_role_mappi
 p.role.mapping
 ```
 
+# Additional candidate synthesis plots
+
+These six outputs are **additions**: each candidate has a main version without
+intervals and a backup with pointwise 95% participant-bootstrap intervals.
+Existing figures and builds keep their filenames, designs, data and availability.
+Both versions of a candidate use the same table, positions, scales and legend;
+only the interval layer differs. Every table below reports exactly the plotted
+values, with full precision retained in its new CSV.
+
+The samples and source datasets are those documented in the developmental-stage
+section above. Ages **3 and 4 → 3–4**; ages **5 and 6 → 5–6**. Adults stay separate,
+and ages 7–9 do not enter these grouped candidates. Study 1 adults are N=100;
+Study 2 adults are the earlier pilot (N=20 Intentional, 21 Accidental);
+Single Cause uses all 32 recovered adults (N=16 per condition). The historical
+Single Cause N=30 exclusions and missing Study 2 main adult data remain unresolved.
+
+Yes and No stay independent 1/0 endorsements for every role. Both Yes and
+Neither remain valid responses. No relative-distal score enters these figures.
+Available scenarios are averaged within participant before participants are
+averaged within a group. Missing answers never become No, and no participant's
+other valid judgments are discarded because one question is missing.
+
+```{r candidate-synthesis-checks}
+check_labels(df.stage.means$study, c("Study 1", "Study 2", "Single Cause"), "candidate source study")
+stopifnot(all(df.stage.means$condition[df.stage.means$study == "Study 1"] == "Baseline"),
+          all(df.stage.means$condition[df.stage.means$study != "Study 1"] %in% condition_order),
+          setequal(as.character(df.stage.means$stage), stage_order),
+          all(df.stage.means$population == "Adults" | df.stage.means$age %in% 3:6),
+          !anyDuplicated(df.stage.means[c("study", "participant", "stage", "condition", "measure", "role")]),
+          all(is.na(df.stage.means$yes_mean) | dplyr::between(df.stage.means$yes_mean, 0, 1)))
+mean_available = function(values) {
+  if (all(is.na(values))) NA_real_ else mean(values, na.rm = TRUE)
+}
+# Both candidate versions share a scale large enough for every point and interval.
+# Differences of two binary-endorsement proportions have the range -100 to 100 pp.
+candidate_difference_scale = function(limits = c(-100, 100)) {
+  scale_y_continuous(breaks = seq(limits[1], limits[2], 50), labels = function(x) paste0(x, "%"),
+                     limits = limits, expand = expansion(add = 3.5))
+}
+```
+
+## Candidate 1: punishment, intention and causal target — horizontal
+
+This reuses all 18 endpoint estimates and intervals from the existing vertical
+punishment figure. The connector is horizontal and joins only the two conditions
+for the same target. Purple filled circles mark Intentional and teal open
+triangles mark Accidental. Transparent triangle interiors keep an overlapping
+circle visible when means nearly coincide. For Chain: Proximal, the condition
+varies the **distal person's intention**, not the proximal person's own intention.
+
+```{r punishment-horizontal-candidate, fig.width=16, fig.height=9}
+df.punishment.horizontal = df.punishment.summary %>%
+  mutate(target_y = 4 - as.numeric(target))
+df.punishment.horizontal.pairs = df.punishment.horizontal %>%
+  select(stage, target, target_y, condition, mean) %>%
+  pivot_wider(names_from = condition, values_from = mean)
+stopifnot(nrow(df.punishment.horizontal) == 18L,
+          all(dplyr::between(df.punishment.horizontal$mean, 0, 1)),
+          all(dplyr::between(df.punishment.horizontal$lower, 0, 1)),
+          all(dplyr::between(df.punishment.horizontal$upper, 0, 1)))
+plot_punishment_horizontal = function(with_ci = FALSE) {
+  p = ggplot(df.punishment.horizontal,
+              aes(x = mean, y = target_y, color = condition, fill = condition, shape = condition)) +
+    geom_vline(xintercept = .5, linetype = "dashed", color = "#B0B0B0", linewidth = .5) +
+    geom_segment(data = df.punishment.horizontal.pairs,
+                 aes(x = Intentional, xend = Accidental, y = target_y, yend = target_y),
+                 inherit.aes = FALSE, color = "#A0A0A0", linewidth = .6)
+  if (with_ci) {
+    p = p + geom_segment(aes(x = lower, xend = upper, yend = target_y),
+                          linewidth = .5, alpha = .55, show.legend = FALSE)
+  }
+  p + geom_point(size = 4.2, stroke = 1) +
+    scale_color_manual(name = NULL, values = comparison_colors, limits = condition_order, drop = FALSE) +
+    scale_fill_manual(name = NULL, values = c(Intentional = comparison_colors[["Intentional"]], Accidental = NA),
+                       limits = condition_order, drop = FALSE) +
+    scale_shape_manual(name = NULL, values = condition_shapes, limits = condition_order, drop = FALSE) +
+    facet_wrap(~ stage, nrow = 1, drop = FALSE) +
+    scale_x_continuous(breaks = seq(0, 1, .25), labels = percent_labels,
+                       limits = c(0, 1), expand = expansion(add = .035)) +
+    scale_y_continuous(breaks = 1:3, labels = rev(stage_target_order),
+                       limits = c(.5, 3.5), expand = expansion(mult = 0)) +
+    labs(x = 'Punish: "Yes" Responses (%)', y = NULL) + talk_theme(stage_text_size) +
+    theme(axis.text.x = element_text(size = 17))
+}
+p.punishment.horizontal = plot_punishment_horizontal()
+p.punishment.horizontal.ci = plot_punishment_horizontal(with_ci = TRUE)
+save_talk(p.punishment.horizontal, file.path(synthesis_output, "punishment_causal_structure_horizontal"), 16, 9)
+save_talk(p.punishment.horizontal.ci, file.path(synthesis_output, "punishment_causal_structure_horizontal_with_ci"), 16, 9)
+p.punishment.horizontal
+p.punishment.horizontal.ci
+```
+
+```{r punishment-horizontal-candidate-table}
+df.punishment.horizontal.values = df.punishment.summary %>%
+  select(study, population, stage, target, condition, measure, eligible_n, n, yes_pct, lower_pct, upper_pct)
+write_csv(df.punishment.horizontal.values,
+          file.path(synthesis_output, "punishment_causal_structure_horizontal_values.csv"))
+kable(df.punishment.horizontal.values, digits = 6,
+      caption = "Horizontal punishment candidate: mean %, N and backup 95% CI; identical endpoints to the vertical figure")
+```
+
+## Candidate 2: Caused versus Lexical role preference
+
+For each participant × scenario × measure, subtract the Proximal binary answer
+from the Distal binary answer. Then average the available **paired-scenario
+differences within participant**, and finally average those participant means
+within source study, stage, condition and measure. Both Yes and Neither yield
+zero; Distal-only yields +1 and Proximal-only yields −1. Multiply by 100 to show
+percentage points. A scenario missing either role cannot supply a paired
+difference; other complete scenarios and other judgments remain available.
+Participants with no complete pair for one measure are omitted only from that
+measure's mean, with eligible/contributing Ns reported separately.
+
+The bootstrap resamples each participant's paired-role mean, preserving the
+within-person role pairing. It does not subtract separately bootstrapped role
+means or calculate Distal/(Distal+Proximal). Lines connect experimental-context
+group means, not repeated measurements of the same people across conditions or
+studies. The new fixed Set1 measure palette is shared with Candidate 3.
+
+```{r role-preference-candidate-means}
+role_preference_means = function(responses) {
+  check_response_rows(responses)
+  responses %>%
+    mutate(role = factor(role, levels = role_order)) %>%
+    pivot_wider(id_cols = c(study, population, participant, age, condition, scenario, measure),
+                 names_from = role, values_from = endorsed, names_expand = TRUE) %>%
+    mutate(scenario_difference = Distal - Proximal) %>%
+    group_by(study, population, participant, age, condition, measure) %>%
+    summarise(paired_scenarios = sum(!is.na(scenario_difference)),
+              role_difference = mean_available(scenario_difference), .groups = "drop")
+}
+df.role.preference.responses = bind_rows(
+  df.study1.adults.responses, df.study1.children.responses,
+  df.study2.adults.responses, df.study2.children.responses) %>%
+  filter(measure %in% c("Caused", "Lexical"), population == "Adults" | age %in% 3:6)
+check_labels(df.role.preference.responses$study, c("Study 1", "Study 2"), "role-preference study")
+df.role.preference.means = role_preference_means(df.role.preference.responses) %>%
+  mutate(stage = stage_group(population, age),
+         condition = factor(condition, levels = c("Baseline", condition_order)),
+         measure = factor(measure, levels = c("Caused", "Lexical")))
+stopifnot(!anyDuplicated(df.role.preference.means[c("study", "participant", "condition", "measure")]),
+          !anyNA(df.role.preference.means$stage),
+          all(df.role.preference.means$paired_scenarios %in% 0:2),
+          all(is.na(df.role.preference.means$role_difference) |
+                dplyr::between(df.role.preference.means$role_difference, -1, 1)))
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 9L)
+df.role.preference.summary = df.role.preference.means %>%
+  arrange(study, stage, condition, measure, participant) %>%
+  group_by(study, population, stage, condition, measure) %>%
+  summarise(eligible_n = n(), summary = list(bootstrap_mean(role_difference)), .groups = "drop") %>%
+  unnest_wider(summary) %>%
+  transmute(study, population, stage, condition, measure, eligible_n, n,
+            mean_pp = 100 * mean, lower_pp = 100 * lower, upper_pp = 100 * upper) %>%
+  arrange(stage, measure, condition)
+stopifnot(nrow(df.role.preference.summary) == 18L,
+          all(dplyr::between(df.role.preference.summary$mean_pp, -100, 100)),
+          all(dplyr::between(df.role.preference.summary$lower_pp, -100, 100)),
+          all(dplyr::between(df.role.preference.summary$upper_pp, -100, 100)),
+          all(df.role.preference.summary$n <= df.role.preference.summary$eligible_n),
+          nrow(count(df.role.preference.summary, stage, condition, measure)) == 18L)
+```
+
+```{r role-preference-candidate-plot, fig.width=16, fig.height=9}
+plot_role_preference = function(with_ci = FALSE) {
+  p = ggplot(df.role.preference.summary,
+              aes(x = condition, y = mean_pp, color = measure, shape = measure, group = measure)) +
+    geom_hline(yintercept = 0, color = "#666666", linewidth = .85) +
+    geom_line(linewidth = .8)
+  if (with_ci) {
+    p = p + geom_linerange(aes(ymin = lower_pp, ymax = upper_pp),
+                            linewidth = .55, alpha = .6, show.legend = FALSE)
+  }
+  p + geom_point(size = 4.5) +
+    facet_wrap(~ stage, nrow = 1, drop = FALSE) +
+    scale_color_manual(name = NULL, values = measure_colors, limits = c("Caused", "Lexical"), drop = FALSE) +
+    scale_shape_manual(name = NULL, values = measure_shapes, limits = c("Caused", "Lexical"), drop = FALSE) +
+    scale_x_discrete(limits = c("Baseline", condition_order), drop = FALSE, expand = expansion(add = .45)) +
+    candidate_difference_scale() +
+    labs(x = NULL, y = expression(plain("Distal") - plain("Proximal") ~ plain("endorsement (%)"))) +
+    talk_theme(stage_text_size) + theme(axis.text.x = element_text(size = 16))
+}
+p.role.preference = plot_role_preference()
+p.role.preference.ci = plot_role_preference(with_ci = TRUE)
+save_talk(p.role.preference, file.path(synthesis_output, "caused_lexical_role_preference"), 16, 9)
+save_talk(p.role.preference.ci, file.path(synthesis_output, "caused_lexical_role_preference_with_ci"), 16, 9)
+p.role.preference
+p.role.preference.ci
+```
+
+```{r role-preference-candidate-table}
+write_csv(df.role.preference.summary, file.path(synthesis_output, "caused_lexical_role_preference_values.csv"))
+kable(df.role.preference.summary, digits = 6,
+      caption = "Paired Distal-minus-Proximal endorsement: mean and backup 95% CI in percentage points; N counts participants")
+```
+
+## Candidate 3: Single Cause sensitivity to intention across judgments
+
+The effect is **100 × (Intentional group mean Yes − Accidental group mean Yes)**.
+The inputs are scenario-averaged participant means from Single Cause only.
+The two conditions contain different people, so the difference is between group
+means, not a within-person intention difference. Adults are the same working
+N=32 sample; these plots do not identify the historical N=30 exclusions.
+
+For each stage, independently resample whole Intentional and Accidental
+participants 5,000 times and subtract the sampled group means. All four
+judgments stay together on each participant's sampled row. A missing measure
+mean is ignored only for that measure, not for a participant's other valid
+judgments. The table gives eligible and contributing Ns separately for the two
+conditions, plus source means and the resulting difference. The backup uses
+percentile intervals from the differences, including uncertainty in both groups.
+Lines describe separate cross-sectional age samples, not within-person change.
+Small fixed horizontal offsets separate overlapping measure points.
+
+```{r single-sensitivity-candidate-means}
+df.single.sensitivity.means = df.stage.means %>% filter(study == "Single Cause")
+check_labels(df.single.sensitivity.means$condition, condition_order, "Single Cause sensitivity condition")
+stopifnot(setequal(as.character(df.single.sensitivity.means$stage), stage_order),
+          !anyDuplicated(df.single.sensitivity.means[c("participant", "stage", "condition", "measure")]))
+df.single.sensitivity.wide = df.single.sensitivity.means %>%
+  select(stage, condition, participant, measure, yes_mean) %>%
+  pivot_wider(names_from = measure, values_from = yes_mean) %>% arrange(stage, condition, participant)
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 10L)
+sensitivity_intervals = list()
+for (stage_name in stage_order) {
+  rows = filter(df.single.sensitivity.wide, stage == stage_name)
+  intentional = rows %>% filter(condition == "Intentional") %>% select(all_of(measure_order)) %>% as.matrix()
+  accidental = rows %>% filter(condition == "Accidental") %>% select(all_of(measure_order)) %>% as.matrix()
+  stopifnot(nrow(intentional) > 0L, nrow(accidental) > 0L)
+  draws = replicate(bootstrap_replicates, {
+    i = sample.int(nrow(intentional), replace = TRUE)
+    a = sample.int(nrow(accidental), replace = TRUE)
+    100 * (apply(intentional[i, , drop = FALSE], 2, mean_available) -
+             apply(accidental[a, , drop = FALSE], 2, mean_available))
+  })
+  sensitivity_intervals[[stage_name]] = tibble(stage = stage_name, measure = measure_order,
+    lower_pp = apply(draws, 1, quantile, probs = .025, na.rm = TRUE),
+    upper_pp = apply(draws, 1, quantile, probs = .975, na.rm = TRUE))
+}
+df.single.sensitivity.summary = df.single.sensitivity.means %>%
+  group_by(stage, condition, measure) %>%
+  summarise(eligible_n = n(), n = sum(!is.na(yes_mean)), yes_mean = mean_available(yes_mean), .groups = "drop") %>%
+  pivot_wider(names_from = condition, values_from = c(eligible_n, n, yes_mean)) %>%
+  mutate(mean_pp = 100 * (yes_mean_Intentional - yes_mean_Accidental)) %>%
+  left_join(bind_rows(sensitivity_intervals), by = c("stage", "measure"), relationship = "one-to-one") %>%
+  mutate(study = "Single Cause", contrast = "Intentional minus Accidental",
+         stage = factor(stage, levels = stage_order), measure = factor(measure, levels = measure_order)) %>%
+  select(study, stage, contrast, measure, eligible_n_Intentional, eligible_n_Accidental,
+         n_Intentional, n_Accidental, yes_mean_Intentional, yes_mean_Accidental, mean_pp, lower_pp, upper_pp) %>%
+  arrange(stage, measure)
+stopifnot(nrow(df.single.sensitivity.summary) == 12L,
+          !anyDuplicated(df.single.sensitivity.summary[c("stage", "measure")]),
+          all(df.single.sensitivity.summary$n_Intentional > 0L), all(df.single.sensitivity.summary$n_Accidental > 0L),
+          all(dplyr::between(df.single.sensitivity.summary$mean_pp, -100, 100)),
+          all(dplyr::between(df.single.sensitivity.summary$lower_pp, -100, 100)),
+          all(dplyr::between(df.single.sensitivity.summary$upper_pp, -100, 100)))
+```
+
+```{r single-sensitivity-candidate-plot, fig.width=16, fig.height=9}
+df.single.sensitivity.plot = df.single.sensitivity.summary %>%
+  mutate(plot_x = as.numeric(stage) + unname(sensitivity_offsets[as.character(measure)]))
+plot_single_sensitivity = function(with_ci = FALSE) {
+  p = ggplot(df.single.sensitivity.plot,
+              aes(x = plot_x, y = mean_pp, color = measure, shape = measure, group = measure)) +
+    geom_hline(yintercept = 0, color = "#666666", linewidth = .75) +
+    geom_line(linewidth = .8)
+  if (with_ci) {
+    p = p + geom_linerange(aes(ymin = lower_pp, ymax = upper_pp),
+                            linewidth = .55, alpha = .6, show.legend = FALSE)
+  }
+  p + geom_point(size = 4.5) +
+    scale_color_manual(name = NULL, values = measure_colors, limits = measure_order, drop = FALSE) +
+    scale_shape_manual(name = NULL, values = measure_shapes, limits = measure_order, drop = FALSE) +
+    scale_x_continuous(breaks = 1:3, labels = stage_order, limits = c(.65, 3.35), expand = expansion(mult = 0)) +
+    candidate_difference_scale(limits = c(-50, 100)) +
+    labs(x = NULL, y = expression(plain("Intentional") - plain("Accidental") ~ plain("(%)"))) +
+    talk_theme(intention_text_size)
+}
+stopifnot(all(df.single.sensitivity.summary$lower_pp >= -50),
+          all(df.single.sensitivity.summary$upper_pp <= 100))
+p.single.sensitivity = plot_single_sensitivity()
+p.single.sensitivity.ci = plot_single_sensitivity(with_ci = TRUE)
+save_talk(p.single.sensitivity, file.path(synthesis_output, "single_cause_intention_sensitivity"), 16, 9)
+save_talk(p.single.sensitivity.ci, file.path(synthesis_output, "single_cause_intention_sensitivity_with_ci"), 16, 9)
+p.single.sensitivity
+p.single.sensitivity.ci
+```
+
+```{r single-sensitivity-candidate-table}
+write_csv(df.single.sensitivity.summary, file.path(synthesis_output, "single_cause_intention_sensitivity_values.csv"))
+kable(select(df.single.sensitivity.summary, study, stage, contrast, measure,
+              n_Intentional, n_Accidental, mean_pp, lower_pp, upper_pp), digits = 6,
+      caption = "Single Cause intention sensitivity: mean difference and backup 95% CI in percentage points; separate condition Ns")
+```
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons
@@ -2285,6 +2586,31 @@ stopifnot(all(df.scoring.checked$Distal == df.scoring.checked$expected_distal),
           all(df.scoring.checked$Proximal == df.scoring.checked$expected_proximal))
 ```
 
+For the new role-preference contrast, a scenario needs both roles. The same
+missingness example must therefore retain only its complete Mirror contrast
+(0 − 1 = −1), while preserving other valid judgments. Both/Neither each yield
+zero. These checks distinguish paired-scenario scoring from subtracting role
+means based on different available scenarios.
+
+```{r candidate-pairing-validation}
+df.preference.expected = tibble(
+  participant = c("both", "neither", "distal_only", "proximal_only", "missing"),
+  expected = c(0, 0, 1, -1, -1), expected_pairs = c(2L, 2L, 2L, 2L, 1L))
+df.preference.checked = role_preference_means(df.scoring.examples) %>%
+  left_join(df.preference.expected, by = "participant", relationship = "one-to-one")
+stopifnot(all(df.preference.checked$role_difference == df.preference.checked$expected),
+          all(df.preference.checked$paired_scenarios == df.preference.checked$expected_pairs))
+# A different, complete judgment from this participant must remain usable.
+df.preference.missing.example = bind_rows(
+  filter(df.scoring.examples, participant == "missing"),
+  filter(df.scoring.examples, participant == "distal_only") %>%
+    mutate(participant = "missing", measure = "Lexical"))
+df.preference.missing.checked = role_preference_means(df.preference.missing.example)
+stopifnot(nrow(df.preference.missing.checked) == 2L,
+          df.preference.missing.checked$role_difference[df.preference.missing.checked$measure == "Lexical"] == 1,
+          df.preference.missing.checked$paired_scenarios[df.preference.missing.checked$measure == "Lexical"] == 2L)
+```
+
 ## Both/neither response patterns
 
 Each count is a **participant × scenario × measure pair**, not a unique child.
@@ -2378,6 +2704,45 @@ kable(tibble(figure = c("Study 1 raw", "Study 2 raw", "Baseline change", "Single
              png_width = c(study1_width, study2_width, comparison_width, study2_width) * png_dpi,
              png_height = c(study1_height, study2_height, comparison_height, study2_height) * png_dpi,
              full_equals_final_build = TRUE))
+```
+
+## Candidate main/CI identity
+
+Adding uncertainty must not move points, axes or panels. These checks verify
+all 48 points across the three candidates, along with the nine horizontal
+punishment connectors (one per stage and target).
+
+```{r candidate-version-validation}
+check_candidate_versions = function(main, backup, expected_points) {
+  a = ggplot_build(main)
+  b = ggplot_build(backup)
+  points = function(plot, built) {
+    index = which(vapply(plot$layers, function(layer) inherits(layer$geom, "GeomPoint"), logical(1)))
+    stopifnot(length(index) == 1L)
+    built$data[[index]]
+  }
+  stopifnot(nrow(points(main, a)) == expected_points,
+            identical(points(main, a), points(backup, b)),
+            identical(a$layout$layout, b$layout$layout))
+  for (panel in seq_along(a$layout$panel_params)) {
+    stopifnot(identical(a$layout$panel_params[[panel]]$x.range, b$layout$panel_params[[panel]]$x.range),
+              identical(a$layout$panel_params[[panel]]$y.range, b$layout$panel_params[[panel]]$y.range))
+  }
+  a_grob = ggplotGrob(main)
+  b_grob = ggplotGrob(backup)
+  stopifnot(identical(a_grob$layout, b_grob$layout),
+            isTRUE(all.equal(grid::convertWidth(a_grob$widths, "cm", valueOnly = TRUE),
+                             grid::convertWidth(b_grob$widths, "cm", valueOnly = TRUE))),
+            isTRUE(all.equal(grid::convertHeight(a_grob$heights, "cm", valueOnly = TRUE),
+                             grid::convertHeight(b_grob$heights, "cm", valueOnly = TRUE))))
+  TRUE
+}
+stopifnot(check_candidate_versions(p.punishment.horizontal, p.punishment.horizontal.ci, 18L),
+          check_candidate_versions(p.role.preference, p.role.preference.ci, 18L),
+          check_candidate_versions(p.single.sensitivity, p.single.sensitivity.ci, 12L))
+punishment_connectors = ggplot_build(p.punishment.horizontal)$data[[2]]
+stopifnot(nrow(punishment_connectors) == 9L,
+          all(punishment_connectors$y == punishment_connectors$yend))
 ```
 
 ## Environment and remaining questions

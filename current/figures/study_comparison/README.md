@@ -30,6 +30,26 @@ Punishment separates more strongly between intention conditions at ages 5–6 th
 
 PNG resolutions: 3840 × 2160 for punishment and Single Cause; 3840 × 2520 for role mapping. PDFs are vector graphics.
 
+## Additional candidate syntheses: main and CI versions
+
+These are additions. All earlier plots and builds remain unchanged. Each candidate has a clean main version without intervals and a separate backup with 95% participant-bootstrap intervals. Points, scales and layout stay identical between versions. All six PNGs are 3840 × 2160; their PDFs are vector graphics.
+
+| Candidate | Main PNG / PDF | CI backup PNG / PDF | Exact numerical table |
+| --- | --- | --- | --- |
+| Horizontal punishment by causal target | [PNG](punishment_causal_structure_horizontal.png) / [PDF](punishment_causal_structure_horizontal.pdf) | [PNG](punishment_causal_structure_horizontal_with_ci.png) / [PDF](punishment_causal_structure_horizontal_with_ci.pdf) | [18 endpoints, Ns, CIs](punishment_causal_structure_horizontal_values.csv) |
+| Caused/Lexical role preference | [PNG](caused_lexical_role_preference.png) / [PDF](caused_lexical_role_preference.pdf) | [PNG](caused_lexical_role_preference_with_ci.png) / [PDF](caused_lexical_role_preference_with_ci.pdf) | [18 differences, Ns, CIs](caused_lexical_role_preference_values.csv) |
+| Single Cause intention sensitivity | [PNG](single_cause_intention_sensitivity.png) / [PDF](single_cause_intention_sensitivity.pdf) | [PNG](single_cause_intention_sensitivity_with_ci.png) / [PDF](single_cause_intention_sensitivity_with_ci.pdf) | [12 effects, both condition Ns/means, CIs](single_cause_intention_sensitivity_values.csv) |
+
+Age groups and samples are exactly those listed above. Children aged 7–9 are not included in these candidates. Participants, rather than ages or trial rows, receive equal weight within each group. Study 2 adults remain the earlier pilot, and Single Cause adults remain the working N=32 sample.
+
+**Horizontal punishment:** the same 18 means and intervals as the existing vertical punishment figure. Each neutral horizontal connector joins Intentional and Accidental within one causal target. Purple filled circles and teal open triangles use the established condition palette. For Chain: Proximal, intention refers to the distal agent. The 0–100% axis preserves raw endorsement levels; the dashed 50% line is a visual reference.
+
+**Role preference:** for each participant × scenario × measure, subtract binary Proximal from binary Distal; then average available paired-scenario differences within participant and participants within study/stage/condition. A scenario missing either role cannot supply a paired contrast, but other valid scenarios and judgments remain. Both/Neither give zero. This is not relative attribution. Positive percentage-point values favor Distal; negative values favor Proximal. The lines connect separate Study 1 Baseline and Study 2 Intentional/Accidental groups, not repeated measurements of the same people. Fixed-seed 5,000-draw bootstraps resample participant contrasts within each cell.
+
+**Single Cause sensitivity:** 100 × (Intentional group mean Yes − Accidental group mean Yes), after scenario averaging within each participant. The conditions contain different people. The 5,000 bootstrap draws independently sample participants in each condition and preserve their four judgments together, so intervals include uncertainty from both means. Small fixed horizontal offsets keep overlapping points readable. Both main and backup display every mean and CI bound.
+
+Caused role preference is positive in every displayed cell, while Lexical favors Proximal except for a tie in Intentional ages 3–4 and a small Distal preference in Intentional adults. Single Cause punishment sensitivity rises from 2.72 to 43.27 to 90.63 percentage points across the displayed stages; Caused peaks at 5–6 rather than increasing monotonically, and Lexical's estimates are −11.06, −2.88 and 0. These descriptive summaries do not establish equivalence, developmental change within individuals, or formal differences between measures.
+
 ## Retained intention-effect backup
 
 [PNG](study2_singlecause_intention_effect_comparison.png) · [Vector PDF](study2_singlecause_intention_effect_comparison.pdf) · [Exact effects, source means, Ns and intervals](study2_singlecause_intention_effect_comparison_values.csv)
