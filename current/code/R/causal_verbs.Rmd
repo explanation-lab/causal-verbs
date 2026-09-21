@@ -2952,6 +2952,169 @@ for (step in 0:5) {
 stopifnot(check_presentation_builds(p.single.onepanel.v4, c(0L, 2L, 4L, 6L, 8L, 12L)))
 ```
 
+# Intention sensitivity across causal contexts
+
+This additional companion to the all-measure role-preference figure uses
+**100 × (Intentional mean Yes − Accidental mean Yes)**. The four panels are
+Caused, Lexical, Fault and Punish; the three trajectories are Single Cause,
+Chain: Distal and Chain: Proximal. Study 1 is absent because it does not
+manipulate intention. A negative value means more Yes in Accidental.
+
+Reuse the existing scenario-averaged participant means and stage groups.
+Conditions contain different people, so subtract group means rather than
+inventing within-participant intention contrasts. All 12 Single Cause effects
+and intervals are reused exactly. The 24 chain intervals apply the same
+5,000-replicate procedure within stage: independently resample Intentional and
+Accidental participants, keeping both roles and all four measures together on
+each sampled row. A separate fixed seed leaves every earlier interval intact.
+
+Chain: Proximal describes judgments of the proximal agent **when the distal
+agent's intention changes**, not a manipulation of the proximal agent's own
+intention. The source-study cohorts remain different; these are descriptive,
+cross-sectional comparisons rather than a test isolating causal context.
+
+```{r context-sensitivity-summary}
+df.chain.sensitivity.means = df.stage.means %>% filter(study == "Study 2")
+chain_score_order = expand_grid(role = role_order, measure = measure_order) %>%
+  transmute(score = paste(role, measure, sep = "__")) %>% pull(score)
+df.chain.sensitivity.wide = df.chain.sensitivity.means %>%
+  mutate(score = paste(role, measure, sep = "__")) %>%
+  select(stage, condition, participant, score, yes_mean) %>%
+  pivot_wider(names_from = score, values_from = yes_mean) %>% arrange(stage, condition, participant)
+check_labels(df.chain.sensitivity.means$condition, condition_order, "chain sensitivity condition")
+stopifnot(!anyDuplicated(df.chain.sensitivity.wide[c("stage", "condition", "participant")]))
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 12L)
+chain_sensitivity_intervals = list()
+for (stage_name in stage_order) {
+  rows = filter(df.chain.sensitivity.wide, stage == stage_name)
+  intentional = rows %>% filter(condition == "Intentional") %>% select(all_of(chain_score_order)) %>% as.matrix()
+  accidental = rows %>% filter(condition == "Accidental") %>% select(all_of(chain_score_order)) %>% as.matrix()
+  stopifnot(nrow(intentional) > 0L, nrow(accidental) > 0L)
+  draws = replicate(bootstrap_replicates, {
+    i = sample.int(nrow(intentional), replace = TRUE)
+    a = sample.int(nrow(accidental), replace = TRUE)
+    100 * (apply(intentional[i, , drop = FALSE], 2, mean_available) -
+             apply(accidental[a, , drop = FALSE], 2, mean_available))
+  })
+  chain_sensitivity_intervals[[stage_name]] = tibble(stage = stage_name, score = chain_score_order,
+    lower_pp = apply(draws, 1, quantile, probs = .025, na.rm = TRUE),
+    upper_pp = apply(draws, 1, quantile, probs = .975, na.rm = TRUE))
+}
+df.chain.sensitivity.intervals = bind_rows(chain_sensitivity_intervals) %>%
+  separate_wider_delim(score, delim = "__", names = c("role", "measure"))
+df.chain.sensitivity.summary = df.chain.sensitivity.means %>%
+  group_by(stage, condition, measure, role) %>%
+  summarise(eligible_n = n(), n = sum(!is.na(yes_mean)), yes_mean = mean_available(yes_mean), .groups = "drop") %>%
+  pivot_wider(names_from = condition, values_from = c(eligible_n, n, yes_mean)) %>%
+  mutate(mean_pp = 100 * (yes_mean_Intentional - yes_mean_Accidental)) %>%
+  left_join(df.chain.sensitivity.intervals, by = c("stage", "measure", "role"), relationship = "one-to-one") %>%
+  mutate(study = "Study 2", context = paste0("Chain: ", role), contrast = "Intentional minus Accidental") %>%
+  select(-role)
+df.context.sensitivity.summary = bind_rows(
+  df.single.sensitivity.summary %>% mutate(context = "Single Cause"), df.chain.sensitivity.summary) %>%
+  mutate(stage = factor(stage, levels = stage_order), measure = factor(measure, levels = measure_order),
+         context = factor(context, levels = stage_target_order)) %>%
+  select(study, stage, context, contrast, measure, eligible_n_Intentional, eligible_n_Accidental,
+         n_Intentional, n_Accidental, yes_mean_Intentional, yes_mean_Accidental, mean_pp, lower_pp, upper_pp) %>%
+  arrange(stage, measure, context)
+stopifnot(nrow(df.context.sensitivity.summary) == 36L,
+          !anyNA(df.context.sensitivity.summary),
+          !anyDuplicated(df.context.sensitivity.summary[c("stage", "measure", "context")]),
+          all(dplyr::between(df.context.sensitivity.summary$mean_pp, -100, 100)),
+          all(df.context.sensitivity.summary$lower_pp <= df.context.sensitivity.summary$upper_pp))
+# Reused Single Cause values and intervals must remain exactly identical.
+single_context_check = df.context.sensitivity.summary %>% filter(context == "Single Cause")
+for (column in names(df.single.sensitivity.summary)) {
+  old = df.single.sensitivity.summary[[column]]
+  new = single_context_check[[column]]
+  if (is.factor(old)) old = as.character(old)
+  if (is.factor(new)) new = as.character(new)
+  stopifnot(identical(unname(old), unname(new)))
+}
+# Independently link each contrast to the already validated role/context means.
+df.context.sensitivity.expected = df.stage.summary %>%
+  filter(study %in% c("Single Cause", "Study 2")) %>%
+  mutate(context = if_else(study == "Single Cause", "Single Cause", paste0("Chain: ", role))) %>%
+  select(study, stage, measure, context, condition, checked_mean = mean, checked_n = n) %>%
+  pivot_wider(names_from = condition, values_from = c(checked_mean, checked_n))
+df.context.sensitivity.checked = df.context.sensitivity.summary %>%
+  left_join(df.context.sensitivity.expected, by = c("study", "stage", "measure", "context"),
+            relationship = "one-to-one")
+stopifnot(all(abs(df.context.sensitivity.checked$yes_mean_Intentional -
+                   df.context.sensitivity.checked$checked_mean_Intentional) < 1e-12),
+          all(abs(df.context.sensitivity.checked$yes_mean_Accidental -
+                    df.context.sensitivity.checked$checked_mean_Accidental) < 1e-12),
+          all(df.context.sensitivity.checked$n_Intentional == df.context.sensitivity.checked$checked_n_Intentional),
+          all(df.context.sensitivity.checked$n_Accidental == df.context.sensitivity.checked$checked_n_Accidental),
+          all(abs(df.context.sensitivity.checked$mean_pp - 100 *
+                    (df.context.sensitivity.checked$checked_mean_Intentional -
+                       df.context.sensitivity.checked$checked_mean_Accidental)) < 1e-10))
+```
+
+## Four-panel presentation figure and cumulative builds
+
+The companion reuses the all-measure figure's 22 × 8.5-inch presentation
+canvas, large text, outlined marks, childhood shading and strong dashed zero
+reference. Gray squares, red circles and blue triangles retain the existing
+causal-context palette. A single legend names the contexts explicitly; color
+encodes context rather than intention condition or judgment.
+
+Main, CI backup and every build share one y scale derived from all means and
+intervals. Main/build versions omit CIs. Build 00 is the full blank scaffold;
+01 adds Single Cause childhood, 02 adds Chain: Distal childhood, 03 adds
+Chain: Proximal childhood, and 04 adds all Adults. Earlier marks never move.
+
+```{r context-sensitivity-plot, fig.width=22, fig.height=8.5}
+context_sensitivity_colors = setNames(unname(synthesis_colors), stage_target_order)
+context_sensitivity_style = list(
+  order = stage_target_order, colors = context_sensitivity_colors, fills = context_sensitivity_colors,
+  shapes = setNames(c(22, 21, 24), stage_target_order),
+  lines = setNames(c("dotted", "solid", "dashed"), stage_target_order))
+context_sensitivity_limits = c(
+  floor(min(0, df.context.sensitivity.summary$mean_pp - 5,
+            df.context.sensitivity.summary$lower_pp) / 10) * 10,
+  ceiling(max(0, df.context.sensitivity.summary$mean_pp + 5,
+              df.context.sensitivity.summary$upper_pp) / 10) * 10)
+context_sensitivity_breaks = seq(ceiling(context_sensitivity_limits[1] / 25) * 25,
+                                 floor(context_sensitivity_limits[2] / 25) * 25, 25)
+df.context.sensitivity.plot = df.context.sensitivity.summary %>%
+  transmute(panel = as.character(measure), series = as.character(context), stage,
+            mean = mean_pp, lower = lower_pp, upper = upper_pp,
+            reveal_step = if_else(stage == "Adults", 4L, match(context, stage_target_order)))
+plot_context_sensitivity = function(step = 4L, with_ci = FALSE) {
+  plot_causal_verbs_talk(df.context.sensitivity.plot, measure_order, context_sensitivity_style,
+                         context_sensitivity_limits, context_sensitivity_breaks,
+                         "Intentional −
+Accidental (%)", 0, step, with_ci)
+}
+p.context.sensitivity = save_presentation_v2_family(
+  plot_context_sensitivity, "intention_sensitivity_across_contexts_talk_v1", "intention_sensitivity_across_contexts",
+  c("build00_blank", "build01_single_cause_childhood", "build02_add_chain_distal_childhood",
+    "build03_add_chain_proximal_childhood", "build04_add_adults_full"))
+p.context.sensitivity$main
+p.context.sensitivity$backup
+p.context.sensitivity$builds[[1]]
+stopifnot(check_presentation_builds(p.context.sensitivity, c(0L, 8L, 16L, 24L, 36L)))
+```
+
+```{r context-sensitivity-table}
+write_csv(df.context.sensitivity.summary,
+          file.path(presentation_v2_output, "intention_sensitivity_across_contexts_talk_v1_values.csv"))
+kable(select(df.context.sensitivity.summary, stage, context, measure, n_Intentional, n_Accidental,
+              mean_pp, lower_pp, upper_pp), digits = 4,
+      caption = "Intention sensitivity by causal context: group-mean difference and participant-bootstrap 95% CI (pp)")
+```
+
+The common y range is `r context_sensitivity_limits[1]`% to
+`r context_sensitivity_limits[2]`%. Lexical is close to zero in Single Cause,
+but this pattern does **not** hold uniformly across contexts: Chain: Distal
+Lexical is positive in all stages, while Chain: Proximal Lexical is negative.
+The plot preserves these departures rather than assuming intention has little
+effect on every lexical judgment. Pointwise CIs are descriptive and do not test
+the ranking of measures or contexts. Study 2's missing main adult dataset and
+Single Cause's unidentified historical adult exclusions remain unresolved.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons
@@ -3319,7 +3482,8 @@ between their main and CI versions; only uncertainty layers differ.
 ```{r additional-synthesis-main-ci-identity}
 stopifnot(check_candidate_versions(p.role.preference.all$main, p.role.preference.all$backup, 36L),
           check_candidate_versions(p.single.onepanel$main, p.single.onepanel$backup, 12L),
-          check_candidate_versions(p.single.onepanel.v4$main, p.single.onepanel.v4$backup, 12L))
+          check_candidate_versions(p.single.onepanel.v4$main, p.single.onepanel.v4$backup, 12L),
+          check_candidate_versions(p.context.sensitivity$main, p.context.sensitivity$backup, 36L))
 ```
 
 ## Environment and remaining questions
