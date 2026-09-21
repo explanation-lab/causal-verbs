@@ -2473,7 +2473,8 @@ saved separately; their ranges expand only when necessary to show every bound.
 
 ```{r presentation-v2-helper}
 plot_causal_verbs_talk = function(values, panel_order, style, y_limits, y_breaks,
-                                  y_label, reference, step, with_ci = FALSE, x_offsets = NULL) {
+                                  y_label, reference, step, with_ci = FALSE, x_offsets = NULL,
+                                  mark_settings = talk_v2) {
   stopifnot(!anyDuplicated(values[c("panel", "series", "stage")]),
             setequal(as.character(values$stage), stage_order),
             all(values$series %in% style$order), all(values$panel %in% panel_order),
@@ -2505,13 +2506,13 @@ plot_causal_verbs_talk = function(values, panel_order, style, y_limits, y_breaks
                linewidth = talk_v2$reference_width) +
     geom_segment(data = segments,
                  aes(xend = end_x, yend = end_y, color = series, linetype = series, alpha = visible),
-                 linewidth = talk_v2$line_width, show.legend = TRUE)
+                 linewidth = mark_settings$line_width, show.legend = TRUE)
   if (with_ci) {
     p = p + geom_linerange(aes(ymin = lower, ymax = upper, color = series, alpha = visible),
                             linewidth = talk_v2$ci_width, show.legend = FALSE)
   }
   p + geom_point(aes(fill = series, shape = series, alpha = visible),
-                 size = talk_v2$point_size, color = "black", stroke = talk_v2$point_stroke,
+                 size = mark_settings$point_size, color = "black", stroke = mark_settings$point_stroke,
                  show.legend = TRUE) +
     facet_wrap(~ panel, nrow = 1, drop = FALSE) +
     scale_alpha_identity(guide = "none") +
@@ -2529,22 +2530,23 @@ plot_causal_verbs_talk = function(values, panel_order, style, y_limits, y_breaks
     theme_causal_verbs_talk()
 }
 
-save_presentation_v2 = function(plot, filename) {
-  ggsave(paste0(filename, ".pdf"), plot = plot, width = talk_v2$width, height = talk_v2$height,
+save_presentation_v2 = function(plot, filename, width = talk_v2$width, height = talk_v2$height) {
+  ggsave(paste0(filename, ".pdf"), plot = plot, width = width, height = height,
          device = grDevices::cairo_pdf, bg = "white")
-  ggsave(paste0(filename, ".png"), plot = plot, width = talk_v2$width, height = talk_v2$height,
+  ggsave(paste0(filename, ".png"), plot = plot, width = width, height = height,
          device = ragg::agg_png, dpi = talk_v2$dpi, bg = "white")
 }
 
-save_presentation_v2_family = function(plot_function, stem, build_folder, build_names) {
+save_presentation_v2_family = function(plot_function, stem, build_folder, build_names,
+                                        width = talk_v2$width, height = talk_v2$height) {
   directory = file.path(presentation_v2_output, "builds", build_folder)
   dir.create(directory, recursive = TRUE, showWarnings = FALSE)
   final_step = length(build_names) - 1L
   main = plot_function(final_step)
   backup = plot_function(final_step, with_ci = TRUE)
   filename = file.path(presentation_v2_output, stem)
-  save_presentation_v2(main, filename)
-  save_presentation_v2(backup, paste0(filename, "_with_ci"))
+  save_presentation_v2(main, filename, width, height)
+  save_presentation_v2(backup, paste0(filename, "_with_ci"), width, height)
   builds = lapply(0:final_step, function(step) {
     plot = plot_function(step)
     build_filename = file.path(directory, build_names[step + 1L])
@@ -2554,7 +2556,7 @@ save_presentation_v2_family = function(plot_function, stem, build_folder, build_
       for (extension in c(".pdf", ".png")) {
         stopifnot(file.copy(paste0(filename, extension), paste0(build_filename, extension), overwrite = TRUE))
       }
-    } else save_presentation_v2(plot, build_filename)
+    } else save_presentation_v2(plot, build_filename, width, height)
     plot
   })
   list(main = main, backup = backup, builds = builds)
@@ -2861,12 +2863,12 @@ single_onepanel_ci_limits = c(
   min(single_onepanel_main_limits[1], floor(min(df.single.onepanel$lower) / 5) * 5),
   max(single_onepanel_main_limits[2], ceiling(max(df.single.onepanel$upper) / 5) * 5))
 single_onepanel_offsets = c(Caused = -.045, Lexical = -.015, Fault = .015, Punish = .045)
-plot_single_sensitivity_onepanel = function(step = 5L, with_ci = FALSE) {
+plot_single_sensitivity_onepanel = function(step = 5L, with_ci = FALSE, mark_settings = talk_v2) {
   plot_causal_verbs_talk(df.single.onepanel, "Single Cause", talk_v2_measures,
                          single_onepanel_ci_limits,
                          seq(single_onepanel_main_limits[1], single_onepanel_main_limits[2], 25),
                          "Intentional −\nAccidental (%)", 0, step, with_ci,
-                         x_offsets = single_onepanel_offsets)
+                         x_offsets = single_onepanel_offsets, mark_settings = mark_settings)
 }
 p.single.onepanel = save_presentation_v2_family(
   plot_single_sensitivity_onepanel, "single_cause_intention_sensitivity_onepanel_talk_v3",
@@ -2897,6 +2899,55 @@ kable(select(df.single.sensitivity.summary, stage, measure, n_Intentional, n_Acc
       digits = 4, caption = "Single Cause: unchanged Intentional-minus-Accidental mean and 95% CI (pp); participant Ns")
 stopifnot(check_presentation_builds(p.role.preference.all, c(0L, 8L, 16L, 24L, 36L)),
           check_presentation_builds(p.single.onepanel, c(0L, 2L, 4L, 6L, 8L, 12L)))
+```
+
+## Single Cause V4: compact canvas and stronger marks
+
+V4 changes only the one-panel figure's canvas and mark sizes. It keeps V3's
+labels, title, colors, shapes, solid line types, x positions/offsets, childhood
+shading, zero reference, typography, y range and exact reveal sequence. V3 and
+all its builds remain unchanged. No values, intervals or analysis are computed
+again for V4; the same plot function and data supply every mark.
+
+The compact canvas is **14 × 9.5 inches** (previously 22 × 8.5). All four lines
+increase from 2.1 to **3.3 mm**, point size from 6.2 to **10 mm**, and the black
+outline stroke from 1.15 to **2.2 mm**. Main and build plots remain free of CIs;
+the separate CI backup has the same compact geometry and unchanged intervals.
+
+```{r single-sensitivity-onepanel-v4, fig.width=14, fig.height=9.5}
+single_onepanel_v4 = list(width = 14, height = 9.5,
+                         line_width = 3.3, point_size = 10, point_stroke = 2.2)
+plot_single_sensitivity_onepanel_v4 = function(step = 5L, with_ci = FALSE) {
+  plot_single_sensitivity_onepanel(step, with_ci, mark_settings = single_onepanel_v4)
+}
+p.single.onepanel.v4 = save_presentation_v2_family(
+  plot_single_sensitivity_onepanel_v4, "single_cause_intention_sensitivity_onepanel_talk_v4",
+  "single_cause_intention_sensitivity_onepanel_v4",
+  c("build00_blank", "build01_caused_childhood", "build02_add_lexical_childhood",
+    "build03_add_fault_childhood", "build04_add_punish_childhood", "build05_add_adults_full"),
+  width = single_onepanel_v4$width, height = single_onepanel_v4$height)
+p.single.onepanel.v4$main
+p.single.onepanel.v4$backup
+p.single.onepanel.v4$builds[[1]]
+
+# Only linewidth, size and stroke may differ from the corresponding V3 layers.
+# This also checks unchanged colors, shapes, values and alpha/reveal sequences.
+for (step in 0:5) {
+  for (with_ci in c(FALSE, TRUE)) {
+    old = ggplot_build(plot_single_sensitivity_onepanel(step, with_ci))
+    new = ggplot_build(plot_single_sensitivity_onepanel_v4(step, with_ci))
+    stopifnot(identical(old$layout$layout, new$layout$layout),
+              identical(old$layout$panel_params[[1]]$x.range, new$layout$panel_params[[1]]$x.range),
+              identical(old$layout$panel_params[[1]]$y.range, new$layout$panel_params[[1]]$y.range),
+              identical(old$layout$panel_params[[1]]$x$get_breaks(), new$layout$panel_params[[1]]$x$get_breaks()),
+              identical(old$layout$panel_params[[1]]$y$get_breaks(), new$layout$panel_params[[1]]$y$get_breaks()))
+    for (layer in seq_along(old$data)) {
+      retained_columns = setdiff(names(old$data[[layer]]), c("linewidth", "size", "stroke"))
+      stopifnot(identical(old$data[[layer]][retained_columns], new$data[[layer]][retained_columns]))
+    }
+  }
+}
+stopifnot(check_presentation_builds(p.single.onepanel.v4, c(0L, 2L, 4L, 6L, 8L, 12L)))
 ```
 
 # Compact validation tables and checks
@@ -3265,7 +3316,8 @@ between their main and CI versions; only uncertainty layers differ.
 
 ```{r additional-synthesis-main-ci-identity}
 stopifnot(check_candidate_versions(p.role.preference.all$main, p.role.preference.all$backup, 36L),
-          check_candidate_versions(p.single.onepanel$main, p.single.onepanel$backup, 12L))
+          check_candidate_versions(p.single.onepanel$main, p.single.onepanel$backup, 12L),
+          check_candidate_versions(p.single.onepanel.v4$main, p.single.onepanel.v4$backup, 12L))
 ```
 
 ## Environment and remaining questions

@@ -1,5 +1,7 @@
 # Presentation V2 synthesis figures
 
+The [compact Single Cause V4](SINGLE_CAUSE_V4.md) preserves V3 and adds a 14 × 9.5-inch version with thicker solid lines, larger shapes and stronger black outlines, including the same six cumulative builds and a CI backup.
+
 The new [four-measure role-preference and one-panel Single Cause additions](ADDITIONAL_SYNTHESES.md) have separate main/CI figures, 11 cumulative builds and numerical tables. All original V2 outputs documented below remain unchanged.
 
 These presentation figures are additions. Every previous synthesis, yes-response figure, baseline-change figure and build remains unchanged. The existing participant-first summary tables supply all means, Ns and intervals; inclusion rules, age groups, weights, adult samples, scenario averaging and response coding are unchanged. The [shared R Markdown workflow](../../../code/R/causal_verbs.Rmd) generates all outputs.
