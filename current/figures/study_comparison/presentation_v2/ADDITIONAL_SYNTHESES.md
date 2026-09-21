@@ -59,12 +59,14 @@ The blank scaffolds already show the complete legend, titles, axes, childhood sh
 
 ### Four-measure role preference
 
+Reveal Baseline childhood first, then Accidental childhood, then Intentional childhood, and Adults last. The full figure, legend order, values and styling are unchanged.
+
 | Build | PDF | PNG |
 | --- | --- | --- |
 | build00_blank | [PDF](builds/role_preference_all_measures/build00_blank.pdf) | [PNG](builds/role_preference_all_measures/build00_blank.png) |
 | build01_baseline_childhood | [PDF](builds/role_preference_all_measures/build01_baseline_childhood.pdf) | [PNG](builds/role_preference_all_measures/build01_baseline_childhood.png) |
-| build02_add_intentional_childhood | [PDF](builds/role_preference_all_measures/build02_add_intentional_childhood.pdf) | [PNG](builds/role_preference_all_measures/build02_add_intentional_childhood.png) |
-| build03_add_accidental_childhood | [PDF](builds/role_preference_all_measures/build03_add_accidental_childhood.pdf) | [PNG](builds/role_preference_all_measures/build03_add_accidental_childhood.png) |
+| build02_add_accidental_childhood | [PDF](builds/role_preference_all_measures/build02_add_accidental_childhood.pdf) | [PNG](builds/role_preference_all_measures/build02_add_accidental_childhood.png) |
+| build03_add_intentional_childhood | [PDF](builds/role_preference_all_measures/build03_add_intentional_childhood.pdf) | [PNG](builds/role_preference_all_measures/build03_add_intentional_childhood.png) |
 | build04_add_adults_full | [PDF](builds/role_preference_all_measures/build04_add_adults_full.pdf) | [PNG](builds/role_preference_all_measures/build04_add_adults_full.png) |
 
 ### One-panel Single Cause sensitivity

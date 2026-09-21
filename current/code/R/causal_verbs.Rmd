@@ -2813,10 +2813,12 @@ negative values favor Proximal. Context colors/shapes/line types match the
 existing two-panel figure exactly.
 
 ```{r role-preference-all-measures-plot, fig.width=22, fig.height=8.5}
+# Reveal Accidental before Intentional in this all-measure build family only.
+role_all_reveal_order = c("Baseline", "Accidental", "Intentional")
 df.role.preference.all.plot = df.role.preference.all.summary %>%
   transmute(panel = as.character(measure), series = as.character(condition), stage,
             mean = mean_pp, lower = lower_pp, upper = upper_pp,
-            reveal_step = if_else(stage == "Adults", 4L, match(condition, talk_v2_contexts$order)))
+            reveal_step = if_else(stage == "Adults", 4L, match(condition, role_all_reveal_order)))
 plot_role_preference_all = function(step = 4L, with_ci = FALSE) {
   limit = if (with_ci) role_all_ci_limit else role_all_main_limit
   plot_causal_verbs_talk(df.role.preference.all.plot, measure_order, talk_v2_contexts,
@@ -2825,8 +2827,8 @@ plot_role_preference_all = function(step = 4L, with_ci = FALSE) {
 }
 p.role.preference.all = save_presentation_v2_family(
   plot_role_preference_all, "role_preference_all_measures_talk_v2", "role_preference_all_measures",
-  c("build00_blank", "build01_baseline_childhood", "build02_add_intentional_childhood",
-    "build03_add_accidental_childhood", "build04_add_adults_full"))
+  c("build00_blank", "build01_baseline_childhood", "build02_add_accidental_childhood",
+    "build03_add_intentional_childhood", "build04_add_adults_full"))
 p.role.preference.all$main
 p.role.preference.all$backup
 p.role.preference.all$builds[[1]]
