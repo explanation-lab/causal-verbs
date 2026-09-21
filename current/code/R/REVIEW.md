@@ -1,5 +1,10 @@
 # Verbal analysis and talk figures — review packet
 
+## Additional presentation syntheses — September 20, 2026
+
+The [new synthesis guide](../../figures/study_comparison/presentation_v2/ADDITIONAL_SYNTHESES.md) documents the four-measure role-preference figure and the preferred one-panel Single Cause sensitivity candidate, with main/CI versions, all 11 build pairs and 48 plotted estimates. Caused/Lexical role estimates and all Single Cause estimates/intervals are reused exactly; only the added Fault/Punish paired-role bootstrap intervals are newly calculated using the existing procedure. The complete knit, independent raw-data checks, PDF/PNG review and fixed-geometry/build checks passed. All 217 earlier figure files, 15 earlier figure CSVs and 2,806 imported files retain their original bytes. Scientific handoff limitations remain unchanged.
+
+
 Prepared September 20, 2026. The earlier plotting update was committed and pushed to `main` as `3b0869ff747164112b7f33558c8c98344b0ea761`. The additional candidate syntheses below are developed directly on `main`; the delivery message records their pushed commit. This reconstructed descriptive workflow does not recover the original analysis scripts or establish scientific handoff acceptance.
 
 ## Presentation V2 — September 20, 2026

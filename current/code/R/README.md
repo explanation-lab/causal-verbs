@@ -1,5 +1,7 @@
 # R analysis
 
+The [additional presentation syntheses](../../figures/study_comparison/presentation_v2/ADDITIONAL_SYNTHESES.md) add four-measure role preference and a one-panel Single Cause sensitivity candidate. Their 30 PDF/PNG outputs, 11 builds and two numerical CSVs are indexed separately; all previous figures remain byte-for-byte unchanged. The existing participant-first calculations and shared presentation helper are reused.
+
 [causal_verbs.Rmd](causal_verbs.Rmd) is the shared descriptive workflow for verbal causal-chain Studies 1 and 2 and the Single Cause adult/child comparison. R Markdown combines explanations, R code, tables and figures in one document. The [HTML report](causal_verbs.html) includes the inclusion flow, repeated-session audit, sample sizes, response patterns, pilot comparison, directly verified plotted means and Ns, and plotting checks.
 
 This is a **new reproducible reconstruction**, not recovered original analysis code. It does not fit inferential models or establish that the original figures have been reproduced. Study 3 analysis and the historical Single Cause adult N=30 subset remain unresolved.

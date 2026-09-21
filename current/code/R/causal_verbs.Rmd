@@ -2473,7 +2473,7 @@ saved separately; their ranges expand only when necessary to show every bound.
 
 ```{r presentation-v2-helper}
 plot_causal_verbs_talk = function(values, panel_order, style, y_limits, y_breaks,
-                                  y_label, reference, step, with_ci = FALSE) {
+                                  y_label, reference, step, with_ci = FALSE, x_offsets = NULL) {
   stopifnot(!anyDuplicated(values[c("panel", "series", "stage")]),
             setequal(as.character(values$stage), stage_order),
             all(values$series %in% style$order), all(values$panel %in% panel_order),
@@ -2483,11 +2483,23 @@ plot_causal_verbs_talk = function(values, panel_order, style, y_limits, y_breaks
     mutate(panel = factor(panel, levels = panel_order),
            series = factor(series, levels = style$order),
            x = match(as.character(stage), stage_order), visible = as.numeric(reveal_step <= step))
+  x_limits = c(1, 3)
+  x_expansion = expansion(add = talk_v2$x_padding)
+  band_end = talk_v2$childhood_end
+  if (!is.null(x_offsets)) {
+    # Optional fixed offsets separate overlapping measures in the NEW one-panel
+    # family. Existing figures take the unchanged no-offset path.
+    stopifnot(setequal(names(x_offsets), style$order), all(abs(x_offsets) < talk_v2$x_padding))
+    points = points %>% mutate(x = x + unname(x_offsets[as.character(series)]))
+    x_limits = c(1 - talk_v2$x_padding, 3 + talk_v2$x_padding)
+    x_expansion = expansion(mult = 0)
+    band_end = talk_v2$childhood_end + max(x_offsets)
+  }
   segments = points %>% arrange(panel, series, x) %>% group_by(panel, series) %>%
     mutate(end_x = lead(x), end_y = lead(mean), end_step = lead(reveal_step)) %>% ungroup() %>%
     filter(!is.na(end_x)) %>% mutate(visible = as.numeric(pmax(reveal_step, end_step) <= step))
   p = ggplot(points, aes(x = x, y = mean, group = series)) +
-    annotate("rect", xmin = -Inf, xmax = talk_v2$childhood_end, ymin = -Inf, ymax = Inf,
+    annotate("rect", xmin = -Inf, xmax = band_end, ymin = -Inf, ymax = Inf,
              fill = talk_v2$childhood_fill, color = NA) +
     geom_hline(yintercept = reference, color = "black", linetype = "dashed",
                linewidth = talk_v2$reference_width) +
@@ -2507,8 +2519,8 @@ plot_causal_verbs_talk = function(values, panel_order, style, y_limits, y_breaks
     scale_fill_manual(NULL, values = style$fills, limits = style$order, drop = FALSE) +
     scale_shape_manual(NULL, values = style$shapes, limits = style$order, drop = FALSE) +
     scale_linetype_manual(NULL, values = style$lines, limits = style$order, drop = FALSE) +
-    scale_x_continuous(breaks = 1:3, labels = stage_order, limits = c(1, 3),
-                       expand = expansion(add = talk_v2$x_padding)) +
+    scale_x_continuous(breaks = 1:3, labels = stage_order, limits = x_limits,
+                       expand = x_expansion) +
     scale_y_continuous(limits = y_limits, breaks = y_breaks,
                        labels = function(x) paste0(x, "%"), expand = expansion(mult = 0)) +
     labs(x = NULL, y = y_label) +
@@ -2699,6 +2711,192 @@ stopifnot(check_presentation_builds(p.v2.punishment, c(0L, 6L, 12L, 18L)),
           check_presentation_builds(p.v2.sensitivity, c(0L, 2L, 4L, 6L, 8L, 12L)))
 kable(tibble(figure = names(v2_tables), points = c(18, 18, 12), builds = c(4, 5, 6),
              numerical_values_unchanged = TRUE, fixed_build_geometry = TRUE, final_build_equals_full = TRUE))
+```
+
+# Additional presentation syntheses — all judgments and one-panel sensitivity
+
+These two new families leave every previous figure and build unchanged,
+including punishment V2, the focused two-panel Caused/Lexical figure and the
+four-panel Single Cause sensitivity figure. They reuse the exact final
+cookie-task presentation settings and shared plotting/build helpers above.
+The reference helper chain and its final Study 1 victim builds were rechecked
+before this addition; no cookie-task files or analysis choices are changed.
+
+## Four judgments: developmental Distal-minus-Proximal role preference
+
+Use the same `role_preference_means()` helper for all four judgments: subtract
+binary Proximal from binary Distal **within scenario**, average available paired
+scenarios within participant, then average participant contrasts within
+study/stage/condition. Both/Neither give zero. A missing role affects only its
+scenario's contrast; other valid scenarios and judgments remain usable.
+
+Caused/Lexical reuse their existing means and confidence intervals exactly.
+Only the newly displayed Fault/Punish contrasts require additional intervals.
+They use the unchanged 5,000-draw participant-bootstrap percentile procedure,
+with a separate fixed seed (`bootstrap_seed + 11`) so adding measures does not
+alter earlier Monte Carlo intervals. Inclusion, repeats, coding, age groups,
+weights and adult samples remain as documented above. Study 2 adults remain
+the earlier pilot; the missing main adult data and handoff gaps stay unresolved.
+
+```{r role-preference-all-measures-summary}
+df.role.preference.all.responses = bind_rows(
+  df.study1.adults.responses, df.study1.children.responses,
+  df.study2.adults.responses, df.study2.children.responses) %>%
+  filter(population == "Adults" | age %in% 3:6)
+check_labels(df.role.preference.all.responses$study, c("Study 1", "Study 2"), "all-measure source study")
+check_labels(df.role.preference.all.responses$measure, measure_order, "all-measure judgment")
+df.role.preference.all.means = role_preference_means(df.role.preference.all.responses) %>%
+  mutate(stage = stage_group(population, age),
+         condition = factor(condition, levels = talk_v2_contexts$order),
+         measure = factor(measure, levels = measure_order))
+stopifnot(!anyNA(df.role.preference.all.means$stage), !anyNA(df.role.preference.all.means$condition),
+          !anyDuplicated(df.role.preference.all.means[c("study", "participant", "condition", "measure")]),
+          setequal(as.character(df.role.preference.all.means$stage), stage_order),
+          all(df.role.preference.all.means$paired_scenarios %in% 0:2))
+RNGkind("Mersenne-Twister", "Inversion", "Rejection")
+set.seed(bootstrap_seed + 11L)
+df.role.preference.additional = df.role.preference.all.means %>%
+  filter(measure %in% c("Fault", "Punish")) %>%
+  arrange(study, stage, condition, measure, participant) %>%
+  group_by(study, population, stage, condition, measure) %>%
+  summarise(eligible_n = n(), summary = list(bootstrap_mean(role_difference)), .groups = "drop") %>%
+  unnest_wider(summary) %>%
+  transmute(study, population, stage, condition, measure, eligible_n, n,
+            mean_pp = 100 * mean, lower_pp = 100 * lower, upper_pp = 100 * upper)
+df.role.preference.all.summary = bind_rows(
+  mutate(df.role.preference.summary, measure = as.character(measure)),
+  mutate(df.role.preference.additional, measure = as.character(measure))) %>%
+  mutate(measure = factor(measure, levels = measure_order)) %>% arrange(stage, measure, condition)
+stopifnot(nrow(df.role.preference.all.summary) == 36L,
+          !anyDuplicated(df.role.preference.all.summary[c("stage", "condition", "measure")]),
+          all(dplyr::between(df.role.preference.all.summary$mean_pp, -100, 100)),
+          all(dplyr::between(df.role.preference.all.summary$lower_pp, -100, 100)),
+          all(dplyr::between(df.role.preference.all.summary$upper_pp, -100, 100)))
+# These snapshots contain complete scenario pairs. Therefore the paired contrast
+# must also equal the difference of the already validated role-specific means.
+stopifnot(all(df.role.preference.all.means$paired_scenarios == 2L))
+df.role.preference.existing_check = df.stage.summary %>%
+  filter(study %in% c("Study 1", "Study 2")) %>%
+  select(study, stage, condition, measure, role, mean, n) %>%
+  pivot_wider(names_from = role, values_from = c(mean, n)) %>%
+  mutate(expected_pp = 100 * (mean_Distal - mean_Proximal))
+df.role.preference.all.check = df.role.preference.all.summary %>%
+  left_join(df.role.preference.existing_check, by = c("study", "stage", "condition", "measure"),
+            relationship = "one-to-one")
+stopifnot(nrow(df.role.preference.all.check) == 36L,
+          all(abs(df.role.preference.all.check$mean_pp - df.role.preference.all.check$expected_pp) < 1e-10),
+          all(df.role.preference.all.check$n == df.role.preference.all.check$n_Distal),
+          all(df.role.preference.all.check$n == df.role.preference.all.check$n_Proximal))
+shared = filter(df.role.preference.all.summary, measure %in% c("Caused", "Lexical"))
+for (column in names(df.role.preference.summary)) {
+  old = df.role.preference.summary[[column]]
+  new = shared[[column]]
+  if (is.factor(old)) old = as.character(old)
+  if (is.factor(new)) new = as.character(new)
+  stopifnot(identical(unname(old), unname(new)))
+}
+# Derive a clean symmetric scale from the data, allowing five points of padding
+# where the theoretical -100..100 range permits it.
+role_all_main_limit = min(100, ceiling((max(abs(df.role.preference.all.summary$mean_pp)) + 5) / 10) * 10)
+role_all_ci_limit = max(role_all_main_limit,
+  ceiling(max(abs(c(df.role.preference.all.summary$lower_pp, df.role.preference.all.summary$upper_pp))) / 10) * 10)
+```
+
+The observed means range from `r round(min(df.role.preference.all.summary$mean_pp), 3)`
+to `r round(max(df.role.preference.all.summary$mean_pp), 3)` percentage points.
+The data-derived symmetric main range is therefore ±`r role_all_main_limit`%,
+with five major ticks. It is not inherited from a ±100% default. The separate
+CI backup shows every bound without clipping. Positive values favor Distal;
+negative values favor Proximal. Context colors/shapes/line types match the
+existing two-panel figure exactly.
+
+```{r role-preference-all-measures-plot, fig.width=22, fig.height=8.5}
+df.role.preference.all.plot = df.role.preference.all.summary %>%
+  transmute(panel = as.character(measure), series = as.character(condition), stage,
+            mean = mean_pp, lower = lower_pp, upper = upper_pp,
+            reveal_step = if_else(stage == "Adults", 4L, match(condition, talk_v2_contexts$order)))
+plot_role_preference_all = function(step = 4L, with_ci = FALSE) {
+  limit = if (with_ci) role_all_ci_limit else role_all_main_limit
+  plot_causal_verbs_talk(df.role.preference.all.plot, measure_order, talk_v2_contexts,
+                         c(-limit, limit), seq(-limit, limit, length.out = 5),
+                         "Distal − Proximal\nendorsement (%)", 0, step, with_ci)
+}
+p.role.preference.all = save_presentation_v2_family(
+  plot_role_preference_all, "role_preference_all_measures_talk_v2", "role_preference_all_measures",
+  c("build00_blank", "build01_baseline_childhood", "build02_add_intentional_childhood",
+    "build03_add_accidental_childhood", "build04_add_adults_full"))
+p.role.preference.all$main
+p.role.preference.all$backup
+p.role.preference.all$builds[[1]]
+```
+
+```{r role-preference-all-measures-table}
+write_csv(df.role.preference.all.summary,
+          file.path(presentation_v2_output, "role_preference_all_measures_talk_v2_values.csv"))
+kable(select(df.role.preference.all.summary, study, stage, condition, measure, n, mean_pp, lower_pp, upper_pp),
+      digits = 4, caption = "All judgments: paired Distal-minus-Proximal mean and 95% CI (pp); participant N; CSV retains full precision")
+```
+
+## Single Cause: one-panel comparison of intention sensitivity
+
+This additional, preferred talk candidate overlays the four judgments in one
+panel. It reuses **all 12 existing Single Cause estimates and intervals**;
+no new scoring, resampling or participant selection occurs. Colors and outlined
+shapes represent measures, with solid lines for all four. The prior four-panel
+V2 figure remains available as a separate presentation option.
+
+Start from the observed means with five points of padding, rounded outward to
+multiples of 25. Expand that range only as needed for the existing interval
+bounds, then use the **same axes for the main, all builds and CI backup**.
+Main builds contain no intervals. Small fixed measure offsets separate nearby
+markers and their CI bars without changing any y-value. The broad childhood
+band includes both child groups and ends before Adults.
+
+```{r single-sensitivity-onepanel-plot, fig.width=22, fig.height=8.5}
+df.single.onepanel = df.v2.sensitivity %>% mutate(panel = "Single Cause")
+single_onepanel_main_limits = c(
+  floor((min(df.single.onepanel$mean) - 5) / 25) * 25,
+  ceiling((max(df.single.onepanel$mean) + 5) / 25) * 25)
+single_onepanel_ci_limits = c(
+  min(single_onepanel_main_limits[1], floor(min(df.single.onepanel$lower) / 5) * 5),
+  max(single_onepanel_main_limits[2], ceiling(max(df.single.onepanel$upper) / 5) * 5))
+single_onepanel_offsets = c(Caused = -.045, Lexical = -.015, Fault = .015, Punish = .045)
+plot_single_sensitivity_onepanel = function(step = 5L, with_ci = FALSE) {
+  plot_causal_verbs_talk(df.single.onepanel, "Single Cause", talk_v2_measures,
+                         single_onepanel_ci_limits,
+                         seq(single_onepanel_main_limits[1], single_onepanel_main_limits[2], 25),
+                         "Intentional −\nAccidental (%)", 0, step, with_ci,
+                         x_offsets = single_onepanel_offsets)
+}
+p.single.onepanel = save_presentation_v2_family(
+  plot_single_sensitivity_onepanel, "single_cause_intention_sensitivity_onepanel_talk_v3",
+  "single_cause_intention_sensitivity_onepanel",
+  c("build00_blank", "build01_caused_childhood", "build02_add_lexical_childhood",
+    "build03_add_fault_childhood", "build04_add_punish_childhood", "build05_add_adults_full"))
+p.single.onepanel$main
+p.single.onepanel$backup
+p.single.onepanel$builds[[1]]
+```
+
+Observed Single Cause sensitivity ranges from
+`r round(min(df.single.onepanel$mean), 3)` to `r round(max(df.single.onepanel$mean), 3)`
+percentage points. Both main and backup use a `r single_onepanel_ci_limits[1]`%
+to `r single_onepanel_ci_limits[2]`% range: the existing −25.320513 lower CI
+bound requires the small extension below the −25% major tick. There is no
+geometry shift when swapping main and backup.
+
+```{r single-sensitivity-onepanel-table}
+onepanel_source = file.path(presentation_v2_output, "single_cause_intention_sensitivity_talk_v2_values.csv")
+onepanel_destination = file.path(presentation_v2_output, "single_cause_intention_sensitivity_onepanel_talk_v3_values.csv")
+stopifnot(file.copy(onepanel_source, onepanel_destination, overwrite = TRUE),
+          identical(readLines(onepanel_source), readLines(onepanel_destination)),
+          identical(df.single.onepanel$mean, df.v2.sensitivity$mean),
+          identical(df.single.onepanel$lower, df.v2.sensitivity$lower),
+          identical(df.single.onepanel$upper, df.v2.sensitivity$upper))
+kable(select(df.single.sensitivity.summary, stage, measure, n_Intentional, n_Accidental, mean_pp, lower_pp, upper_pp),
+      digits = 4, caption = "Single Cause: unchanged Intentional-minus-Accidental mean and 95% CI (pp); participant Ns")
+stopifnot(check_presentation_builds(p.role.preference.all, c(0L, 8L, 16L, 24L, 36L)),
+          check_presentation_builds(p.single.onepanel, c(0L, 2L, 4L, 6L, 8L, 12L)))
 ```
 
 # Compact validation tables and checks
@@ -3060,6 +3258,14 @@ stopifnot(check_candidate_versions(p.punishment.horizontal, p.punishment.horizon
 punishment_connectors = ggplot_build(p.punishment.horizontal)$data[[2]]
 stopifnot(nrow(punishment_connectors) == 9L,
           all(punishment_connectors$y == punishment_connectors$yend))
+```
+
+The additional all-measure and one-panel families also keep identical geometry
+between their main and CI versions; only uncertainty layers differ.
+
+```{r additional-synthesis-main-ci-identity}
+stopifnot(check_candidate_versions(p.role.preference.all$main, p.role.preference.all$backup, 36L),
+          check_candidate_versions(p.single.onepanel$main, p.single.onepanel$backup, 12L))
 ```
 
 ## Environment and remaining questions

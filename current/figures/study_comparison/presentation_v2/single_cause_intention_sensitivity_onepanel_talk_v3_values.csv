@@ -1,0 +1,13 @@
+study,stage,contrast,measure,eligible_n_Intentional,eligible_n_Accidental,n_Intentional,n_Accidental,yes_mean_Intentional,yes_mean_Accidental,mean_pp,lower_pp,upper_pp
+Single Cause,3–4,Intentional minus Accidental,Caused,24,26,24,26,0.625,0.4807692307692307,14.423076923076927,-8.012820512820518,37.5
+Single Cause,3–4,Intentional minus Accidental,Lexical,24,26,24,26,0.8125,0.9230769230769231,-11.057692307692314,-25.320512820512818,1.2820512820512775
+Single Cause,3–4,Intentional minus Accidental,Fault,24,26,24,26,0.7291666666666666,0.6923076923076923,3.685897435897434,-16.830929487179482,25.16426282051276
+Single Cause,3–4,Intentional minus Accidental,Punish,24,26,24,26,0.6041666666666666,0.5769230769230769,2.724358974358976,-20.993589743589737,25.961538461538463
+Single Cause,5–6,Intentional minus Accidental,Caused,26,20,26,20,0.9230769230769231,0.45,47.307692307692314,26.730769230769226,67.88461538461539
+Single Cause,5–6,Intentional minus Accidental,Lexical,26,20,26,20,0.8461538461538461,0.875,-2.8846153846153855,-18.08173076923076,12.884615384615383
+Single Cause,5–6,Intentional minus Accidental,Fault,26,20,26,20,0.8653846153846154,0.5,36.53846153846154,13.846153846153852,59.03846153846154
+Single Cause,5–6,Intentional minus Accidental,Punish,26,20,26,20,0.8076923076923077,0.375,43.269230769230774,22.302884615384617,63.26923076923077
+Single Cause,Adults,Intentional minus Accidental,Caused,16,16,16,16,0.96875,0.875,9.375,-3.125,25
+Single Cause,Adults,Intentional minus Accidental,Lexical,16,16,16,16,0.96875,0.96875,0,-9.375,9.375
+Single Cause,Adults,Intentional minus Accidental,Fault,16,16,16,16,0.9375,0.5625,37.5,12.5,62.5
+Single Cause,Adults,Intentional minus Accidental,Punish,16,16,16,16,0.9375,0.03125,90.625,81.25,100
