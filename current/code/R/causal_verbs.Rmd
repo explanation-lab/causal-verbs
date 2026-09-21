@@ -3062,13 +3062,16 @@ encodes context rather than intention condition or judgment.
 
 Main, CI backup and every build share one y scale derived from all means and
 intervals. Main/build versions omit CIs. Build 00 is the full blank scaffold;
-01 adds Single Cause childhood, 02 adds Chain: Distal childhood, 03 adds
-Chain: Proximal childhood, and 04 adds all Adults. Earlier marks never move.
+01 adds Single Cause childhood, 02 adds Chain: Proximal childhood, 03 adds
+Chain: Distal childhood, and 04 adds all Adults. Earlier marks never move.
 
 ```{r context-sensitivity-plot, fig.width=22, fig.height=8.5}
+# This family uses the same order for its legend and childhood reveals.
+# Named color/shape/line mappings stay attached to their original contexts.
+context_sensitivity_order = c("Single Cause", "Chain: Proximal", "Chain: Distal")
 context_sensitivity_colors = setNames(unname(synthesis_colors), stage_target_order)
 context_sensitivity_style = list(
-  order = stage_target_order, colors = context_sensitivity_colors, fills = context_sensitivity_colors,
+  order = context_sensitivity_order, colors = context_sensitivity_colors, fills = context_sensitivity_colors,
   shapes = setNames(c(22, 21, 24), stage_target_order),
   lines = setNames(c("dotted", "solid", "dashed"), stage_target_order))
 context_sensitivity_limits = c(
@@ -3081,7 +3084,7 @@ context_sensitivity_breaks = seq(ceiling(context_sensitivity_limits[1] / 25) * 2
 df.context.sensitivity.plot = df.context.sensitivity.summary %>%
   transmute(panel = as.character(measure), series = as.character(context), stage,
             mean = mean_pp, lower = lower_pp, upper = upper_pp,
-            reveal_step = if_else(stage == "Adults", 4L, match(context, stage_target_order)))
+            reveal_step = if_else(stage == "Adults", 4L, match(context, context_sensitivity_order)))
 plot_context_sensitivity = function(step = 4L, with_ci = FALSE) {
   plot_causal_verbs_talk(df.context.sensitivity.plot, measure_order, context_sensitivity_style,
                          context_sensitivity_limits, context_sensitivity_breaks,
@@ -3090,8 +3093,8 @@ Accidental (%)", 0, step, with_ci)
 }
 p.context.sensitivity = save_presentation_v2_family(
   plot_context_sensitivity, "intention_sensitivity_across_contexts_talk_v1", "intention_sensitivity_across_contexts",
-  c("build00_blank", "build01_single_cause_childhood", "build02_add_chain_distal_childhood",
-    "build03_add_chain_proximal_childhood", "build04_add_adults_full"))
+  c("build00_blank", "build01_single_cause_childhood", "build02_add_chain_proximal_childhood",
+    "build03_add_chain_distal_childhood", "build04_add_adults_full"))
 p.context.sensitivity$main
 p.context.sensitivity$backup
 p.context.sensitivity$builds[[1]]

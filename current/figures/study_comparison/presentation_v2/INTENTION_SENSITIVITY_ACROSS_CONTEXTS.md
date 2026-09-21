@@ -1,6 +1,6 @@
 # Intention sensitivity across causal contexts
 
-This new companion to [all-measure role preference](ADDITIONAL_SYNTHESES.md#four-measure-role-preference) plots **Intentional − Accidental Yes endorsement**, in percentage points. The four panels are Caused, Lexical, Fault and Punish; each contains Single Cause, Chain: Distal and Chain: Proximal trajectories across 3–4, 5–6 and Adults. Study 1 is not included because it does not manipulate intention.
+This new companion to [all-measure role preference](ADDITIONAL_SYNTHESES.md#four-measure-role-preference) plots **Intentional − Accidental Yes endorsement**, in percentage points. The four panels are Caused, Lexical, Fault and Punish; each contains Single Cause, Chain: Proximal and Chain: Distal trajectories across 3–4, 5–6 and Adults. Study 1 is not included because it does not manipulate intention.
 
 The [existing R Markdown workflow](../../../code/R/causal_verbs.Rmd) generates these additional outputs. No earlier figure, build or numerical CSV is replaced.
 
@@ -12,7 +12,7 @@ The [existing R Markdown workflow](../../../code/R/causal_verbs.Rmd) generates t
 
 Both versions use the all-measure companion's **22 × 8.5-inch** presentation canvas, 44 pt ticks/panel titles, 47⅔ pt y title, 42⅙ pt centered legend, 2.1 mm trajectories and large black-outlined markers. PDFs are vector graphics; PNGs are 5280 × 2040 at 240 dpi. Childhood shading ends at the second child tick, before Adults. Every panel has a strong black dashed zero line.
 
-The established causal-context palette is retained: Single Cause uses gray filled squares/dotted lines, Chain: Distal red filled circles/solid lines, and Chain: Proximal blue filled triangles/dashed lines. Colors encode context, not intention condition or judgment. Positive values mean more Yes under Intentional; negative values mean more Yes under Accidental.
+The established causal-context palette is retained: Single Cause uses gray filled squares/dotted lines, Chain: Proximal blue filled triangles/dashed lines, and Chain: Distal red filled circles/solid lines. The legend follows that same order. Colors encode context, not intention condition or judgment. Positive values mean more Yes under Intentional; negative values mean more Yes under Accidental.
 
 All main/CI/build outputs share a **-60% to 100%** y range, derived from the means and all CI bounds, with ticks every 25 percentage points. No interval is clipped.
 
@@ -50,14 +50,14 @@ Study 2 adults remain the earlier 41-person pilot (20 Intentional, 21 Accidental
 
 ## Cumulative talk builds
 
-The blank scaffold includes all panels, axes, childhood shading, reference lines and the complete legend. Childhood contexts enter one at a time; Adults and their connecting segments appear last. Main and build figures contain no CIs. All earlier marks and all layout geometry stay fixed. The final build is byte-for-byte identical to the full main PDF and PNG.
+The blank scaffold includes all panels, axes, childhood shading, reference lines and the complete legend. Childhood contexts enter Single Cause → Chain: Proximal → Chain: Distal; Adults and their connecting segments appear last. Main and build figures contain no CIs. All earlier marks and all layout geometry stay fixed. The final build is byte-for-byte identical to the full main PDF and PNG.
 
 | Build | PDF | PNG |
 | --- | --- | --- |
 | build00_blank | [PDF](builds/intention_sensitivity_across_contexts/build00_blank.pdf) | [PNG](builds/intention_sensitivity_across_contexts/build00_blank.png) |
 | build01_single_cause_childhood | [PDF](builds/intention_sensitivity_across_contexts/build01_single_cause_childhood.pdf) | [PNG](builds/intention_sensitivity_across_contexts/build01_single_cause_childhood.png) |
-| build02_add_chain_distal_childhood | [PDF](builds/intention_sensitivity_across_contexts/build02_add_chain_distal_childhood.pdf) | [PNG](builds/intention_sensitivity_across_contexts/build02_add_chain_distal_childhood.png) |
-| build03_add_chain_proximal_childhood | [PDF](builds/intention_sensitivity_across_contexts/build03_add_chain_proximal_childhood.pdf) | [PNG](builds/intention_sensitivity_across_contexts/build03_add_chain_proximal_childhood.png) |
+| build02_add_chain_proximal_childhood | [PDF](builds/intention_sensitivity_across_contexts/build02_add_chain_proximal_childhood.pdf) | [PNG](builds/intention_sensitivity_across_contexts/build02_add_chain_proximal_childhood.png) |
+| build03_add_chain_distal_childhood | [PDF](builds/intention_sensitivity_across_contexts/build03_add_chain_distal_childhood.pdf) | [PNG](builds/intention_sensitivity_across_contexts/build03_add_chain_distal_childhood.png) |
 | build04_add_adults_full | [PDF](builds/intention_sensitivity_across_contexts/build04_add_adults_full.pdf) | [PNG](builds/intention_sensitivity_across_contexts/build04_add_adults_full.png) |
 
 ## Reproduce and validate
