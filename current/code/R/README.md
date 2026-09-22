@@ -1,12 +1,14 @@
 # R analysis
 
+The [Study 1 causal-role differentiation synthesis](../../figures/study1_baseline_causal_chains/role_differentiation/README.md) adds a developmental comparison with distal fault/punishment preference and a participant-level relationship backup. It uses the unchanged baseline sample and reports exploratory associations with categorical age adjustment.
+
 The [intention-sensitivity companion](../../figures/study_comparison/presentation_v2/INTENTION_SENSITIVITY_ACROSS_CONTEXTS.md) compares Intentional-minus-Accidental effects across Single Cause and both chain roles in four presentation panels. It reuses validated participant means, preserves existing Single Cause intervals, and includes a separate CI backup and cumulative builds.
 
 The [additional presentation syntheses](../../figures/study_comparison/presentation_v2/ADDITIONAL_SYNTHESES.md) add four-measure role preference and a one-panel Single Cause sensitivity candidate. Their 30 PDF/PNG outputs, 11 builds and two numerical CSVs are indexed separately; all previous figures remain byte-for-byte unchanged. The existing participant-first calculations and shared presentation helper are reused.
 
 [causal_verbs.Rmd](causal_verbs.Rmd) is the shared descriptive workflow for verbal causal-chain Studies 1 and 2 and the Single Cause adult/child comparison. R Markdown combines explanations, R code, tables and figures in one document. The [HTML report](causal_verbs.html) includes the inclusion flow, repeated-session audit, sample sizes, response patterns, pilot comparison, directly verified plotted means and Ns, and plotting checks.
 
-This is a **new reproducible reconstruction**, not recovered original analysis code. It does not fit inferential models or establish that the original figures have been reproduced. Study 3 analysis and the historical Single Cause adult N=30 subset remain unresolved.
+This is a **new reproducible reconstruction**, not recovered original analysis code. The Study 1 role-differentiation extension includes exploratory association models; this workflow does not establish that the original figures have been reproduced. Study 3 analysis and the historical Single Cause adult N=30 subset remain unresolved.
 
 ## Run the workflow
 

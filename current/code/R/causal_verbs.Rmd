@@ -22,8 +22,9 @@ in both studies. The historical Single Cause N=30 subset remains unidentified.
 Three additional stage-grouped synthesis figures show punishment by causal
 target, all four Single Cause judgments, and Caused/Lexical role mapping in
 Studies 1 and 2. They display raw Yes proportions at ages 3–4, 5–6 and Adults.
-This workflow prepares descriptive summaries and cumulative talk figures,
-without fitting models or testing hypotheses.
+This workflow prepares descriptive summaries and cumulative talk figures.
+The new Study 1 role-differentiation synthesis additionally fits exploratory
+participant-level associations, with and without categorical age adjustment.
 
 **This is a new reproducible reconstruction from available data and documented
 design, not recovered original analysis code.** The old verbal plotting scripts
@@ -291,7 +292,8 @@ participant_means = function(responses) {
 Each input row is already one participant's mean for a measure and causal role.
 Within each plotted age/role/condition group, resample those participants with replacement 5,000
 times. The 2.5th and 97.5th percentiles form the descriptive 95% interval. We do
-not resample trial rows, pool pilots, fit developmental curves, or run tests.
+not resample trial rows or pool pilots. The later Study 1 relationship section
+separately fits exploratory associations and bootstraps their slopes.
 Family/household dependence is not modeled by these participant intervals.
 
 ```{r bootstrap-helper}
@@ -3117,6 +3119,303 @@ The plot preserves these departures rather than assuming intention has little
 effect on every lexical judgment. Pointwise CIs are descriptive and do not test
 the ranking of measures or contexts. Study 2's missing main adult dataset and
 Single Cause's unidentified historical adult exclusions remain unresolved.
+
+# Study 1: causal-role differentiation and distal responsibility
+
+This additional synthesis uses **Study 1 Baseline only**, with the same retained
+211 children (ages 3–9) and 100 adults as the raw Yes plots. It asks whether the
+expected causal-role distinction accompanies distal fault and punishment
+preferences. It does not change participant selection, binary coding or any
+previous figure. These exploratory analyses use the uncapped descriptive
+snapshot; they are not a recovered or finalized preregistered analysis.
+
+## Participant scores and age summaries
+
+Average available scenarios within each participant × measure × role first,
+using the existing `df.study1.means` table. Then calculate:
+
+- **Causal-role differentiation** = [(Caused Distal − Proximal) +
+  (Lexical Proximal − Distal)] / 2.
+- **Fault distal preference** = Fault Distal − Proximal.
+- **Punish distal preference** = Punish Distal − Proximal.
+
+The composite weights Caused and Lexical equally. A missing component makes
+that score missing; we never substitute zero or average only one half of the
+composite. Each responsibility relationship requires its outcome and the
+composite, without requiring the other responsibility outcome. In this snapshot
+all participants have two scenarios for every component, so no one is lost.
+Both-Yes and neither-Yes judgments both give a zero role contrast and remain
+included. Scores range from -100 to 100 percentage points; percentage tick
+labels denote these contrasts, not a new relative-attribution transformation.
+
+```{r study1-role-responsibility-scores}
+role_responsibility_output = "../../figures/study1_baseline_causal_chains/role_differentiation"
+dir.create(role_responsibility_output, recursive = TRUE, showWarnings = FALSE)
+role_responsibility_order = c("Causal-role differentiation", "Fault distal preference", "Punish distal preference")
+role_responsibility_colors = c("Causal-role differentiation" = "#666666",
+                               "Fault distal preference" = measure_colors[["Fault"]],
+                               "Punish distal preference" = measure_colors[["Punish"]])
+role_responsibility_shapes = setNames(c(21, 22, 23), role_responsibility_order)
+
+stopifnot(all(df.study1.means$study == "Study 1"),
+          all(df.study1.means$condition == "Baseline"),
+          all(df.study1.means$scenarios_available == 2L))
+df.study1.role.scores = df.study1.means %>%
+  select(population, participant, age, measure, role, yes_mean) %>%
+  pivot_wider(names_from = c(measure, role), values_from = yes_mean) %>%
+  mutate(age_group = factor(if_else(population == "Adults", "Adult", as.character(age)),
+                            levels = age_labels),
+         differentiation = ((Caused_Distal - Caused_Proximal) +
+                            (Lexical_Proximal - Lexical_Distal)) / 2,
+         fault_preference = Fault_Distal - Fault_Proximal,
+         punish_preference = Punish_Distal - Punish_Proximal) %>%
+  arrange(age_group, participant)
+stopifnot(nrow(df.study1.role.scores) == 311L,
+          !anyDuplicated(df.study1.role.scores[c("population", "participant")]),
+          !anyNA(select(df.study1.role.scores, differentiation, fault_preference, punish_preference)))
+df.study1.role.long = df.study1.role.scores %>%
+  select(population, participant, age_group, differentiation, fault_preference, punish_preference) %>%
+  pivot_longer(c(differentiation, fault_preference, punish_preference),
+               names_to = "score_key", values_to = "score") %>%
+  mutate(series = factor(role_responsibility_order[
+    match(score_key, c("differentiation", "fault_preference", "punish_preference"))],
+    levels = role_responsibility_order))
+set.seed(bootstrap_seed + 20L)
+df.study1.role.development = df.study1.role.long %>%
+  arrange(age_group, series, participant) %>% group_by(population, age_group, series) %>%
+  summarise(summary = list(bootstrap_mean(score)), .groups = "drop") %>%
+  unnest_wider(summary) %>%
+  mutate(x = if_else(age_group == "Adult", comparison_adult_position,
+                     as.numeric(as.character(replace(age_group, age_group == "Adult", NA)))),
+         mean_pp = 100 * mean, lower_pp = 100 * lower, upper_pp = 100 * upper) %>%
+  arrange(age_group, series)
+stopifnot(nrow(df.study1.role.development) == 24L,
+          all(dplyr::between(df.study1.role.long$score, -1, 1)))
+write_csv(select(df.study1.role.development, population, age_group, series, n, mean_pp, lower_pp, upper_pp),
+          file.path(role_responsibility_output, "study1_role_differentiation_development_values.csv"))
+kable(select(df.study1.role.development, age_group, series, n, mean_pp, lower_pp, upper_pp),
+      digits = 3, caption = "Study 1: participant-weighted means and 95% bootstrap intervals (percentage points)")
+```
+
+The main plot has three child trajectories and separate Adult reference points.
+Adult is a category, not age 10 or an additional within-child measurement.
+Childhood shading, large outlined markers, thick solid lines and measure colors
+follow the existing talk style. Light intervals are 5,000-draw participant
+bootstrap 95% CIs, calculated separately for each age and score. They describe
+uncertainty in each mean, not tests of differences between trajectories.
+
+```{r study1-role-responsibility-development, fig.width=17, fig.height=10}
+role_responsibility_limits = c(
+  min(-25, floor(min(df.study1.role.development$lower_pp) / 25) * 25),
+  max(25, ceiling(max(df.study1.role.development$upper_pp) / 25) * 25))
+role_responsibility_labels = setNames(
+  c("Causal-role\ndifferentiation", "Fault distal\npreference", "Punish distal\npreference"),
+  role_responsibility_order)
+role_responsibility_theme = theme_causal_verbs_talk() +
+  theme(axis.text = element_text(size = 32), axis.title = element_text(size = 34),
+        strip.text = element_text(size = 34), legend.text = element_text(size = 28),
+        plot.title = element_text(size = 36, face = "bold", margin = margin(b = 16)),
+        plot.subtitle = element_text(size = 22, margin = margin(b = 20)),
+        plot.caption = element_text(size = 17, hjust = 0, margin = margin(t = 15)))
+p.study1.role.development = ggplot(df.study1.role.development,
+                                  aes(x = x, y = mean_pp, group = series)) +
+  annotate("rect", xmin = -Inf, xmax = 9.25, ymin = -Inf, ymax = Inf,
+           fill = talk_v2$childhood_fill, color = NA) +
+  geom_hline(yintercept = 0, linewidth = talk_v2$reference_width, linetype = "dashed") +
+  geom_linerange(aes(ymin = lower_pp, ymax = upper_pp, color = series),
+                linewidth = .85, alpha = .55, show.legend = FALSE) +
+  geom_line(data = filter(df.study1.role.development, population == "Children"),
+            aes(color = series), linewidth = talk_v2$line_width) +
+  geom_point(aes(fill = series, shape = series), color = "black", size = 6.8, stroke = 1.25) +
+  scale_color_manual(NULL, values = role_responsibility_colors, labels = role_responsibility_labels) +
+  scale_fill_manual(NULL, values = role_responsibility_colors, labels = role_responsibility_labels) +
+  scale_shape_manual(NULL, values = role_responsibility_shapes, labels = role_responsibility_labels) +
+  scale_x_continuous(breaks = c(child_ages, comparison_adult_position), labels = age_labels,
+                     expand = expansion(add = .35)) +
+  scale_y_continuous(limits = role_responsibility_limits,
+                     breaks = seq(role_responsibility_limits[1], role_responsibility_limits[2], 25),
+                     labels = function(x) paste0(x, "%"), expand = expansion(add = 3)) +
+  labs(x = "Age", y = "Preference /\ndifferentiation score (%)",
+       title = "Causal roles and distal responsibility", subtitle = "Study 1 baseline",
+       caption = "Means and 95% participant-bootstrap CIs. Adult is a separate reference group.") +
+  role_responsibility_theme
+save_presentation_v2(p.study1.role.development,
+                    file.path(role_responsibility_output, "study1_role_differentiation_development_talk_v1"),
+                    width = 17, height = 10)
+p.study1.role.development
+```
+
+## Direct relationships and adjustment for age
+
+The backup shows all participants, with separate Fault and Punish panels.
+Each plotted point is one participant; small, fixed-seed jitter (at most 3
+percentage points on either axis) reveals coincident discrete scores. Only the
+rendered points are jittered: fits, exported values and all analyses use exact
+scores. Circles identify children and triangles identify adults. The colored
+line is the pooled, unadjusted ordinary least-squares fit within each panel.
+It does not imply an age-adjusted or causal effect.
+
+We separately fit `responsibility ~ differentiation` and
+`responsibility ~ differentiation + age_group`. The **children-only** models
+address the childhood question; the combined models show whether the association
+also holds with the Adult reference group included. Age is categorical (3–9,
+plus Adult in the combined model), allowing each group its own intercept without
+inventing a chronological adult age or imposing linear age effects. The adjusted
+slope is a common within-age association, not a test of age-varying slopes.
+
+Slope CIs resample whole participants **within age group**, retaining age-group
+sample sizes, 5,000 times. The table expresses the outcome difference in
+percentage points for a **25-point increase in causal-role differentiation**.
+Intervals are exploratory, unadjusted for multiple comparisons and conditional
+on participant independence; household dependence is not modeled. Temporal or
+causal claims cannot follow from this cross-sectional association.
+
+```{r study1-role-responsibility-models}
+df.study1.role.relationship = df.study1.role.scores %>%
+  select(population, participant, age_group, differentiation, fault_preference, punish_preference) %>%
+  pivot_longer(c(fault_preference, punish_preference), names_to = "outcome_key",
+               values_to = "responsibility") %>%
+  mutate(measure = factor(if_else(outcome_key == "fault_preference", "Fault", "Punish"),
+                         levels = c("Fault", "Punish")),
+         differentiation_pp = 100 * differentiation, responsibility_pp = 100 * responsibility) %>%
+  filter(!is.na(differentiation), !is.na(responsibility))
+
+# With age-group intercepts, the slope is the regression of age-centered scores.
+# This also makes participant bootstrapping easy to read without refitting many lm objects.
+role_relationship_slope = function(data, adjusted) {
+  x = data$differentiation
+  y = data$responsibility
+  if (adjusted) {
+    x = x - ave(x, data$age_group, FUN = mean)
+    y = y - ave(y, data$age_group, FUN = mean)
+  } else {
+    x = x - mean(x)
+    y = y - mean(y)
+  }
+  if (sum(x^2) == 0) return(NA_real_)
+  sum(x * y) / sum(x^2)
+}
+
+set.seed(bootstrap_seed + 21L)
+role_relationship_results = list()
+for (sample_name in c("Children", "Children and adults")) {
+  for (outcome in c("Fault", "Punish")) {
+    data = df.study1.role.relationship %>% filter(measure == outcome) %>%
+      filter(sample_name == "Children and adults" | population == "Children") %>%
+      arrange(age_group, participant) %>% mutate(age_group = droplevels(age_group))
+    age_rows = split(seq_len(nrow(data)), data$age_group)
+    fits = list(Unadjusted = lm(responsibility ~ differentiation, data = data),
+                `Age-group adjusted` = lm(responsibility ~ differentiation + age_group, data = data))
+    # One draw keeps the participant's predictor and outcome together.
+    draws = replicate(bootstrap_replicates, {
+      rows = unlist(lapply(age_rows, function(index) sample(index, length(index), replace = TRUE)),
+                    use.names = FALSE)
+      sampled = data[rows, ]
+      c(role_relationship_slope(sampled, FALSE), role_relationship_slope(sampled, TRUE))
+    })
+    stopifnot(!anyNA(draws))
+    for (j in seq_along(fits)) {
+      slope = unname(coef(fits[[j]])[["differentiation"]])
+      stopifnot(abs(slope - role_relationship_slope(data, j == 2L)) < 1e-10)
+      interval = unname(quantile(draws[j, ], c(.025, .975)))
+      role_relationship_results[[length(role_relationship_results) + 1L]] = tibble(
+        sample = sample_name, measure = outcome, model = names(fits)[j], n = nrow(data),
+        age_groups = nlevels(data$age_group), slope = slope,
+        slope_lower = interval[1], slope_upper = interval[2],
+        effect_per_25pp = 25 * slope, lower_per_25pp = 25 * interval[1], upper_per_25pp = 25 * interval[2],
+        bootstrap_replicates = bootstrap_replicates)
+    }
+  }
+}
+df.study1.role.models = bind_rows(role_relationship_results)
+write_csv(df.study1.role.models, file.path(role_responsibility_output, "study1_role_differentiation_relationship_models.csv"))
+# Exact joint score frequencies reproduce the scatter and models without exporting participant IDs.
+df.study1.role.joint = df.study1.role.relationship %>%
+  count(population, age_group, measure, differentiation_pp, responsibility_pp, name = "participants")
+write_csv(df.study1.role.joint, file.path(role_responsibility_output, "study1_role_differentiation_relationship_values.csv"))
+kable(select(df.study1.role.models, sample, measure, model, n, effect_per_25pp, lower_per_25pp, upper_per_25pp),
+      digits = 3, caption = "Outcome difference (pp) per 25-point differentiation increase; age-stratified participant-bootstrap 95% CI")
+```
+
+```{r study1-role-responsibility-scatter, fig.width=17, fig.height=9}
+p.study1.role.relationship = ggplot(df.study1.role.relationship,
+                                   aes(x = differentiation_pp, y = responsibility_pp)) +
+  geom_hline(yintercept = 0, linewidth = .7, linetype = "dashed", color = "#666666") +
+  geom_vline(xintercept = 0, linewidth = .5, linetype = "dotted", color = "#AAAAAA") +
+  geom_point(aes(fill = measure, shape = population), color = "black", stroke = .45,
+             size = 3.4, alpha = .35,
+             position = position_jitter(width = 3, height = 3, seed = bootstrap_seed + 22L)) +
+  geom_smooth(aes(color = measure), method = "lm", formula = y ~ x, se = FALSE,
+              linewidth = 1.8, show.legend = FALSE) +
+  facet_wrap(~ measure, nrow = 1) +
+  scale_color_manual(values = measure_colors[c("Fault", "Punish")], guide = "none") +
+  scale_fill_manual(values = measure_colors[c("Fault", "Punish")], guide = "none") +
+  scale_shape_manual(NULL, values = c(Children = 21, Adults = 24), breaks = c("Children", "Adults")) +
+  guides(shape = guide_legend(override.aes = list(fill = "#999999", alpha = 1, size = 4.5))) +
+  scale_x_continuous(breaks = seq(-100, 100, 50), labels = function(x) paste0(x, "%")) +
+  scale_y_continuous(breaks = seq(-100, 100, 50), labels = function(x) paste0(x, "%")) +
+  coord_cartesian(xlim = c(-108, 108), ylim = c(-108, 108), expand = FALSE) +
+  labs(x = "Causal-role differentiation (%)", y = "Distal responsibility\npreference (%)",
+       title = "Causal differentiation and distal responsibility",
+       subtitle = "Study 1 baseline: participant scores and pooled linear fits",
+       caption = "Display-only jitter: up to 3 pp. Fits use exact scores; age-adjusted estimates are reported separately.") +
+  role_responsibility_theme + theme(axis.text = element_text(size = 25), legend.text = element_text(size = 25),
+                                  panel.spacing = grid::unit(2.2, "cm"))
+save_presentation_v2(p.study1.role.relationship,
+                    file.path(role_responsibility_output, "study1_role_differentiation_relationship_backup_v1"),
+                    width = 17, height = 9)
+p.study1.role.relationship
+```
+
+## Independent scoring and output checks
+
+Recalculate scores directly from the binary responses using signed role weights,
+without the participant-mean table or the wide-score formulas above. Complete
+paired scenarios make the independent trial-based calculation equivalent. Verify
+all participant scores, displayed means, participant counts and model slopes.
+
+```{r study1-role-responsibility-checks}
+df.study1.role.direct = bind_rows(df.study1.adults.responses, df.study1.children.responses) %>%
+  mutate(signed_yes = endorsed * if_else((measure == "Lexical" & role == "Proximal") |
+                                        (measure != "Lexical" & role == "Distal"), 1, -1),
+         score_key = case_when(measure %in% c("Caused", "Lexical") ~ "differentiation",
+                               measure == "Fault" ~ "fault_preference", TRUE ~ "punish_preference")) %>%
+  group_by(population, participant, score_key) %>%
+  summarise(checked_score = 2 * mean(signed_yes), .groups = "drop") %>%
+  left_join(select(df.study1.role.long, population, participant, score_key, score),
+            by = c("population", "participant", "score_key"), relationship = "one-to-one")
+stopifnot(nrow(df.study1.role.direct) == 933L,
+          all(abs(df.study1.role.direct$checked_score - df.study1.role.direct$score) < 1e-12),
+          sum(df.study1.role.joint$participants) == 622L,
+          nrow(ggplot_build(p.study1.role.development)$data[[5]]) == 24L,
+          nrow(ggplot_build(p.study1.role.relationship)$data[[3]]) == 622L)
+# The composite group mean must equal the equally weighted Caused and reversed Lexical gaps.
+df.study1.role.mean.check = df.study1.summary %>%
+  select(age_group, measure, role, mean) %>%
+  pivot_wider(names_from = c(measure, role), values_from = mean) %>%
+  mutate(expected = 100 * ((Caused_Distal - Caused_Proximal) +
+                          (Lexical_Proximal - Lexical_Distal)) / 2) %>%
+  left_join(filter(df.study1.role.development, series == "Causal-role differentiation") %>%
+              select(age_group, mean_pp), by = "age_group", relationship = "one-to-one")
+stopifnot(nrow(df.study1.role.mean.check) == 8L,
+          all(abs(df.study1.role.mean.check$expected - df.study1.role.mean.check$mean_pp) < 1e-10))
+```
+
+The participant-level association is positive for both outcomes, including after
+age-group adjustment. For children, each 25-point increase in differentiation
+corresponds to `r round(df.study1.role.models$effect_per_25pp[2], 1)` points more
+distal Fault preference (95% CI `r round(df.study1.role.models$lower_per_25pp[2], 1)`
+to `r round(df.study1.role.models$upper_per_25pp[2], 1)`) and
+`r round(df.study1.role.models$effect_per_25pp[4], 1)` points more distal Punish
+preference (95% CI `r round(df.study1.role.models$lower_per_25pp[4], 1)` to
+`r round(df.study1.role.models$upper_per_25pp[4], 1)`). The combined-sample
+age-adjusted intervals also exclude zero. These results support an association
+beyond age-group differences; they do not establish developmental causation.
+
+The three childhood trajectories broadly rise but do not move in lockstep:
+Fault and Punish dip at age 9, and Adult causal-role differentiation is lower
+than that of children aged 6–9 while adult distal responsibility remains high.
+Thus the adult endpoint does not follow a simple parallel-increase account.
 
 # Compact validation tables and checks
 
