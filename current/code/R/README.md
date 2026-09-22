@@ -1,5 +1,7 @@
 # R analysis
 
+The [extended developmental comparison and age-adjusted analyses](../../figures/study_comparison/role_differentiation_age_adjusted/README.md) add three new figures: ages 3–9 plus Adult with bootstrap CIs, and children-only Study 1/Study 2 responsibility relationships adjusted for numeric age. Existing figures and the earlier categorical-age models remain unchanged.
+
 The [Fault/Punish differentiation-and-intention figure](../../figures/study_comparison/role_differentiation_intention_effects/README.md) adds two panels for ages 3–6 and Adult. Each repeats the Study 1 causal-role reference alongside Single Cause and Chain: Distal intention effects. Existing outputs are preserved.
 
 The [matched role-differentiation figure and new Study 1 builds](../../figures/study_comparison/role_differentiation/README.md) compare Baseline, Accidental and Intentional on common axes. Each family has a blank scaffold and four cumulative reveals, with adults last; prior outputs are preserved.

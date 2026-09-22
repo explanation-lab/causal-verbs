@@ -3884,6 +3884,426 @@ The same existing source samples and limitations apply: Study 2 adults are the
 recovered adults, while its historical N=30 subset remains unidentified. No
 participant inclusion rule or unresolved scientific handoff conclusion changes.
 
+# Extended development and age-adjusted responsibility relationships
+
+These three new figures preserve all existing outputs and use the same screened
+participant means and role scores. The developmental extension includes ages
+3–9 and Adult for Study 1 differentiation and Chain: Distal intention effects.
+Single Cause child **pilot** data cover only ages 3–6; its Adult point is separate.
+The two relationship analyses use **children only**: Study 1 N=211 and Study 2
+N=406 (200 Accidental, 206 Intentional).
+
+## Extend the developmental comparison without changing existing estimates
+
+Reuse all previously computed means and intervals. Only Chain: Distal effects
+at ages 7–9 require new bootstrap draws. The reference remains the Study 1
+participant composite `((Caused Distal - Proximal) + (Lexical Proximal - Distal)) / 2`.
+The colored series are Yes-proportion differences, Intentional minus Accidental,
+not distal-minus-proximal preferences. Whole participants are independently
+resampled within age and condition, preserving their Fault/Punish responses
+within each draw. The pointwise intervals use 5,000 replicates.
+
+```{r age-adjusted-development-summary}
+age_adjusted_output = "../../figures/study_comparison/role_differentiation_age_adjusted"
+dir.create(age_adjusted_output, recursive = TRUE, showWarnings = FALSE)
+df.chain.older.means = df.study2.means %>%
+  filter(population == "Children", age %in% 7:9, role == "Distal", measure %in% c("Fault", "Punish")) %>%
+  select(age, condition, participant, measure, yes_mean)
+df.chain.older.wide = df.chain.older.means %>%
+  pivot_wider(names_from = measure, values_from = yes_mean) %>% arrange(age, condition, participant)
+set.seed(bootstrap_seed + 25L)
+chain_older_intervals = list()
+for (age_value in 7:9) {
+  rows = filter(df.chain.older.wide, age == age_value)
+  intentional = rows %>% filter(condition == "Intentional") %>% select(Fault, Punish) %>% as.matrix()
+  accidental = rows %>% filter(condition == "Accidental") %>% select(Fault, Punish) %>% as.matrix()
+  stopifnot(!anyNA(intentional), !anyNA(accidental))
+  draws = replicate(bootstrap_replicates, {
+    i = sample.int(nrow(intentional), replace = TRUE)
+    a = sample.int(nrow(accidental), replace = TRUE)
+    100 * (colMeans(intentional[i, , drop = FALSE]) - colMeans(accidental[a, , drop = FALSE]))
+  })
+  chain_older_intervals[[as.character(age_value)]] = tibble(
+    age = age_value, panel = c("Fault", "Punish"),
+    lower_pp = apply(draws, 1, quantile, probs = .025), upper_pp = apply(draws, 1, quantile, probs = .975))
+}
+df.chain.older.summary = df.chain.older.means %>%
+  group_by(age, measure, condition) %>% summarise(n = n(), yes_mean = mean(yes_mean), .groups = "drop") %>%
+  pivot_wider(names_from = condition, values_from = c(n, yes_mean)) %>% rename(panel = measure) %>%
+  mutate(mean_pp = 100 * (yes_mean_Intentional - yes_mean_Accidental)) %>%
+  left_join(bind_rows(chain_older_intervals), by = c("age", "panel"), relationship = "one-to-one") %>%
+  mutate(series = "Chain: Distal", source_study = "Study 2", population = "Children",
+         age_group = as.character(age), quantity = "Intentional minus Accidental")
+df.role.intention.v2 = bind_rows(
+  # Keep the original Single Cause and age-3–6/Adult Chain estimates and CIs unchanged.
+  df.role.intention.plot %>% filter(series != "Causal-role differentiation") %>% select(-x),
+  df.chain.older.summary %>% select(-age),
+  bind_rows(lapply(c("Fault", "Punish"), function(panel_name) {
+    df.study1.role.development %>% filter(series == "Causal-role differentiation") %>%
+      transmute(panel = panel_name, series = as.character(series), source_study = "Study 1", population,
+                age_group = as.character(age_group), quantity = "Study 1 causal-role differentiation",
+                baseline_n = n, mean_pp, lower_pp, upper_pp)
+  }))) %>%
+  mutate(panel = factor(panel, levels = c("Fault", "Punish")),
+         series = factor(series, levels = role_intention_order), age_group = factor(age_group, levels = age_labels),
+         x = if_else(age_group == "Adult", comparison_adult_position,
+                     as.numeric(as.character(replace(age_group, age_group == "Adult", NA))))) %>%
+  arrange(panel, series, age_group)
+stopifnot(nrow(df.role.intention.v2) == 42L,
+          !anyDuplicated(df.role.intention.v2[c("panel", "series", "age_group")]),
+          !anyNA(select(df.role.intention.v2, mean_pp, lower_pp, upper_pp)))
+write_csv(select(df.role.intention.v2, panel, series, source_study, quantity, population, age_group,
+                 baseline_n, n_Intentional, n_Accidental, yes_mean_Intentional, yes_mean_Accidental,
+                 mean_pp, lower_pp, upper_pp),
+          file.path(age_adjusted_output, "role_differentiation_intention_effects_talk_v2_values.csv"))
+kable(select(df.role.intention.v2, panel, series, age_group, mean_pp, lower_pp, upper_pp), digits = 3,
+      caption = "Extended developmental comparison: exact means and participant-bootstrap 95% intervals (pp)")
+```
+
+## Children-only models and the meaning of age adjustment
+
+Use each child's existing scenario-averaged, participant-level scores. The
+outcomes are **Fault or Punish Distal-minus-Proximal preference**, unlike the
+intention-effect series in the first figure. The predictor is the same causal
+composite, calculated within the child's own study/condition. Scores are
+multiplied by 100 for percentage-point units.
+
+For these requested formulas, **age is numeric age in years (3–9)**, with a
+linear additive effect. This differs from the earlier exploratory categorical
+`age_group` models, which remain unchanged. Centering age at the study's observed
+child mean and scaling differentiation to 25-point units change interpretation
+of the intercept/units only, not the requested model:
+
+- Study 1: `responsibility ~ differentiation + age`.
+- Study 2: `responsibility ~ differentiation * intention + age`.
+
+Accidental is the Study 2 reference condition. Thus its differentiation
+coefficient is the Accidental simple slope; the Intentional slope adds the
+interaction. The intention coefficient is **Intentional minus Accidental at
+0% differentiation**, where the composite shows no net expected role distinction.
+The interaction is the difference between condition slopes, per 25-point
+increase. These meanings are reported explicitly rather than calling the
+intention coefficient an unconditional average effect.
+
+Fitted curves average predictions over the original study's observed child-age
+distribution, using the **same distribution for both Study 2 conditions**.
+With additive linear age, this equals predicting at that study's mean child age.
+For every bootstrap draw this age distribution stays fixed. Confidence bands
+are pointwise 95% CIs for the fitted mean, not individual prediction intervals.
+
+```{r age-adjusted-model-data}
+df.age.adjusted.children = bind_rows(
+  df.study1.role.scores %>% mutate(study = "Study 1", intention = "Baseline"),
+  df.study2.role.scores %>% mutate(study = "Study 2", intention = as.character(condition))) %>%
+  filter(population == "Children") %>%
+  transmute(study, participant, age, age_group, intention,
+            differentiation_pp = 100 * differentiation,
+            differentiation_25 = 4 * differentiation,
+            Fault = 100 * fault_preference, Punish = 100 * punish_preference) %>%
+  arrange(study, age, intention, participant)
+stopifnot(nrow(df.age.adjusted.children) == 617L,
+          sum(df.age.adjusted.children$study == "Study 1") == 211L,
+          sum(df.age.adjusted.children$study == "Study 2") == 406L,
+          !anyNA(df.age.adjusted.children),
+          !anyDuplicated(df.age.adjusted.children[c("study", "participant")]),
+          all(df.age.adjusted.children$age %in% 3:9))
+# Joint score frequencies retain the pairing needed to reproduce the models without exporting IDs.
+df.age.adjusted.frequencies = df.age.adjusted.children %>%
+  count(study, intention, age, differentiation_pp, Fault, Punish, name = "participants")
+write_csv(df.age.adjusted.frequencies, file.path(age_adjusted_output, "child_score_frequencies.csv"))
+```
+
+Bootstrap **whole children**, retaining their predictor and both responsibility
+outcomes together. Study 1 resamples within age; Study 2 within age × intention.
+This preserves each observed age/condition cell size. Separate fixed seeds and
+5,000 draws make the new models reproducible. No adult enters either model.
+
+```{r age-adjusted-bootstrap-models}
+age_adjusted_coefficients = list()
+age_adjusted_contrasts = list()
+age_adjusted_predictions = list()
+age_adjusted_fits = list()
+for (study_name in c("Study 1", "Study 2")) {
+  data = filter(df.age.adjusted.children, study == study_name)
+  mean_age = mean(data$age)
+  data = mutate(data, age_centered = age - mean_age)
+  if (study_name == "Study 2") {
+    data$intention = factor(data$intention, levels = c("Accidental", "Intentional"))
+    contrasts(data$intention) = contr.treatment(c("Accidental", "Intentional"), base = 1)
+  }
+  formula = if (study_name == "Study 1") ~ differentiation_25 + age_centered else
+    ~ differentiation_25 * intention + age_centered
+  design = model.matrix(formula, data = data)
+  outcomes = as.matrix(select(data, Fault, Punish))
+  # lm.fit is the same least-squares fit as lm, without repeatedly rebuilding model frames.
+  fit = lm.fit(design, outcomes)
+  stopifnot(fit$rank == ncol(design), !anyNA(fit$coefficients))
+  age_adjusted_fits[[study_name]] = list(data = data, design = design, outcomes = outcomes,
+                                        coefficients = fit$coefficients, mean_age = mean_age)
+  strata = if (study_name == "Study 1") data$age else interaction(data$age, data$intention, drop = TRUE)
+  stratum_rows = split(seq_len(nrow(data)), strata)
+  set.seed(bootstrap_seed + if (study_name == "Study 1") 26L else 27L)
+  coefficient_draws = array(NA_real_, dim = c(ncol(design), 2L, bootstrap_replicates),
+                            dimnames = list(colnames(design), c("Fault", "Punish"), NULL))
+  for (draw in seq_len(bootstrap_replicates)) {
+    selected = unlist(lapply(stratum_rows, function(index) {
+      index[sample.int(length(index), replace = TRUE)]
+    }), use.names = FALSE)
+    sampled_fit = lm.fit(design[selected, , drop = FALSE], outcomes[selected, , drop = FALSE])
+    stopifnot(sampled_fit$rank == ncol(design))
+    coefficient_draws[, , draw] = sampled_fit$coefficients
+  }
+  stopifnot(!anyNA(coefficient_draws))
+
+  for (outcome in c("Fault", "Punish")) {
+    beta = fit$coefficients[, outcome]
+    beta_draws = coefficient_draws[, outcome, ]
+    interval = t(apply(beta_draws, 1, quantile, probs = c(.025, .975)))
+    age_adjusted_coefficients[[length(age_adjusted_coefficients) + 1L]] = tibble(
+      study = study_name, panel = outcome, term = names(beta), estimate_pp = unname(beta),
+      lower_pp = interval[, 1], upper_pp = interval[, 2], n = nrow(data),
+      standardized_mean_age = mean_age)
+    # Verify the faster bootstrap fitting path against the requested ordinary lm formula.
+    model_formula = as.formula(paste(outcome, if (study_name == "Study 1")
+      "~ differentiation_25 + age_centered" else "~ differentiation_25 * intention + age_centered"))
+    ordinary_fit = lm(model_formula, data = data)
+    stopifnot(isTRUE(all.equal(unname(coef(ordinary_fit)), unname(beta), tolerance = 1e-10)))
+
+    weights = matrix(0, nrow = if (study_name == "Study 1") 1L else 4L, ncol = length(beta),
+                     dimnames = list(NULL, names(beta)))
+    weights[1, "differentiation_25"] = 1
+    contrast_names = "Differentiation effect per 25 points"
+    if (study_name == "Study 2") {
+      weights[2, "differentiation_25"] = 1
+      weights[2, "differentiation_25:intentionIntentional"] = 1
+      weights[3, "intentionIntentional"] = 1
+      weights[4, "differentiation_25:intentionIntentional"] = 1
+      contrast_names = c("Accidental slope / differentiation main effect per 25 points",
+                         "Intentional slope per 25 points", "Intention effect at zero differentiation",
+                         "Interaction / slope difference per 25 points")
+    }
+    contrast_draws = weights %*% beta_draws
+    contrast_interval = t(apply(contrast_draws, 1, quantile, probs = c(.025, .975)))
+    age_adjusted_contrasts[[length(age_adjusted_contrasts) + 1L]] = tibble(
+      study = study_name, panel = outcome, contrast = contrast_names,
+      estimate_pp = as.vector(weights %*% beta), lower_pp = contrast_interval[, 1],
+      upper_pp = contrast_interval[, 2], n = nrow(data), standardized_mean_age = mean_age,
+      bootstrap_replicates = bootstrap_replicates)
+
+    conditions = if (study_name == "Study 1") "Baseline" else c("Accidental", "Intentional")
+    for (condition_name in conditions) {
+      observed = if (study_name == "Study 1") data else filter(data, intention == condition_name)
+      # Draw lines only over the differentiation range observed in the relevant condition.
+      x_grid = seq(min(observed$differentiation_pp), max(observed$differentiation_pp), length.out = 81)
+      newdata = data.frame(differentiation_25 = x_grid / 25, age_centered = 0)
+      if (study_name == "Study 2") newdata$intention = factor(condition_name, levels = c("Accidental", "Intentional"))
+      new_design = model.matrix(formula, data = newdata)
+      stopifnot(identical(colnames(new_design), names(beta)))
+      predictions = as.vector(new_design %*% beta)
+      prediction_draws = new_design %*% beta_draws
+      prediction_interval = t(apply(prediction_draws, 1, quantile, probs = c(.025, .975)))
+      age_adjusted_predictions[[length(age_adjusted_predictions) + 1L]] = tibble(
+        study = study_name, panel = outcome, intention = condition_name,
+        differentiation_pp = x_grid, prediction_pp = predictions,
+        lower_pp = prediction_interval[, 1], upper_pp = prediction_interval[, 2],
+        standardized_mean_age = mean_age)
+      # Averaging each child's age produces exactly the same fitted line as mean-age prediction.
+      direct_prediction = vapply(x_grid[c(1, 41, 81)], function(value) {
+        averaged_data = data
+        averaged_data$differentiation_25 = value / 25
+        if (study_name == "Study 2") averaged_data$intention = factor(condition_name, levels = c("Accidental", "Intentional"))
+        mean(predict(ordinary_fit, newdata = averaged_data))
+      }, numeric(1))
+      stopifnot(all(abs(direct_prediction - predictions[c(1, 41, 81)]) < 1e-10))
+    }
+  }
+}
+df.age.adjusted.coefficients = bind_rows(age_adjusted_coefficients)
+df.age.adjusted.contrasts = bind_rows(age_adjusted_contrasts)
+df.age.adjusted.predictions = bind_rows(age_adjusted_predictions)
+write_csv(df.age.adjusted.coefficients, file.path(age_adjusted_output, "age_adjusted_model_coefficients.csv"))
+write_csv(df.age.adjusted.contrasts, file.path(age_adjusted_output, "age_adjusted_reported_effects.csv"))
+write_csv(df.age.adjusted.predictions, file.path(age_adjusted_output, "age_adjusted_prediction_curves.csv"))
+kable(df.age.adjusted.contrasts, digits = 3,
+      caption = "Children only: age-adjusted effects and 95% whole-participant bootstrap CIs (percentage points)")
+```
+
+
+## Presentation figures
+
+The extended comparison shades childhood through age 9 and separates every
+Adult point from the child lines. Single Cause has no observations or connecting
+line at ages 7–9. Light vertical bars show all 95% interval bounds.
+
+```{r age-adjusted-development-plot, fig.width=23, fig.height=11}
+role_intention_v2_limits = c(-50, 100)
+role_intention_v2_labels = setNames(c("Causal-role\ndifferentiation",
+  "Single Cause\nIntentional − Accidental", "Chain: Distal\nIntentional − Accidental"), role_intention_order)
+# Small fixed offsets separate overlapping uncertainty bars without changing age labels.
+role_intention_v2_offsets = setNames(c(-.06, 0, .06), role_intention_order)
+df.role.intention.v2.plot = df.role.intention.v2 %>%
+  mutate(x_plot = x + unname(role_intention_v2_offsets[as.character(series)]))
+p.role.intention.v2 = ggplot(df.role.intention.v2.plot, aes(x = x_plot, y = mean_pp, group = series)) +
+  annotate("rect", xmin = -Inf, xmax = 9.25, ymin = -Inf, ymax = Inf,
+           fill = talk_v2$childhood_fill, color = NA) +
+  geom_hline(yintercept = 0, linetype = "dashed", linewidth = 1.1, color = "black") +
+  geom_errorbar(aes(ymin = lower_pp, ymax = upper_pp, color = series),
+                width = .12, linewidth = .65, alpha = .6, show.legend = FALSE) +
+  geom_line(data = filter(df.role.intention.v2.plot, population == "Children"),
+            aes(color = series, linetype = series), linewidth = talk_v2$line_width) +
+  geom_point(aes(fill = series, shape = series), size = 6.8, color = "black", stroke = 1.25) +
+  facet_wrap(~ panel, nrow = 1, drop = FALSE) +
+  scale_color_manual(NULL, values = role_intention_colors, limits = role_intention_order, labels = role_intention_v2_labels) +
+  scale_fill_manual(NULL, values = role_intention_colors, limits = role_intention_order, labels = role_intention_v2_labels) +
+  scale_shape_manual(NULL, values = role_intention_shapes, limits = role_intention_order, labels = role_intention_v2_labels) +
+  scale_linetype_manual(NULL, values = role_intention_lines, limits = role_intention_order, labels = role_intention_v2_labels) +
+  scale_x_continuous(breaks = c(3:9, comparison_adult_position), labels = age_labels,
+                     limits = c(2.7, comparison_adult_position + .3), expand = expansion(add = .05)) +
+  scale_y_continuous(limits = role_intention_v2_limits, breaks = seq(-50, 100, 25),
+                     labels = function(x) paste0(x, "%"), expand = expansion(add = 4)) +
+  labs(x = "Age", y = "Differentiation /\nintention effect (%)",
+       caption = "Single Cause child pilot data: ages 3–6 only. Bars show 95% participant-bootstrap CIs.") +
+  role_responsibility_theme +
+  theme(legend.key.width = grid::unit(2.2, "cm"), legend.text = element_text(size = 25),
+        plot.caption = element_text(size = 18, hjust = .5, margin = margin(t = 12))) +
+  guides(color = guide_legend(nrow = 1), fill = guide_legend(nrow = 1),
+         shape = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1))
+save_presentation_v2(p.role.intention.v2,
+  file.path(age_adjusted_output, "role_differentiation_intention_effects_talk_v2"), width = 23, height = 11)
+p.role.intention.v2
+```
+
+In the relationship figures, each faint point represents one child. Small,
+fixed-seed jitter (at most 1.5 percentage points) separates coincident discrete
+scores for display only. Models and numerical exports use the exact scores.
+The fitted mean and its uncertainty band are adjusted for age; the background
+observations are raw scores. Shared axes allow direct comparison between studies.
+The vertical zero guide marks no net causal differentiation; the horizontal
+zero guide marks equal distal/proximal responsibility endorsement.
+
+```{r age-adjusted-relationship-style}
+df.age.adjusted.points = df.age.adjusted.children %>%
+  pivot_longer(c(Fault, Punish), names_to = "panel", values_to = "responsibility_pp") %>%
+  mutate(panel = factor(panel, levels = c("Fault", "Punish")))
+df.age.adjusted.predictions = df.age.adjusted.predictions %>%
+  mutate(panel = factor(panel, levels = c("Fault", "Punish")))
+relationship_theme = role_responsibility_theme +
+  theme(panel.spacing.x = grid::unit(4, "cm"), axis.text = element_text(size = 28), axis.title = element_text(size = 31),
+        strip.text = element_text(size = 34), legend.text = element_text(size = 27),
+        plot.subtitle = element_text(size = 22, hjust = .5, margin = margin(b = 22)),
+        plot.caption = element_text(size = 18, hjust = .5, margin = margin(t = 16)),
+        legend.key.width = grid::unit(2, "cm"))
+relationship_axes = list(
+  facet_wrap(~ panel, nrow = 1),
+  scale_x_continuous(limits = c(-103, 103), breaks = seq(-100, 100, 50),
+                     labels = function(x) paste0(x, "%"), expand = expansion(mult = 0)),
+  scale_y_continuous(limits = c(-103, 103), breaks = seq(-100, 100, 50),
+                     labels = function(x) paste0(x, "%"), expand = expansion(mult = 0)),
+  labs(x = "Causal-role differentiation (%)", y = "Distal responsibility\npreference (%)",
+       subtitle = "Farther right: clearer causal roles     •     Farther up: more distal responsibility"),
+  relationship_theme)
+relationship_guides = list(
+  geom_hline(yintercept = 0, color = "#777777", linetype = "dashed", linewidth = .7),
+  geom_vline(xintercept = 0, color = "#BBBBBB", linetype = "dotted", linewidth = .5))
+```
+
+```{r study1-age-adjusted-relationship-plot, fig.width=20, fig.height=11}
+p.study1.age.adjusted = ggplot() + relationship_guides +
+  geom_point(data = filter(df.age.adjusted.points, study == "Study 1"),
+             aes(x = differentiation_pp, y = responsibility_pp),
+             position = position_jitter(width = 1.5, height = 1.5, seed = bootstrap_seed + 28L),
+             size = 3.8, color = "#777777", alpha = .18) +
+  geom_ribbon(data = filter(df.age.adjusted.predictions, study == "Study 1"),
+              aes(x = differentiation_pp, ymin = lower_pp, ymax = upper_pp, fill = panel),
+              alpha = .18, show.legend = FALSE) +
+  geom_line(data = filter(df.age.adjusted.predictions, study == "Study 1"),
+            aes(x = differentiation_pp, y = prediction_pp, color = panel),
+            linewidth = 2.1, show.legend = FALSE) +
+  scale_color_manual(values = measure_colors) + scale_fill_manual(values = measure_colors) +
+  relationship_axes +
+  labs(caption = "Study 1 · Children ages 3–9 (N = 211) · Age-adjusted lines with 95% bootstrap CIs\nFaint points show observed participant scores.")
+save_presentation_v2(p.study1.age.adjusted,
+  file.path(age_adjusted_output, "study1_role_differentiation_age_adjusted_talk_v1"), width = 20, height = 11)
+p.study1.age.adjusted
+```
+
+```{r study2-age-adjusted-relationship-plot, fig.width=20, fig.height=11}
+relationship_condition_order = c("Intentional", "Accidental")
+p.study2.age.adjusted = ggplot() + relationship_guides +
+  geom_point(data = filter(df.age.adjusted.points, study == "Study 2"),
+             aes(x = differentiation_pp, y = responsibility_pp, color = intention, shape = intention),
+             position = position_jitter(width = 1.5, height = 1.5, seed = bootstrap_seed + 29L),
+             size = 3.5, alpha = .14, show.legend = FALSE) +
+  geom_ribbon(data = filter(df.age.adjusted.predictions, study == "Study 2"),
+              aes(x = differentiation_pp, ymin = lower_pp, ymax = upper_pp, fill = intention),
+              alpha = .16, show.legend = FALSE) +
+  geom_line(data = filter(df.age.adjusted.predictions, study == "Study 2"),
+            aes(x = differentiation_pp, y = prediction_pp, color = intention, linetype = intention),
+            linewidth = 2.1) +
+  scale_color_manual(NULL, values = comparison_colors, limits = relationship_condition_order) +
+  scale_fill_manual(NULL, values = comparison_colors, limits = relationship_condition_order) +
+  scale_linetype_manual(NULL, values = condition_lines, limits = relationship_condition_order) +
+  scale_shape_manual(NULL, values = c(Intentional = 16, Accidental = 2), limits = relationship_condition_order) +
+  relationship_axes +
+  labs(caption = "Study 2 · Children ages 3–9 (N = 406) · Age-adjusted lines with 95% bootstrap CIs\nFaint points show observed participant scores.") +
+  guides(color = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1))
+save_presentation_v2(p.study2.age.adjusted,
+  file.path(age_adjusted_output, "study2_role_differentiation_age_adjusted_talk_v1"), width = 20, height = 11)
+p.study2.age.adjusted
+```
+
+## Verify the extension and interpretation
+
+The new developmental table must preserve all 30 old estimates and intervals,
+add exactly 12 older-child points, and repeat the same baseline reference in both
+panels. Source condition means independently reproduce every intention effect.
+The models are checked against ordinary `lm`, with 10 reported contrasts and
+486 fitted-curve rows; all confidence limits fit within the displayed axes.
+
+```{r age-adjusted-output-checks}
+df.role.intention.v2.check = df.role.intention.v2 %>%
+  inner_join(df.role.intention.plot, by = c("panel", "series", "age_group"), suffix = c("", "_v1"),
+             relationship = "one-to-one")
+stopifnot(nrow(df.role.intention.v2.check) == 30L,
+          all(df.role.intention.v2.check$mean_pp == df.role.intention.v2.check$mean_pp_v1),
+          all(df.role.intention.v2.check$lower_pp == df.role.intention.v2.check$lower_pp_v1),
+          all(df.role.intention.v2.check$upper_pp == df.role.intention.v2.check$upper_pp_v1),
+          all(df.role.intention.v2$lower_pp >= min(role_intention_v2_limits)),
+          all(df.role.intention.v2$upper_pp <= max(role_intention_v2_limits)))
+df.chain.older.check = df.study2.summary %>%
+  filter(population == "Children", age_group %in% as.character(7:9), role == "Distal", measure %in% c("Fault", "Punish")) %>%
+  select(age_group, panel = measure, condition, mean) %>% pivot_wider(names_from = condition, values_from = mean) %>%
+  inner_join(filter(df.role.intention.v2, series == "Chain: Distal"), by = c("age_group", "panel"),
+             relationship = "one-to-one")
+stopifnot(nrow(df.chain.older.check) == 6L,
+          all(abs(df.chain.older.check$mean_pp - 100 * (df.chain.older.check$Intentional - df.chain.older.check$Accidental)) < 1e-10))
+role_intention_v2_built = ggplot_build(p.role.intention.v2)
+stopifnot(nrow(role_intention_v2_built$data[[5]]) == 42L,
+          nrow(role_intention_v2_built$data[[4]]) == 36L,
+          all(role_intention_v2_built$data[[4]]$x < 9.1),
+          all(filter(df.role.intention.v2, series == "Single Cause")$age_group %in% c("3", "4", "5", "6", "Adult")),
+          identical(filter(df.role.intention.v2, panel == "Fault", series == "Causal-role differentiation")$mean_pp,
+                    filter(df.role.intention.v2, panel == "Punish", series == "Causal-role differentiation")$mean_pp),
+          nrow(df.age.adjusted.contrasts) == 10L, nrow(df.age.adjusted.predictions) == 486L,
+          !anyNA(df.age.adjusted.contrasts), !anyNA(df.age.adjusted.predictions),
+          all(df.age.adjusted.predictions$lower_pp >= -100), all(df.age.adjusted.predictions$upper_pp <= 100),
+          nrow(ggplot_build(p.study1.age.adjusted)$data[[3]]) == 422L,
+          nrow(ggplot_build(p.study2.age.adjusted)$data[[3]]) == 812L)
+```
+
+A 25-point increase in differentiation predicts **14.1 points more distal fault
+preference** (95% CI 9.9–18.3) and **9.5 points more distal punishment preference**
+(4.8–14.1) in Study 1 after linear age adjustment. In Study 2, both fault slopes
+are positive and nearly equal. The punishment slope is larger under intention,
+but the interaction interval includes zero (−0.5 to 11.1 points per 25-point
+increase): this snapshot does not establish different punishment slopes.
+The intention-related level shift at zero differentiation is positive for both
+outcomes. These are exploratory, cross-sectional associations, not evidence that
+differentiation causes responsibility judgments or mediates development. CIs are
+not adjusted for multiple comparisons and assume independent participants;
+household dependence is not modeled. Original sample, pilot and handoff
+limitations remain unchanged.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons
