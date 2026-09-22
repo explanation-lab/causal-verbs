@@ -4304,6 +4304,212 @@ not adjusted for multiple comparisons and assume independent participants;
 household dependence is not modeled. Original sample, pilot and handoff
 limitations remain unchanged.
 
+# Binned causal differentiation and raw responsibility
+
+This new three-panel figure separates **when causal-role differentiation
+emerges** from **how Intentional and Accidental raw Yes rates separate** in
+Single Cause and Chain: Distal. The age groups are 3–4, 5–6 and Adult. Ages 7–9
+do not enter these binned summaries; they remain in earlier figures. Existing
+figures, data, inclusion rules and handoff conclusions are unchanged.
+
+Each child has equal weight within the displayed age bin: combine participant
+means, not the two single-year group means. Study 1 supplies the participant
+composite `((Caused Distal - Caused Proximal) + (Lexical Proximal - Lexical Distal)) / 2`.
+Single Cause and Study 2 Distal supply the **raw Yes proportions** for Fault and
+Punish, separately by condition. Yes=1, No=0, with both/neither retained. Average
+available scenarios within participant before summarizing participants.
+
+## Reuse raw-response summaries and bin baseline participant scores
+
+The 24 responsibility means, Ns and 95% bootstrap CIs are reused exactly from
+`df.stage.summary`. Only the two binned child baseline composites need new
+intervals; these use 5,000 whole-participant draws within bin, with a separate
+fixed seed. The Adult baseline mean and CI are reused from the earlier Study 1
+role-differentiation summary. Intervals are pointwise 95% percentile CIs for
+each mean, not CIs or tests of the intentional–accidental or between-context gaps.
+
+```{r binned-role-responsibility-summary}
+binned_responsibility_output = "../../figures/study_comparison/binned_role_and_responsibility"
+dir.create(binned_responsibility_output, recursive = TRUE, showWarnings = FALSE)
+binned_age_labels = c("3–4", "5–6", "Adult")
+df.binned.baseline.participants = df.study1.role.scores %>%
+  mutate(stage = stage_group(population, age)) %>% filter(!is.na(stage))
+stopifnot(nrow(df.binned.baseline.participants) == 222L,
+          !anyNA(df.binned.baseline.participants$differentiation),
+          all(filter(df.binned.baseline.participants, population == "Children")$age %in% 3:6))
+set.seed(bootstrap_seed + 30L)
+df.binned.baseline.children = df.binned.baseline.participants %>%
+  filter(population == "Children") %>% arrange(stage, participant) %>%
+  group_by(population, stage) %>% summarise(summary = list(bootstrap_mean(differentiation)), .groups = "drop") %>%
+  unnest_wider(summary) %>% transmute(population, stage, n, mean_pct = 100 * mean,
+                                     lower_pct = 100 * lower, upper_pct = 100 * upper)
+df.binned.baseline = bind_rows(
+  df.binned.baseline.children,
+  df.study1.role.development %>% filter(population == "Adults", series == "Causal-role differentiation") %>%
+    transmute(population, stage = factor("Adults", levels = stage_order), n,
+              mean_pct = mean_pp, lower_pct = lower_pp, upper_pct = upper_pp)) %>%
+  mutate(panel = "Causal-role\ndifferentiation", study = "Study 1", context = "Baseline",
+         condition = "Baseline", quantity = "Causal-role differentiation", unit = "percentage points",
+         x = as.integer(stage)) %>% arrange(stage)
+df.binned.responsibility = df.stage.summary %>%
+  filter((study == "Single Cause" | (study == "Study 2" & role == "Distal")),
+         measure %in% c("Fault", "Punish")) %>%
+  transmute(panel = factor(measure, levels = c("Fault", "Punish")), study, population, stage,
+            context = if_else(study == "Single Cause", "Single Cause", "Chain: Distal"),
+            condition = as.character(condition), quantity = "Raw Yes responses", unit = "percent yes",
+            n, mean_pct = yes_pct, lower_pct, upper_pct, x = as.integer(stage))
+# The CSV explicitly distinguishes the first panel's contrast from raw Yes rates.
+df.binned.responsibility.values = bind_rows(df.binned.baseline, df.binned.responsibility) %>%
+  mutate(panel = gsub("\n", " ", as.character(panel)), age_group = binned_age_labels[as.integer(stage)]) %>%
+  select(panel, study, context, condition, population, age_group, quantity, unit, n, mean_pct, lower_pct, upper_pct) %>%
+  arrange(match(panel, c("Causal-role differentiation", "Fault", "Punish")),
+          match(age_group, binned_age_labels), match(context, c("Baseline", "Single Cause", "Chain: Distal")),
+          match(condition, c("Baseline", "Intentional", "Accidental")))
+stopifnot(nrow(df.binned.baseline) == 3L, nrow(df.binned.responsibility) == 24L,
+          identical(df.binned.baseline$n, c(63L, 59L, 100L)),
+          !anyNA(df.binned.responsibility.values),
+          all(df.binned.responsibility$mean_pct >= 0), all(df.binned.responsibility$mean_pct <= 100),
+          all(df.binned.responsibility$lower_pct >= 0), all(df.binned.responsibility$upper_pct <= 100))
+write_csv(df.binned.responsibility.values,
+          file.path(binned_responsibility_output, "causal_role_and_raw_responsibility_talk_v1_values.csv"))
+kable(df.binned.responsibility.values, digits = 3,
+      caption = "Binned comparison: exact plotted means, participant Ns and 95% bootstrap CIs")
+```
+
+## One neutral baseline panel and two context/condition panels
+
+Blue means Single Cause; red means Chain: Distal. Intentional uses solid lines
+and filled circles; Accidental uses dashed lines and open triangles. Only the
+responsibility panels use these four combinations. Their 50% line is a visual
+reference, not a chance-model assumption. The baseline panel uses a 0% reference
+and a neutral trajectory, with its own differentiation axis title.
+
+The displayed child-bin means connect to Adult group means as requested; these
+are different samples, not within-participant development or a chronological
+adult age. Small, fixed offsets separate overlapping responsibility CIs while
+keeping all four trajectories centered around each age category. `patchwork`
+only arranges the baseline plot and the two responsibility facets and collects
+one shared legend; it does not compute or change scores.
+
+```{r binned-role-responsibility-plot, fig.width=25, fig.height=11}
+binned_context_colors = c("Single Cause" = "#377EB8", "Chain: Distal" = "#E41A1C")
+binned_series_order = c("Single Cause Intentional", "Single Cause Accidental",
+                        "Chain: Distal Intentional", "Chain: Distal Accidental")
+binned_series_labels = c("Single Cause\nIntentional", "Single Cause\nAccidental",
+                         "Chain: Distal\nIntentional", "Chain: Distal\nAccidental")
+binned_series_colors = setNames(rep(binned_context_colors, each = 2), binned_series_order)
+binned_series_fills = setNames(c(binned_context_colors[[1]], "white", binned_context_colors[[2]], "white"), binned_series_order)
+binned_series_shapes = setNames(rep(c(21, 24), 2), binned_series_order)
+binned_series_lines = setNames(rep(c("solid", "dashed"), 2), binned_series_order)
+binned_series_offsets = setNames(c(-.09, -.03, .03, .09), binned_series_order)
+df.binned.responsibility.plot = df.binned.responsibility %>%
+  mutate(series = factor(paste(context, condition), levels = binned_series_order),
+         x_plot = x + unname(binned_series_offsets[as.character(series)]))
+binned_baseline_limits = c(min(0, 25 * floor(min(df.binned.baseline$lower_pct) / 25)), 100)
+binned_talk_theme = role_responsibility_theme +
+  theme(axis.text = element_text(size = 30), axis.title = element_text(size = 32),
+        strip.text = element_text(size = 32), legend.text = element_text(size = 25),
+        legend.key.width = grid::unit(2.1, "cm"),
+        panel.spacing.x = grid::unit(1.6, "cm"),
+        plot.margin = margin(8, 18, 8, 16))
+binned_x_scale = function() {
+  scale_x_continuous(breaks = 1:3, labels = binned_age_labels, limits = c(.78, 3.22),
+                     expand = expansion(mult = 0))
+}
+p.binned.baseline = ggplot(df.binned.baseline, aes(x = x, y = mean_pct, group = 1)) +
+  annotate("rect", xmin = -Inf, xmax = 2.22, ymin = -Inf, ymax = Inf,
+           fill = talk_v2$childhood_fill, color = NA) +
+  geom_hline(yintercept = 0, linetype = "dashed", linewidth = .9, color = "#555555") +
+  geom_errorbar(aes(ymin = lower_pct, ymax = upper_pct), width = .07,
+                color = "#666666", linewidth = .7, alpha = .65) +
+  geom_line(color = "#666666", linewidth = 2.1) +
+  geom_point(shape = 21, fill = "#666666", color = "black", size = 7.2, stroke = 1.15) +
+  facet_wrap(~ panel, nrow = 1) + binned_x_scale() +
+  scale_y_continuous(limits = binned_baseline_limits, breaks = seq(binned_baseline_limits[1], 100, 25),
+                     labels = function(x) paste0(x, "%"), expand = expansion(add = 2)) +
+  labs(x = "Age", y = "Causal-role\ndifferentiation (%)") + binned_talk_theme
+p.binned.raw.responsibility = ggplot(df.binned.responsibility.plot,
+                                    aes(x = x_plot, y = mean_pct, group = series)) +
+  annotate("rect", xmin = -Inf, xmax = 2.22, ymin = -Inf, ymax = Inf,
+           fill = talk_v2$childhood_fill, color = NA) +
+  geom_hline(yintercept = 50, linetype = "dashed", linewidth = .95, color = "#555555") +
+  geom_errorbar(aes(ymin = lower_pct, ymax = upper_pct, color = series),
+                width = .055, linewidth = .65, alpha = .5, show.legend = FALSE) +
+  geom_line(aes(color = series, linetype = series), linewidth = 1.9) +
+  geom_point(aes(color = series, fill = series, shape = series), size = 7.2, stroke = 1.25) +
+  facet_wrap(~ panel, nrow = 1) + binned_x_scale() +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 25),
+                     labels = function(x) paste0(x, "%"), expand = expansion(add = 2)) +
+  scale_color_manual(NULL, values = binned_series_colors, limits = binned_series_order, labels = binned_series_labels) +
+  scale_fill_manual(NULL, values = binned_series_fills, limits = binned_series_order, labels = binned_series_labels) +
+  scale_shape_manual(NULL, values = binned_series_shapes, limits = binned_series_order, labels = binned_series_labels) +
+  scale_linetype_manual(NULL, values = binned_series_lines, limits = binned_series_order, labels = binned_series_labels) +
+  labs(x = "Age", y = '"Yes" Responses (%)') + binned_talk_theme +
+  guides(color = guide_legend(nrow = 1), fill = guide_legend(nrow = 1),
+         shape = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1))
+p.binned.role.responsibility = patchwork::wrap_plots(p.binned.baseline, p.binned.raw.responsibility,
+                                                    widths = c(1, 2), guides = "collect") +
+  patchwork::plot_annotation(
+    caption = "Causal-role differentiation: Study 1 baseline. Single Cause child data are pilot data. Bars show 95% participant-bootstrap CIs.",
+    theme = theme(plot.caption = element_text(size = 18, hjust = .5, margin = margin(t = 10)),
+                  plot.margin = margin(10, 10, 12, 10))) &
+  theme(legend.position = "bottom")
+save_presentation_v2(p.binned.role.responsibility,
+                    file.path(binned_responsibility_output, "causal_role_and_raw_responsibility_talk_v1"),
+                    width = 25, height = 11)
+p.binned.role.responsibility
+```
+
+## Check participant weighting, source identity and display geometry
+
+Recompute the first panel from the underlying role-specific Yes means, and
+recompute responsibility from participant Yes means. Every plotted mean and N
+must match. The original 24 raw-response intervals must be unchanged, and the
+figure must contain exactly three baseline points plus 24 responsibility points,
+with no out-of-range CI bounds.
+
+```{r binned-role-responsibility-checks}
+df.binned.baseline.checked = df.stage.means %>% filter(study == "Study 1") %>%
+  select(population, participant, stage, measure, role, yes_mean) %>%
+  pivot_wider(names_from = c(measure, role), values_from = yes_mean) %>%
+  mutate(checked_score = ((Caused_Distal - Caused_Proximal) + (Lexical_Proximal - Lexical_Distal)) / 2) %>%
+  group_by(population, stage) %>% summarise(checked_n = n(), checked_mean = 100 * mean(checked_score), .groups = "drop") %>%
+  left_join(df.binned.baseline, by = c("population", "stage"), relationship = "one-to-one")
+df.binned.raw.checked = df.stage.means %>%
+  filter((study == "Single Cause" | (study == "Study 2" & role == "Distal")), measure %in% c("Fault", "Punish")) %>%
+  group_by(study, stage, condition, panel = measure) %>%
+  summarise(checked_n = n(), checked_mean = 100 * mean(yes_mean), .groups = "drop") %>%
+  left_join(df.binned.responsibility, by = c("study", "stage", "condition", "panel"), relationship = "one-to-one")
+df.binned.raw.intervals = df.stage.summary %>%
+  filter((study == "Single Cause" | (study == "Study 2" & role == "Distal")), measure %in% c("Fault", "Punish")) %>%
+  select(study, stage, condition, panel = measure, original_lower = lower_pct, original_upper = upper_pct) %>%
+  left_join(df.binned.responsibility, by = c("study", "stage", "condition", "panel"), relationship = "one-to-one")
+binned_baseline_built = ggplot_build(p.binned.baseline)
+binned_raw_built = ggplot_build(p.binned.raw.responsibility)
+stopifnot(nrow(df.binned.baseline.checked) == 3L,
+          all(df.binned.baseline.checked$n == df.binned.baseline.checked$checked_n),
+          all(abs(df.binned.baseline.checked$mean_pct - df.binned.baseline.checked$checked_mean) < 1e-10),
+          nrow(df.binned.raw.checked) == 24L,
+          all(df.binned.raw.checked$n == df.binned.raw.checked$checked_n),
+          all(abs(df.binned.raw.checked$mean_pct - df.binned.raw.checked$checked_mean) < 1e-10),
+          all(df.binned.raw.intervals$lower_pct == df.binned.raw.intervals$original_lower),
+          all(df.binned.raw.intervals$upper_pct == df.binned.raw.intervals$original_upper),
+          nrow(binned_baseline_built$data[[5]]) == 3L, nrow(binned_raw_built$data[[5]]) == 24L,
+          nrow(binned_raw_built$data[[4]]) == 24L,
+          nrow(distinct(binned_raw_built$data[[4]], PANEL, group)) == 8L,
+          all(binned_baseline_built$data[[3]]$ymin >= min(binned_baseline_limits)),
+          all(binned_baseline_built$data[[3]]$ymax <= max(binned_baseline_limits)),
+          all(binned_raw_built$data[[3]]$ymin >= 0), all(binned_raw_built$data[[3]]$ymax <= 100),
+          all(binned_raw_built$data[[2]]$yintercept == 50))
+```
+
+The age-bin curves are descriptive comparisons of separate samples. The child
+Single Cause sample is pilot data; the Chain Adult points come from the selected
+Study 2 adult pilot, not the still-missing main adult dataset. The Single Cause
+Adult endpoint uses all 32 recovered adults; its historical N=30 subset remains
+unidentified. The existing uncapped child snapshot, participant-selection and
+scientific handoff limitations remain unchanged.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons

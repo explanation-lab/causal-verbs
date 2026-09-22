@@ -1,5 +1,7 @@
 # R analysis
 
+The [binned differentiation and raw responsibility figure](../../figures/study_comparison/binned_role_and_responsibility/README.md) places the Study 1 baseline composite beside raw Fault/Punish Yes rates for Single Cause and Chain: Distal, with context colors, condition markers and participant-bootstrap CIs. It uses ages 3–4, 5–6 and Adult; all earlier figures remain unchanged.
+
 The [extended developmental comparison and age-adjusted analyses](../../figures/study_comparison/role_differentiation_age_adjusted/README.md) add three new figures: ages 3–9 plus Adult with bootstrap CIs, and children-only Study 1/Study 2 responsibility relationships adjusted for numeric age. Existing figures and the earlier categorical-age models remain unchanged.
 
 The [Fault/Punish differentiation-and-intention figure](../../figures/study_comparison/role_differentiation_intention_effects/README.md) adds two panels for ages 3–6 and Adult. Each repeats the Study 1 causal-role reference alongside Single Cause and Chain: Distal intention effects. Existing outputs are preserved.
@@ -18,10 +20,10 @@ This is a **new reproducible reconstruction**, not recovered original analysis c
 
 ## Run the workflow
 
-Install R, Pandoc (included with RStudio), and the packages `dplyr` (1.1 or newer), `tidyr`, `readr`, `ggplot2` (3.5 or newer), `knitr`, `rmarkdown` and `ragg`. In R, missing packages can be installed with:
+Install R, Pandoc (included with RStudio), and the packages `dplyr` (1.1 or newer), `tidyr`, `readr`, `ggplot2` (3.5 or newer), `knitr`, `rmarkdown`, `ragg` and `patchwork`. In R, missing packages can be installed with:
 
 ```r
-install.packages(c("dplyr", "tidyr", "readr", "ggplot2", "knitr", "rmarkdown", "ragg"))
+install.packages(c("dplyr", "tidyr", "readr", "ggplot2", "knitr", "rmarkdown", "ragg", "patchwork"))
 ```
 
 Open `causal_verbs.Rmd` in RStudio and click **Knit**, or run this command from the repository root:

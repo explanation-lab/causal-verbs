@@ -1,0 +1,28 @@
+panel,study,context,condition,population,age_group,quantity,unit,n,mean_pct,lower_pct,upper_pct
+Causal-role differentiation,Study 1,Baseline,Baseline,Children,3–4,Causal-role differentiation,percentage points,63,13.888888888888893,5.555555555555554,22.619047619047617
+Causal-role differentiation,Study 1,Baseline,Baseline,Children,5–6,Causal-role differentiation,percentage points,59,41.94915254237288,30.084745762711872,53.38983050847458
+Causal-role differentiation,Study 1,Baseline,Baseline,Adults,Adult,Causal-role differentiation,percentage points,100,33.5,27.250000000000004,40
+Fault,Single Cause,Single Cause,Intentional,Children,3–4,Raw Yes responses,percent yes,24,72.91666666666666,58.333333333333336,87.5
+Fault,Single Cause,Single Cause,Accidental,Children,3–4,Raw Yes responses,percent yes,26,69.23076923076923,53.84615384615385,84.61538461538461
+Fault,Study 2,Chain: Distal,Intentional,Children,3–4,Raw Yes responses,percent yes,60,58.33333333333333,48.33333333333333,67.5
+Fault,Study 2,Chain: Distal,Accidental,Children,3–4,Raw Yes responses,percent yes,67,56.71641791044776,47.76119402985074,65.67164179104478
+Fault,Single Cause,Single Cause,Intentional,Children,5–6,Raw Yes responses,percent yes,26,86.53846153846155,76.92307692307693,94.23076923076923
+Fault,Single Cause,Single Cause,Accidental,Children,5–6,Raw Yes responses,percent yes,20,50,29.999999999999993,70
+Fault,Study 2,Chain: Distal,Intentional,Children,5–6,Raw Yes responses,percent yes,47,78.72340425531915,70.2127659574468,87.2340425531915
+Fault,Study 2,Chain: Distal,Accidental,Children,5–6,Raw Yes responses,percent yes,49,55.10204081632652,42.857142857142854,66.3265306122449
+Fault,Single Cause,Single Cause,Intentional,Adults,Adult,Raw Yes responses,percent yes,16,93.75,81.25,100
+Fault,Single Cause,Single Cause,Accidental,Adults,Adult,Raw Yes responses,percent yes,16,56.25,34.375,78.125
+Fault,Study 2,Chain: Distal,Intentional,Adults,Adult,Raw Yes responses,percent yes,20,97.5,92.5,100
+Fault,Study 2,Chain: Distal,Accidental,Adults,Adult,Raw Yes responses,percent yes,21,64.28571428571429,47.61904761904761,80.95238095238095
+Punish,Single Cause,Single Cause,Intentional,Children,3–4,Raw Yes responses,percent yes,24,60.416666666666664,43.75,75
+Punish,Single Cause,Single Cause,Accidental,Children,3–4,Raw Yes responses,percent yes,26,57.692307692307686,42.30769230769231,73.07692307692307
+Punish,Study 2,Chain: Distal,Intentional,Children,3–4,Raw Yes responses,percent yes,60,54.16666666666667,43.333333333333336,64.16666666666667
+Punish,Study 2,Chain: Distal,Accidental,Children,3–4,Raw Yes responses,percent yes,67,45.522388059701484,35.820895522388064,55.223880597014926
+Punish,Single Cause,Single Cause,Intentional,Children,5–6,Raw Yes responses,percent yes,26,80.76923076923077,67.3076923076923,92.3076923076923
+Punish,Single Cause,Single Cause,Accidental,Children,5–6,Raw Yes responses,percent yes,20,37.5,20,55.00000000000001
+Punish,Study 2,Chain: Distal,Intentional,Children,5–6,Raw Yes responses,percent yes,47,68.08510638297872,56.38297872340425,79.7872340425532
+Punish,Study 2,Chain: Distal,Accidental,Children,5–6,Raw Yes responses,percent yes,49,39.795918367346935,28.571428571428577,51.02040816326531
+Punish,Single Cause,Single Cause,Intentional,Adults,Adult,Raw Yes responses,percent yes,16,93.75,84.375,100
+Punish,Single Cause,Single Cause,Accidental,Adults,Adult,Raw Yes responses,percent yes,16,3.125,0,9.375
+Punish,Study 2,Chain: Distal,Intentional,Adults,Adult,Raw Yes responses,percent yes,20,92.5,80,100
+Punish,Study 2,Chain: Distal,Accidental,Adults,Adult,Raw Yes responses,percent yes,21,30.952380952380953,14.28571428571429,47.61904761904761
