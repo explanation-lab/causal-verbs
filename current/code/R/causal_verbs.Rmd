@@ -3417,6 +3417,279 @@ Fault and Punish dip at age 9, and Adult causal-role differentiation is lower
 than that of children aged 6–9 while adult distal responsibility remains high.
 Thus the adult endpoint does not follow a simple parallel-increase account.
 
+# Matched causal-role differentiation: Baseline, Accidental, Intentional
+
+This new figure applies the Study 1 participant-level score definitions to the
+corresponding Study 2 conditions, in the display order **Baseline | Accidental |
+Intentional**. The Baseline panel reuses the exact means and 95% bootstrap CIs
+from the earlier Study 1 synthesis. No old plot or analysis is replaced.
+
+Within each participant, scenario-averaged Yes means supply
+`((Caused Distal - Proximal) + (Lexical Proximal - Distal)) / 2`,
+`Fault Distal - Proximal`, and `Punish Distal - Proximal`. Both/neither responses
+remain included. A missing component would make its corresponding score
+missing; this snapshot has both scenarios for every component. Study 2 adds
+406 children and the same 41-person adult pilot (21 Accidental, 20 Intentional)
+already used elsewhere. The missing main adult dataset is not substituted or
+implied to be recovered. These remain the uncapped descriptive snapshots.
+
+## Matched participant scores and intervals
+
+```{r matched-role-summary}
+matched_role_output = "../../figures/study_comparison/role_differentiation"
+dir.create(matched_role_output, recursive = TRUE, showWarnings = FALSE)
+matched_role_panel_order = c("Baseline", "Accidental", "Intentional")
+stopifnot(all(df.study2.means$study == "Study 2"),
+          all(df.study2.means$condition %in% condition_order),
+          all(df.study2.means$scenarios_available == 2L))
+df.study2.role.scores = df.study2.means %>%
+  select(population, participant, age, condition, measure, role, yes_mean) %>%
+  pivot_wider(names_from = c(measure, role), values_from = yes_mean) %>%
+  mutate(age_group = factor(if_else(population == "Adults", "Adult", as.character(age)),
+                            levels = age_labels),
+         differentiation = ((Caused_Distal - Caused_Proximal) +
+                            (Lexical_Proximal - Lexical_Distal)) / 2,
+         fault_preference = Fault_Distal - Fault_Proximal,
+         punish_preference = Punish_Distal - Punish_Proximal) %>%
+  arrange(condition, age_group, participant)
+stopifnot(nrow(df.study2.role.scores) == 447L,
+          !anyDuplicated(df.study2.role.scores[c("population", "participant")]),
+          !anyNA(select(df.study2.role.scores, differentiation, fault_preference, punish_preference)))
+df.study2.role.long = df.study2.role.scores %>%
+  select(population, participant, age_group, condition, differentiation, fault_preference, punish_preference) %>%
+  pivot_longer(c(differentiation, fault_preference, punish_preference),
+               names_to = "score_key", values_to = "score") %>%
+  mutate(series = factor(role_responsibility_order[
+    match(score_key, c("differentiation", "fault_preference", "punish_preference"))],
+    levels = role_responsibility_order))
+set.seed(bootstrap_seed + 23L)
+df.study2.role.development = df.study2.role.long %>%
+  arrange(condition, age_group, series, participant) %>%
+  group_by(condition, population, age_group, series) %>%
+  summarise(summary = list(bootstrap_mean(score)), .groups = "drop") %>%
+  unnest_wider(summary) %>%
+  mutate(x = if_else(age_group == "Adult", comparison_adult_position,
+                     as.numeric(as.character(replace(age_group, age_group == "Adult", NA)))),
+         mean_pp = 100 * mean, lower_pp = 100 * lower, upper_pp = 100 * upper)
+df.matched.role.summary = bind_rows(
+  mutate(df.study1.role.development, study = "Study 1", condition = "Baseline"),
+  mutate(df.study2.role.development, study = "Study 2")) %>%
+  mutate(panel = factor(condition, levels = matched_role_panel_order)) %>%
+  arrange(panel, age_group, series)
+stopifnot(nrow(df.matched.role.summary) == 72L,
+          !anyDuplicated(df.matched.role.summary[c("panel", "age_group", "series")]),
+          all(dplyr::between(df.study2.role.long$score, -1, 1)))
+write_csv(select(df.matched.role.summary, study, condition, population, age_group, series,
+                 n, mean_pp, lower_pp, upper_pp),
+          file.path(matched_role_output, "matched_role_differentiation_development_talk_v1_values.csv"))
+kable(select(df.matched.role.summary, condition, age_group, series, n, mean_pp, lower_pp, upper_pp),
+      digits = 3, caption = "Matched panels: participant means and pointwise 95% bootstrap CIs (percentage points)")
+```
+
+CIs use 5,000 participant resamples per age/condition/score. The Baseline seed
+and intervals remain unchanged; Study 2 uses a separate fixed seed
+(`bootstrap_seed + 23`). These are descriptive between-sample comparisons,
+not within-person condition changes or formal tests between trajectories.
+
+## One fixed scaffold for both new build series
+
+Every matched panel uses the same age positions, y limits, tick marks,
+childhood shading, zero line, fonts, colors, shapes and line widths. The common
+y range is derived from **all** means and CI endpoints in all three conditions;
+no interval is clipped. The new standalone Study 1 version uses the same scale
+and style. Only the canvas width differs between the three-panel and single-panel
+figures. Both omit plot title, subtitle and footer text; Baseline, Accidental
+and Intentional remain as the required panel labels.
+
+Builds keep all data rows and the full scaffold in place, changing only their
+visibility. Adults remain separate reference points and appear only in Build 04.
+Child lines never extend to the Adult category. CIs appear with their points.
+
+```{r matched-role-plot-helper}
+matched_role_limits = c(
+  min(-25, floor(min(df.matched.role.summary$lower_pp) / 25) * 25),
+  max(25, ceiling(max(df.matched.role.summary$upper_pp) / 25) * 25))
+matched_role_breaks = seq(matched_role_limits[1], matched_role_limits[2], 25)
+df.matched.role.plot = df.matched.role.summary %>%
+  mutate(reveal_step = if_else(population == "Adults", 4L, as.integer(panel)))
+df.study1.role.v2.plot = df.matched.role.summary %>% filter(condition == "Baseline") %>%
+  mutate(reveal_step = if_else(population == "Adults", 4L, as.integer(series)))
+
+plot_matched_roles = function(values, panel_order, step) {
+  points = values %>%
+    mutate(panel = factor(as.character(panel), levels = panel_order),
+           visible = as.numeric(reveal_step <= step))
+  segments = points %>% filter(population == "Children") %>%
+    arrange(panel, series, x) %>% group_by(panel, series) %>%
+    mutate(end_x = lead(x), end_y = lead(mean_pp), end_step = lead(reveal_step)) %>%
+    ungroup() %>% filter(!is.na(end_x)) %>%
+    mutate(visible = as.numeric(pmax(reveal_step, end_step) <= step))
+  p = ggplot(points, aes(x = x, y = mean_pp, group = series)) +
+    annotate("rect", xmin = -Inf, xmax = 9.25, ymin = -Inf, ymax = Inf,
+             fill = talk_v2$childhood_fill, color = NA) +
+    geom_hline(yintercept = 0, linewidth = talk_v2$reference_width, linetype = "dashed") +
+    geom_linerange(aes(ymin = lower_pp, ymax = upper_pp, color = series, alpha = .55 * visible),
+                  linewidth = .85, show.legend = FALSE) +
+    geom_segment(data = segments, aes(xend = end_x, yend = end_y, color = series, alpha = visible),
+                 linewidth = talk_v2$line_width, show.legend = TRUE) +
+    geom_point(aes(fill = series, shape = series, alpha = visible), color = "black", size = 6.8,
+               stroke = 1.25, show.legend = TRUE) +
+    scale_alpha_identity(guide = "none") +
+    scale_color_manual(NULL, values = role_responsibility_colors, limits = role_responsibility_order,
+                       labels = role_responsibility_labels, drop = FALSE) +
+    scale_fill_manual(NULL, values = role_responsibility_colors, limits = role_responsibility_order,
+                      labels = role_responsibility_labels, drop = FALSE) +
+    scale_shape_manual(NULL, values = role_responsibility_shapes, limits = role_responsibility_order,
+                       labels = role_responsibility_labels, drop = FALSE) +
+    scale_x_continuous(breaks = c(child_ages, comparison_adult_position), labels = age_labels,
+                       limits = c(3, comparison_adult_position), expand = expansion(add = .35)) +
+    scale_y_continuous(limits = matched_role_limits, breaks = matched_role_breaks,
+                       labels = function(x) paste0(x, "%"), expand = expansion(add = 3)) +
+    labs(x = "Age", y = "Preference /\ndifferentiation score (%)",
+         title = NULL, subtitle = NULL, caption = NULL) +
+    guides(color = guide_legend(nrow = 1, override.aes = list(alpha = 1)),
+           fill = guide_legend(nrow = 1), shape = guide_legend(nrow = 1)) +
+    role_responsibility_theme
+  if (length(panel_order) > 1L) p = p + facet_wrap(~ panel, nrow = 1, drop = FALSE)
+  p
+}
+plot_matched_role_development = function(step = 4L) {
+  plot_matched_roles(df.matched.role.plot, matched_role_panel_order, step)
+}
+plot_study1_role_development_v2 = function(step = 4L) {
+  plot_matched_roles(df.study1.role.v2.plot, "Baseline", step)
+}
+
+# Every version is generated from the same summary; the final build copies the full export.
+save_role_development_builds = function(plot_function, output, stem, build_names, width) {
+  directory = file.path(output, "builds", stem)
+  dir.create(directory, recursive = TRUE, showWarnings = FALSE)
+  main = plot_function(4L)
+  filename = file.path(output, stem)
+  save_presentation_v2(main, filename, width = width, height = 10)
+  builds = lapply(0:4, function(step) {
+    plot = plot_function(step)
+    destination = file.path(directory, build_names[step + 1L])
+    if (step == 4L) {
+      stopifnot(identical(ggplot_build(plot)$data, ggplot_build(main)$data))
+      for (extension in c(".pdf", ".png")) {
+        stopifnot(file.copy(paste0(filename, extension), paste0(destination, extension), overwrite = TRUE))
+      }
+    } else save_presentation_v2(plot, destination, width = width, height = 10)
+    plot
+  })
+  list(main = main, builds = builds)
+}
+```
+
+The matched build order is 00 blank, 01 Baseline childhood, 02 add Accidental
+childhood, 03 add Intentional childhood, and 04 add all adults in all three
+panels. Each condition reveal shows all three scores and their CIs at once.
+
+```{r matched-role-exports, fig.width=24, fig.height=10}
+p.matched.role = save_role_development_builds(
+  plot_matched_role_development, matched_role_output, "matched_role_differentiation_development_talk_v1",
+  c("build00_blank", "build01_baseline", "build02_add_accidental", "build03_add_intentional",
+    "build04_add_adults_full"), width = 24)
+p.matched.role$main
+p.matched.role$builds[[1]]
+```
+
+The standalone Study 1 series uses 00 blank, 01 causal-role differentiation
+childhood, 02 add Fault childhood, 03 add Punish childhood, and 04 add all three
+Adult points. This is saved as **V2**, leaving the titled V1 and its relationship
+backup unchanged. The V2 numerical CSV is a byte-for-byte copy of V1's values.
+
+```{r study1-role-v2-exports, fig.width=17, fig.height=10}
+p.study1.role.v2 = save_role_development_builds(
+  plot_study1_role_development_v2, role_responsibility_output, "study1_role_differentiation_development_talk_v2",
+  c("build00_blank", "build01_causal_differentiation", "build02_add_fault", "build03_add_punish",
+    "build04_add_adults_full"), width = 17)
+stopifnot(file.copy(file.path(role_responsibility_output, "study1_role_differentiation_development_values.csv"),
+                    file.path(role_responsibility_output, "study1_role_differentiation_development_talk_v2_values.csv"),
+                    overwrite = TRUE))
+p.study1.role.v2$main
+p.study1.role.v2$builds[[1]]
+```
+
+## Verify scoring, original Baseline values, and fixed build geometry
+
+```{r matched-role-validation}
+# Recalculate Study 2 scores directly from signed binary responses, independently of the wide table.
+df.study2.role.direct = bind_rows(df.study2.adults.responses, df.study2.children.responses) %>%
+  mutate(signed_yes = endorsed * if_else((measure == "Lexical" & role == "Proximal") |
+                                        (measure != "Lexical" & role == "Distal"), 1, -1),
+         score_key = case_when(measure %in% c("Caused", "Lexical") ~ "differentiation",
+                               measure == "Fault" ~ "fault_preference", TRUE ~ "punish_preference")) %>%
+  group_by(population, participant, condition, score_key) %>%
+  summarise(checked_score = 2 * mean(signed_yes), .groups = "drop") %>%
+  left_join(df.study2.role.long, by = c("population", "participant", "condition", "score_key"),
+            relationship = "one-to-one")
+stopifnot(nrow(df.study2.role.direct) == 1341L,
+          all(abs(df.study2.role.direct$checked_score - df.study2.role.direct$score) < 1e-12))
+df.matched.baseline.check = filter(df.matched.role.summary, condition == "Baseline") %>%
+  left_join(df.study1.role.development, by = c("population", "age_group", "series"),
+            relationship = "one-to-one", suffix = c("_new", "_old"))
+for (column in c("n", "mean_pp", "lower_pp", "upper_pp")) {
+  stopifnot(identical(df.matched.baseline.check[[paste0(column, "_new")]],
+                      df.matched.baseline.check[[paste0(column, "_old")]]))
+}
+
+# Keep this CI-aware check local to the new families; earlier build checks remain unchanged.
+check_role_development_builds = function(family, expected_counts) {
+  full = ggplot_build(family$main)
+  full_grob = ggplotGrob(family$main)
+  counts = integer(5)
+  for (i in seq_along(family$builds)) {
+    plot = family$builds[[i]]
+    built = ggplot_build(plot)
+    grob = ggplotGrob(plot)
+    stopifnot(identical(built$layout$layout, full$layout$layout),
+              identical(grob$layout, full_grob$layout),
+              isTRUE(all.equal(grid::convertWidth(grob$widths, "cm", valueOnly = TRUE),
+                               grid::convertWidth(full_grob$widths, "cm", valueOnly = TRUE))),
+              isTRUE(all.equal(grid::convertHeight(grob$heights, "cm", valueOnly = TRUE),
+                               grid::convertHeight(full_grob$heights, "cm", valueOnly = TRUE))),
+              is.null(plot$labels$title), is.null(plot$labels$subtitle), is.null(plot$labels$caption))
+    for (panel in seq_along(built$layout$panel_params)) {
+      stopifnot(identical(built$layout$panel_params[[panel]]$x.range, full$layout$panel_params[[1]]$x.range),
+                identical(built$layout$panel_params[[panel]]$y.range, full$layout$panel_params[[1]]$y.range))
+    }
+    for (layer in seq_along(built$data)) {
+      a = built$data[[layer]]; b = full$data[[layer]]
+      stopifnot(identical(a[setdiff(names(a), "alpha")], b[setdiff(names(b), "alpha")]))
+      if ("alpha" %in% names(a) && !all(is.na(a$alpha)) && i > 1L) {
+        stopifnot(all(a$alpha >= ggplot_build(family$builds[[i - 1L]])$data[[layer]]$alpha))
+      }
+    }
+    points = built$data[[5]]
+    intervals = built$data[[3]]
+    counts[i] = sum(points$alpha > 0)
+    stopifnot(sum(intervals$alpha > 0) == counts[i],
+              all(intervals$ymin >= matched_role_limits[1]),
+              all(intervals$ymax <= matched_role_limits[2]))
+    if (i < 5L) stopifnot(all(points$alpha[points$x == comparison_adult_position] == 0))
+  }
+  stopifnot(identical(counts, expected_counts),
+            identical(ggplot_build(family$builds[[5]])$data, full$data))
+  TRUE
+}
+stopifnot(check_role_development_builds(p.matched.role, c(0L, 21L, 42L, 63L, 72L)),
+          check_role_development_builds(p.study1.role.v2, c(0L, 7L, 14L, 21L, 24L)))
+# Both new families use exactly the same axis scales.
+stopifnot(identical(ggplot_build(p.matched.role$main)$layout$panel_params[[1]]$x.range,
+                    ggplot_build(p.study1.role.v2$main)$layout$panel_params[[1]]$x.range),
+          identical(ggplot_build(p.matched.role$main)$layout$panel_params[[1]]$y.range,
+                    ggplot_build(p.study1.role.v2$main)$layout$panel_params[[1]]$y.range))
+```
+
+The shared y scale is `r matched_role_limits[1]`% to
+`r matched_role_limits[2]`%, including every interval. Full-precision values and
+sample sizes are saved alongside the plots. The panel sequence is a descriptive
+comparison of samples; it does not establish that adding intention information
+caused the difference from Study 1. Existing handoff gaps, including the missing
+Study 2 main adult dataset, remain unresolved.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons

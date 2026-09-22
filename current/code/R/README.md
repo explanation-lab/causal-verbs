@@ -1,5 +1,7 @@
 # R analysis
 
+The [matched role-differentiation figure and new Study 1 builds](../../figures/study_comparison/role_differentiation/README.md) compare Baseline, Accidental and Intentional on common axes. Each family has a blank scaffold and four cumulative reveals, with adults last; prior outputs are preserved.
+
 The [Study 1 causal-role differentiation synthesis](../../figures/study1_baseline_causal_chains/role_differentiation/README.md) adds a developmental comparison with distal fault/punishment preference and a participant-level relationship backup. It uses the unchanged baseline sample and reports exploratory associations with categorical age adjustment.
 
 The [intention-sensitivity companion](../../figures/study_comparison/presentation_v2/INTENTION_SENSITIVITY_ACROSS_CONTEXTS.md) compares Intentional-minus-Accidental effects across Single Cause and both chain roles in four presentation panels. It reuses validated participant means, preserves existing Single Cause intervals, and includes a separate CI backup and cumulative builds.

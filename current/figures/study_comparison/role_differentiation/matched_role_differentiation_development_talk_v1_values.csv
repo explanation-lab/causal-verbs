@@ -1,0 +1,73 @@
+study,condition,population,age_group,series,n,mean_pp,lower_pp,upper_pp
+Study 1,Baseline,Children,3,Causal-role differentiation,31,12.903225806451612,1.6129032258064528,25
+Study 1,Baseline,Children,3,Fault distal preference,31,1.6129032258064528,-16.12903225806452,19.354838709677416
+Study 1,Baseline,Children,3,Punish distal preference,31,4.838709677419356,-11.290322580645162,19.35483870967742
+Study 1,Baseline,Children,4,Causal-role differentiation,32,14.84375,2.34375,28.125
+Study 1,Baseline,Children,4,Fault distal preference,32,23.4375,4.6875,42.1875
+Study 1,Baseline,Children,4,Punish distal preference,32,-4.6875,-23.4375,14.0625
+Study 1,Baseline,Children,5,Causal-role differentiation,29,27.586206896551722,13.79310344827586,42.241379310344826
+Study 1,Baseline,Children,5,Fault distal preference,29,18.965517241379306,-1.7241379310344858,39.6551724137931
+Study 1,Baseline,Children,5,Punish distal preference,29,10.344827586206899,-6.896551724137931,27.586206896551722
+Study 1,Baseline,Children,6,Causal-role differentiation,30,55.83333333333332,39.16666666666667,71.66666666666667
+Study 1,Baseline,Children,6,Fault distal preference,30,29.999999999999993,8.333333333333332,51.66666666666667
+Study 1,Baseline,Children,6,Punish distal preference,30,31.666666666666664,11.666666666666666,50
+Study 1,Baseline,Children,7,Causal-role differentiation,30,54.16666666666667,41.666666666666664,66.66666666666667
+Study 1,Baseline,Children,7,Fault distal preference,30,71.66666666666667,55.00000000000001,86.66666666666667
+Study 1,Baseline,Children,7,Punish distal preference,30,60,45,75
+Study 1,Baseline,Children,8,Causal-role differentiation,30,55.833333333333336,40.833333333333336,70
+Study 1,Baseline,Children,8,Fault distal preference,30,71.66666666666667,58.33333333333333,85
+Study 1,Baseline,Children,8,Punish distal preference,30,68.33333333333333,55.00000000000001,81.66666666666667
+Study 1,Baseline,Children,9,Causal-role differentiation,29,62.06896551724138,49.137931034482754,75
+Study 1,Baseline,Children,9,Fault distal preference,29,58.620689655172406,36.20689655172414,79.3103448275862
+Study 1,Baseline,Children,9,Punish distal preference,29,46.55172413793104,22.41379310344828,68.96551724137932
+Study 1,Baseline,Adults,Adult,Causal-role differentiation,100,33.5,27.250000000000004,40
+Study 1,Baseline,Adults,Adult,Fault distal preference,100,71.50000000000001,62.5,79.5
+Study 1,Baseline,Adults,Adult,Punish distal preference,100,65.99999999999999,57.99999999999999,73.01249999999982
+Study 2,Accidental,Children,3,Causal-role differentiation,32,14.84375,3.90625,27.34375
+Study 2,Accidental,Children,3,Fault distal preference,32,1.5625,-18.75,21.875
+Study 2,Accidental,Children,3,Punish distal preference,32,0,-20.3125,18.75
+Study 2,Accidental,Children,4,Causal-role differentiation,35,27.857142857142858,17.857142857142854,37.857142857142854
+Study 2,Accidental,Children,4,Fault distal preference,35,19.999999999999993,-1.428571428571433,40.00000000000001
+Study 2,Accidental,Children,4,Punish distal preference,35,9.999999999999996,-9.999999999999996,28.57142857142858
+Study 2,Accidental,Children,5,Causal-role differentiation,25,28.000000000000004,14.000000000000002,43.00000000000001
+Study 2,Accidental,Children,5,Fault distal preference,25,5.999999999999996,-20,31.999999999999996
+Study 2,Accidental,Children,5,Punish distal preference,25,-7.999999999999999,-29.999999999999993,13.999999999999993
+Study 2,Accidental,Children,6,Causal-role differentiation,24,55.208333333333336,38.541666666666664,71.875
+Study 2,Accidental,Children,6,Fault distal preference,24,50,25,72.91666666666667
+Study 2,Accidental,Children,6,Punish distal preference,24,35.416666666666664,12.5,58.33333333333333
+Study 2,Accidental,Children,7,Causal-role differentiation,30,53.333333333333336,40.833333333333336,66.66666666666666
+Study 2,Accidental,Children,7,Fault distal preference,30,50,33.29166666666667,66.66666666666667
+Study 2,Accidental,Children,7,Punish distal preference,30,25,4.999999999999999,43.333333333333336
+Study 2,Accidental,Children,8,Causal-role differentiation,23,47.82608695652174,29.347826086956523,64.13043478260869
+Study 2,Accidental,Children,8,Fault distal preference,23,45.65217391304348,28.260869565217394,63.04347826086957
+Study 2,Accidental,Children,8,Punish distal preference,23,32.60869565217391,15.217391304347828,50
+Study 2,Accidental,Children,9,Causal-role differentiation,31,53.2258064516129,41.93548387096774,63.70967741935484
+Study 2,Accidental,Children,9,Fault distal preference,31,50,37.096774193548384,64.51612903225806
+Study 2,Accidental,Children,9,Punish distal preference,31,19.354838709677416,4.838709677419358,35.48387096774193
+Study 2,Accidental,Adults,Adult,Causal-role differentiation,21,30.952380952380953,15.476190476190476,45.23809523809524
+Study 2,Accidental,Adults,Adult,Fault distal preference,21,38.095238095238095,14.285714285714288,61.904761904761905
+Study 2,Accidental,Adults,Adult,Punish distal preference,21,26.190476190476193,4.761904761904761,47.61904761904761
+Study 2,Intentional,Children,3,Causal-role differentiation,37,6.75675675675676,-4.729729729729729,18.24324324324324
+Study 2,Intentional,Children,3,Fault distal preference,37,12.162162162162163,-5.40540540540541,29.729729729729726
+Study 2,Intentional,Children,3,Punish distal preference,37,24.32432432432433,4.054054054054053,44.59459459459459
+Study 2,Intentional,Children,4,Causal-role differentiation,23,7.608695652173914,-3.2608695652173925,18.47826086956522
+Study 2,Intentional,Children,4,Fault distal preference,23,15.217391304347828,-10.8695652173913,41.30434782608695
+Study 2,Intentional,Children,4,Punish distal preference,23,2.1739130434782585,-21.73913043478261,26.086956521739125
+Study 2,Intentional,Children,5,Causal-role differentiation,19,26.315789473684216,0,50
+Study 2,Intentional,Children,5,Fault distal preference,19,65.78947368421053,47.36842105263158,81.57894736842105
+Study 2,Intentional,Children,5,Punish distal preference,19,68.42105263157895,44.73684210526316,86.8421052631579
+Study 2,Intentional,Children,6,Causal-role differentiation,28,43.75,29.464285714285708,58.03571428571429
+Study 2,Intentional,Children,6,Fault distal preference,28,60.71428571428571,42.857142857142854,76.78571428571429
+Study 2,Intentional,Children,6,Punish distal preference,28,44.642857142857146,23.214285714285708,66.07142857142857
+Study 2,Intentional,Children,7,Causal-role differentiation,29,56.03448275862068,37.06896551724138,73.27586206896551
+Study 2,Intentional,Children,7,Fault distal preference,29,79.3103448275862,65.51724137931035,91.37931034482759
+Study 2,Intentional,Children,7,Punish distal preference,29,81.03448275862068,68.96551724137932,91.37931034482759
+Study 2,Intentional,Children,8,Causal-role differentiation,28,44.642857142857146,29.464285714285708,58.950892857142534
+Study 2,Intentional,Children,8,Fault distal preference,28,71.42857142857143,57.14285714285714,85.71428571428571
+Study 2,Intentional,Children,8,Punish distal preference,28,80.35714285714286,66.07142857142857,92.85714285714286
+Study 2,Intentional,Children,9,Causal-role differentiation,42,43.452380952380956,30.357142857142854,56.547619047619044
+Study 2,Intentional,Children,9,Fault distal preference,42,72.61904761904762,57.14285714285715,84.52380952380952
+Study 2,Intentional,Children,9,Punish distal preference,42,77.3809523809524,63.095238095238095,90.47619047619048
+Study 2,Intentional,Adults,Adult,Causal-role differentiation,20,33.75000000000001,17.5,52.5
+Study 2,Intentional,Adults,Adult,Fault distal preference,20,95,87.5,100
+Study 2,Intentional,Adults,Adult,Punish distal preference,20,87.5,75,97.5
