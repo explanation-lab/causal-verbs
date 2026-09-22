@@ -3690,6 +3690,200 @@ comparison of samples; it does not establish that adding intention information
 caused the difference from Study 1. Existing handoff gaps, including the missing
 Study 2 main adult dataset, remain unresolved.
 
+# Causal-role differentiation and intention effects: Fault and Punish
+
+This additional two-panel talk figure uses exactly **3, 4, 5, 6, Adult**.
+Both panels contain the same Study 1 Baseline causal-role differentiation
+reference. Fault and Punish intention effects come from Single Cause and
+Study 2's **Distal role only**. No Proximal series, older child groups or
+previous outputs are changed or included in this new figure.
+
+The reference is the existing participant-level composite,
+`((Caused Distal - Proximal) + (Lexical Proximal - Distal)) / 2`,
+using Study 1 only. Reuse its age means and bootstrap intervals exactly.
+For each intention effect, reuse the existing scenario-averaged participant
+Yes means, average participants within age and condition, and subtract
+**Intentional minus Accidental**. Conditions contain different participants;
+no within-person intention contrast is invented. Yes = 1, No = 0, and neither
+responses remain included.
+
+## Exact estimates and uncertainty
+
+The main figure omits CIs for presentation clarity. Its full-precision table
+also reports source condition means, sample sizes and pointwise 95% bootstrap
+intervals. For the new intention-effect intervals, independently resample whole
+participants within each age × condition × context, keeping Fault and Punish
+together, and subtract condition means within each of 5,000 draws. Do not
+subtract endpoints of separate CIs. The Baseline reference retains its original
+intervals and is duplicated only for display in the two panels.
+
+```{r role-intention-summary}
+role_intention_output = "../../figures/study_comparison/role_differentiation_intention_effects"
+dir.create(role_intention_output, recursive = TRUE, showWarnings = FALSE)
+role_intention_ages = c("3", "4", "5", "6", "Adult")
+role_intention_panels = c("Fault", "Punish")
+role_intention_order = c("Causal-role differentiation", "Single Cause", "Chain: Distal")
+
+df.role.intention.means = bind_rows(
+  df.single.means %>% mutate(population = "Children", source_study = "Single Cause", context = "Single Cause"),
+  df.single.adults.means %>% mutate(population = "Adults", age = NA_integer_,
+                                   source_study = "Single Cause", context = "Single Cause"),
+  df.study2.means %>% filter(role == "Distal", population == "Adults" | age %in% 3:6) %>%
+    mutate(source_study = "Study 2", context = "Chain: Distal")) %>%
+  filter(measure %in% role_intention_panels) %>%
+  mutate(age_group = factor(if_else(population == "Adults", "Adult", as.character(age)),
+                            levels = role_intention_ages)) %>%
+  select(source_study, context, population, age_group, participant, condition, measure, yes_mean)
+stopifnot(nrow(df.role.intention.means) == 784L,
+          !anyNA(df.role.intention.means),
+          !anyDuplicated(df.role.intention.means[c("context", "population", "participant", "measure")]),
+          all(df.role.intention.means$condition %in% condition_order))
+
+# Whole-participant rows preserve the relation between Fault and Punish during resampling.
+df.role.intention.wide = df.role.intention.means %>%
+  pivot_wider(names_from = measure, values_from = yes_mean) %>%
+  arrange(context, age_group, condition, participant)
+set.seed(bootstrap_seed + 24L)
+role_intention_intervals = list()
+for (context_name in c("Single Cause", "Chain: Distal")) {
+  for (age_name in role_intention_ages) {
+    rows = df.role.intention.wide %>% filter(context == context_name, age_group == age_name)
+    intentional = rows %>% filter(condition == "Intentional") %>% select(all_of(role_intention_panels)) %>% as.matrix()
+    accidental = rows %>% filter(condition == "Accidental") %>% select(all_of(role_intention_panels)) %>% as.matrix()
+    stopifnot(nrow(intentional) > 0L, nrow(accidental) > 0L, !anyNA(intentional), !anyNA(accidental))
+    draws = replicate(bootstrap_replicates, {
+      i = sample.int(nrow(intentional), replace = TRUE)
+      a = sample.int(nrow(accidental), replace = TRUE)
+      100 * (colMeans(intentional[i, , drop = FALSE]) - colMeans(accidental[a, , drop = FALSE]))
+    })
+    role_intention_intervals[[length(role_intention_intervals) + 1L]] = tibble(
+      context = context_name, age_group = age_name, measure = role_intention_panels,
+      lower_pp = apply(draws, 1, quantile, probs = .025),
+      upper_pp = apply(draws, 1, quantile, probs = .975))
+  }
+}
+df.role.intention.effects = df.role.intention.means %>%
+  group_by(source_study, context, population, age_group, measure, condition) %>%
+  summarise(n = n(), yes_mean = mean(yes_mean), .groups = "drop") %>%
+  pivot_wider(names_from = condition, values_from = c(n, yes_mean)) %>%
+  mutate(mean_pp = 100 * (yes_mean_Intentional - yes_mean_Accidental)) %>%
+  left_join(bind_rows(role_intention_intervals), by = c("context", "age_group", "measure"),
+            relationship = "one-to-one")
+df.role.intention.reference = df.study1.role.development %>%
+  filter(series == "Causal-role differentiation", age_group %in% role_intention_ages) %>%
+  transmute(source_study = "Study 1", population, age_group = as.character(age_group),
+            baseline_n = n, mean_pp, lower_pp, upper_pp)
+df.role.intention.plot = bind_rows(
+  bind_rows(lapply(role_intention_panels, function(panel_name) {
+    df.role.intention.reference %>% mutate(panel = panel_name, series = "Causal-role differentiation",
+                                          quantity = "Study 1 causal-role differentiation")
+  })),
+  df.role.intention.effects %>%
+    rename(panel = measure, series = context) %>%
+    mutate(quantity = "Intentional minus Accidental")) %>%
+  mutate(panel = factor(panel, levels = role_intention_panels),
+         series = factor(series, levels = role_intention_order),
+         age_group = factor(age_group, levels = role_intention_ages),
+         x = if_else(age_group == "Adult", single_adult_position,
+                     as.numeric(as.character(replace(age_group, age_group == "Adult", NA))))) %>%
+  arrange(panel, series, age_group)
+stopifnot(nrow(df.role.intention.plot) == 30L,
+          !anyDuplicated(df.role.intention.plot[c("panel", "series", "age_group")]),
+          !anyNA(df.role.intention.plot$mean_pp),
+          all(dplyr::between(df.role.intention.plot$mean_pp, -100, 100)))
+write_csv(select(df.role.intention.plot, panel, series, source_study, quantity, population, age_group,
+                 baseline_n, n_Intentional, n_Accidental, yes_mean_Intentional, yes_mean_Accidental,
+                 mean_pp, lower_pp, upper_pp),
+          file.path(role_intention_output, "role_differentiation_intention_effects_talk_v1_values.csv"))
+kable(select(df.role.intention.plot, panel, series, age_group, baseline_n, n_Intentional, n_Accidental,
+              mean_pp, lower_pp, upper_pp), digits = 3,
+      caption = "Exact plotted means and backup 95% intervals (percentage points); the reference repeats in both panels")
+```
+
+## Talk figure
+
+Gray dashed lines and circles identify the common Baseline reference. Blue
+squares identify Single Cause intention effects, and red diamonds identify
+Chain: Distal intention effects. Single Cause is blue **in this new figure**
+because gray is reserved for the reference; earlier figures retain their colors.
+Childhood shading ends after age 6 and before the separate Adult reference
+points. Adults are not treated as another chronological child age, and child
+lines do not extend to them. Fault and Punish share the same axes and one legend.
+No title, subtitle, footer, build series or additional plot is added.
+
+```{r role-intention-plot, fig.width=18, fig.height=9.5}
+role_intention_colors = setNames(c("#666666", "#377EB8", "#E41A1C"), role_intention_order)
+role_intention_shapes = setNames(c(21, 22, 23), role_intention_order)
+role_intention_lines = setNames(c("dashed", "solid", "solid"), role_intention_order)
+role_intention_labels = setNames(c("Causal-role\ndifferentiation", "Single Cause", "Chain: Distal"), role_intention_order)
+role_intention_limits = c(
+  min(-25, floor(min(df.role.intention.plot$mean_pp) / 25) * 25),
+  max(25, ceiling(max(df.role.intention.plot$mean_pp) / 25) * 25))
+p.role.intention = ggplot(df.role.intention.plot, aes(x = x, y = mean_pp, group = series)) +
+  annotate("rect", xmin = -Inf, xmax = 6.25, ymin = -Inf, ymax = Inf,
+           fill = talk_v2$childhood_fill, color = NA) +
+  geom_hline(yintercept = 0, linetype = "dashed", linewidth = 1.1, color = "black") +
+  geom_line(data = filter(df.role.intention.plot, population == "Children"),
+            aes(color = series, linetype = series), linewidth = talk_v2$line_width) +
+  geom_point(aes(fill = series, shape = series), size = 6.8, color = "black", stroke = 1.25) +
+  facet_wrap(~ panel, nrow = 1, drop = FALSE) +
+  scale_color_manual(NULL, values = role_intention_colors, limits = role_intention_order, labels = role_intention_labels) +
+  scale_fill_manual(NULL, values = role_intention_colors, limits = role_intention_order, labels = role_intention_labels) +
+  scale_shape_manual(NULL, values = role_intention_shapes, limits = role_intention_order, labels = role_intention_labels) +
+  scale_linetype_manual(NULL, values = role_intention_lines, limits = role_intention_order, labels = role_intention_labels) +
+  scale_x_continuous(breaks = c(3:6, single_adult_position), labels = role_intention_ages,
+                     limits = c(3, single_adult_position), expand = expansion(add = .35)) +
+  scale_y_continuous(limits = role_intention_limits, breaks = seq(role_intention_limits[1], role_intention_limits[2], 25),
+                     labels = function(x) paste0(x, "%"), expand = expansion(add = 3)) +
+  labs(x = "Age", y = "Difference\n(percentage points)", title = NULL, subtitle = NULL, caption = NULL) +
+  role_responsibility_theme + theme(legend.key.width = grid::unit(2.2, "cm")) +
+  guides(color = guide_legend(nrow = 1), fill = guide_legend(nrow = 1),
+         shape = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1))
+save_presentation_v2(p.role.intention,
+                    file.path(role_intention_output, "role_differentiation_intention_effects_talk_v1"),
+                    width = 18, height = 9.5)
+p.role.intention
+```
+
+## Verify source contrasts and duplicated reference
+
+```{r role-intention-validation}
+# Independently subtract the already-validated raw Yes group means.
+df.role.intention.checked = bind_rows(
+  df.single.summary %>% filter(measure %in% role_intention_panels) %>%
+    transmute(context = "Single Cause", population, age_group, measure, condition, n, mean),
+  df.study2.summary %>% filter(role == "Distal", measure %in% role_intention_panels,
+                               age_group %in% role_intention_ages) %>%
+    transmute(context = "Chain: Distal", population, age_group, measure, condition, n, mean)) %>%
+  pivot_wider(names_from = condition, values_from = c(n, mean)) %>%
+  mutate(checked_pp = 100 * (mean_Intentional - mean_Accidental)) %>%
+  left_join(df.role.intention.effects, by = c("context", "population", "age_group", "measure"),
+            suffix = c("_checked", "_new"), relationship = "one-to-one")
+stopifnot(nrow(df.role.intention.checked) == 20L,
+          all(abs(df.role.intention.checked$checked_pp - df.role.intention.checked$mean_pp) < 1e-12),
+          all(df.role.intention.checked$n_Intentional_checked == df.role.intention.checked$n_Intentional_new),
+          all(df.role.intention.checked$n_Accidental_checked == df.role.intention.checked$n_Accidental_new))
+role_reference_fault = df.role.intention.plot %>% filter(series == "Causal-role differentiation", panel == "Fault") %>% select(-panel)
+role_reference_punish = df.role.intention.plot %>% filter(series == "Causal-role differentiation", panel == "Punish") %>% select(-panel)
+stopifnot(identical(role_reference_fault, role_reference_punish))
+role_intention_built = ggplot_build(p.role.intention)
+stopifnot(nrow(role_intention_built$data[[4]]) == 30L,
+          nrow(role_intention_built$data[[3]]) == 24L,
+          all(role_intention_built$data[[3]]$x %in% 3:6),
+          identical(role_intention_built$layout$panel_params[[1]]$x.range,
+                    role_intention_built$layout$panel_params[[2]]$x.range),
+          identical(role_intention_built$layout$panel_params[[1]]$y.range,
+                    role_intention_built$layout$panel_params[[2]]$y.range))
+```
+
+The reference and intention-effect series are different estimands in common
+percentage-point units. Their visual relation is descriptive, not a participant-level
+association or a test that causal differentiation produces sensitivity to intention.
+The same existing source samples and limitations apply: Study 2 adults are the
+41-person pilot; its main adult dataset is missing. Single Cause uses all 32
+recovered adults, while its historical N=30 subset remains unidentified. No
+participant inclusion rule or unresolved scientific handoff conclusion changes.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons

@@ -1,0 +1,31 @@
+panel,series,source_study,quantity,population,age_group,baseline_n,n_Intentional,n_Accidental,yes_mean_Intentional,yes_mean_Accidental,mean_pp,lower_pp,upper_pp
+Fault,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Children,3,31,NA,NA,NA,NA,12.903225806451612,1.6129032258064528,25
+Fault,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Children,4,32,NA,NA,NA,NA,14.84375,2.34375,28.125
+Fault,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Children,5,29,NA,NA,NA,NA,27.586206896551722,13.79310344827586,42.241379310344826
+Fault,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Children,6,30,NA,NA,NA,NA,55.83333333333332,39.16666666666667,71.66666666666667
+Fault,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Adults,Adult,100,NA,NA,NA,NA,33.5,27.250000000000004,40
+Fault,Single Cause,Single Cause,Intentional minus Accidental,Children,3,NA,14,12,0.7857142857142857,0.5833333333333334,20.238095238095234,-5.3720238095238075,47.61904761904762
+Fault,Single Cause,Single Cause,Intentional minus Accidental,Children,4,NA,10,14,0.65,0.7857142857142857,-13.571428571428568,-47.85714285714286,19.999999999999996
+Fault,Single Cause,Single Cause,Intentional minus Accidental,Children,5,NA,13,10,0.8461538461538461,0.55,29.61538461538461,-1.538461538461544,62.30769230769231
+Fault,Single Cause,Single Cause,Intentional minus Accidental,Children,6,NA,13,10,0.8846153846153846,0.45,43.46153846153846,10.769230769230775,75
+Fault,Single Cause,Single Cause,Intentional minus Accidental,Adults,Adult,NA,16,16,0.9375,0.5625,37.5,12.5,62.5
+Fault,Chain: Distal,Study 2,Intentional minus Accidental,Children,3,NA,37,32,0.6081081081081081,0.5625,4.560810810810811,-12.415540540540537,21.328124999999964
+Fault,Chain: Distal,Study 2,Intentional minus Accidental,Children,4,NA,23,35,0.5434782608695652,0.5714285714285714,-2.795031055900621,-24.534161490683225,18.13664596273292
+Fault,Chain: Distal,Study 2,Intentional minus Accidental,Children,5,NA,19,25,0.8157894736842105,0.44,37.57894736842105,18.210526315789465,57.47368421052632
+Fault,Chain: Distal,Study 2,Intentional minus Accidental,Children,6,NA,28,24,0.7678571428571429,0.6666666666666666,10.119047619047628,-9.82142857142857,30.059523809523803
+Fault,Chain: Distal,Study 2,Intentional minus Accidental,Adults,Adult,NA,20,21,0.975,0.6428571428571429,33.21428571428571,16.02678571428573,52.14285714285714
+Punish,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Children,3,31,NA,NA,NA,NA,12.903225806451612,1.6129032258064528,25
+Punish,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Children,4,32,NA,NA,NA,NA,14.84375,2.34375,28.125
+Punish,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Children,5,29,NA,NA,NA,NA,27.586206896551722,13.79310344827586,42.241379310344826
+Punish,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Children,6,30,NA,NA,NA,NA,55.83333333333332,39.16666666666667,71.66666666666667
+Punish,Causal-role differentiation,Study 1,Study 1 causal-role differentiation,Adults,Adult,100,NA,NA,NA,NA,33.5,27.250000000000004,40
+Punish,Single Cause,Single Cause,Intentional minus Accidental,Children,3,NA,14,12,0.5714285714285714,0.5416666666666666,2.9761904761904767,-25.595238095238095,30.95238095238096
+Punish,Single Cause,Single Cause,Intentional minus Accidental,Children,4,NA,10,14,0.65,0.6071428571428572,4.285714285714281,-32.14285714285714,40
+Punish,Single Cause,Single Cause,Intentional minus Accidental,Children,5,NA,13,10,0.8461538461538461,0.45,39.61538461538461,6.538461538461537,71.93269230769216
+Punish,Single Cause,Single Cause,Intentional minus Accidental,Children,6,NA,13,10,0.7692307692307693,0.3,46.92307692307693,19.23076923076923,73.46153846153845
+Punish,Single Cause,Single Cause,Intentional minus Accidental,Adults,Adult,NA,16,16,0.9375,0.03125,90.625,81.25,100
+Punish,Chain: Distal,Study 2,Intentional minus Accidental,Children,3,NA,37,32,0.6081081081081081,0.46875,13.93581081081081,-4.898648648648651,32.34797297297297
+Punish,Chain: Distal,Study 2,Intentional minus Accidental,Children,4,NA,23,35,0.4347826086956522,0.44285714285714284,-0.8074534161490621,-21.677018633540367,19.254658385093173
+Punish,Chain: Distal,Study 2,Intentional minus Accidental,Children,5,NA,19,25,0.7894736842105263,0.28,50.94736842105263,27.78947368421053,71.57894736842105
+Punish,Chain: Distal,Study 2,Intentional minus Accidental,Children,6,NA,28,24,0.6071428571428571,0.5208333333333333,8.630952380952383,-14.583333333333337,31.25
+Punish,Chain: Distal,Study 2,Intentional minus Accidental,Adults,Adult,NA,20,21,0.925,0.30952380952380953,61.54761904761905,41.785714285714285,78.57142857142857

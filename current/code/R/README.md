@@ -1,5 +1,7 @@
 # R analysis
 
+The [Fault/Punish differentiation-and-intention figure](../../figures/study_comparison/role_differentiation_intention_effects/README.md) adds two panels for ages 3–6 and Adult. Each repeats the Study 1 causal-role reference alongside Single Cause and Chain: Distal intention effects. Existing outputs are preserved.
+
 The [matched role-differentiation figure and new Study 1 builds](../../figures/study_comparison/role_differentiation/README.md) compare Baseline, Accidental and Intentional on common axes. Each family has a blank scaffold and four cumulative reveals, with adults last; prior outputs are preserved.
 
 The [Study 1 causal-role differentiation synthesis](../../figures/study1_baseline_causal_chains/role_differentiation/README.md) adds a developmental comparison with distal fault/punishment preference and a participant-level relationship backup. It uses the unchanged baseline sample and reports exploratory associations with categorical age adjustment.
