@@ -1,5 +1,7 @@
 # R analysis
 
+The [two-panel raw-responsibility V2](../../figures/study_comparison/binned_role_and_responsibility/V2.md) repeats the unchanged Study 1 differentiation reference inside both Fault and Punish, alongside four raw-response trajectories. It preserves the three-panel V1 and reuses all estimates and participant-bootstrap CIs.
+
 The [binned differentiation and raw responsibility figure](../../figures/study_comparison/binned_role_and_responsibility/README.md) places the Study 1 baseline composite beside raw Fault/Punish Yes rates for Single Cause and Chain: Distal, with context colors, condition markers and participant-bootstrap CIs. It uses ages 3–4, 5–6 and Adult; all earlier figures remain unchanged.
 
 The [extended developmental comparison and age-adjusted analyses](../../figures/study_comparison/role_differentiation_age_adjusted/README.md) add three new figures: ages 3–9 plus Adult with bootstrap CIs, and children-only Study 1/Study 2 responsibility relationships adjusted for numeric age. Existing figures and the earlier categorical-age models remain unchanged.

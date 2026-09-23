@@ -4510,6 +4510,128 @@ Adult endpoint uses all 32 recovered adults; its historical N=30 subset remains
 unidentified. The existing uncapped child snapshot, participant-selection and
 scientific handoff limitations remain unchanged.
 
+# Binned raw responsibility with a shared differentiation reference
+
+This additional **V2** places the same Study 1 causal-role differentiation
+trajectory directly inside both the Fault and Punish panels, beside the four
+raw-response trajectories. The three-panel V1 remains unchanged. All means,
+participant Ns and 95% participant-bootstrap intervals are reused from V1:
+there is no new scoring, sample selection, resampling or inferential analysis.
+
+The common numeric scale displays percentages, but the quantities retain their
+original meanings. Colored lines show raw Yes-response percentages; the gray
+reference is a causal-role contrast in percentage points, not a Yes-response
+rate. Its formula remains
+`((Caused Distal - Caused Proximal) + (Lexical Proximal - Lexical Distal)) / 2`,
+computed within participant before group averaging. It is identical in both
+panels and is not subtracted from the responsibility judgments.
+
+## Reuse all estimates and duplicate only the baseline reference
+
+```{r binned-role-responsibility-v2-values}
+binned_v2_series_order = c("Causal-role differentiation", binned_series_order)
+df.binned.responsibility.v2 = bind_rows(
+  bind_rows(lapply(c("Fault", "Punish"), function(panel_name) {
+    df.binned.baseline %>% mutate(panel = panel_name)
+  })),
+  df.binned.responsibility) %>%
+  mutate(panel = factor(panel, levels = c("Fault", "Punish")),
+         series = factor(if_else(context == "Baseline", "Causal-role differentiation",
+                                  paste(context, condition)), levels = binned_v2_series_order)) %>%
+  arrange(panel, series, stage)
+df.binned.responsibility.v2.values = df.binned.responsibility.v2 %>%
+  mutate(age_group = binned_age_labels[as.integer(stage)]) %>%
+  select(panel, series, study, context, condition, population, age_group, quantity, unit,
+         n, mean_pct, lower_pct, upper_pct)
+write_csv(df.binned.responsibility.v2.values,
+          file.path(binned_responsibility_output, "causal_role_and_raw_responsibility_talk_v2_values.csv"))
+kable(df.binned.responsibility.v2.values, digits = 3,
+      caption = "Two-panel V2: unchanged estimates and CIs, with the baseline repeated in both panels")
+```
+
+## Five readable trajectories per panel
+
+A gray long-dashed line with filled squares identifies the baseline reference.
+Blue identifies Single Cause and red identifies Chain: Distal. Intentional
+remains solid with filled circles; Accidental remains dashed with open triangles.
+Both panels use the same 0–100% scale and 50% reference line. Shading covers the
+two child bins and ends before Adult. Small fixed horizontal offsets separate
+uncertainty bars while keeping each trajectory centered on the age categories.
+The one-row legend identifies all five trajectories.
+
+```{r binned-role-responsibility-v2-plot, fig.width=20, fig.height=10.5}
+binned_v2_labels = c("Causal-role\ndifferentiation", binned_series_labels)
+binned_v2_colors = c("Causal-role differentiation" = "#666666", binned_series_colors)
+binned_v2_fills = c("Causal-role differentiation" = "#666666", binned_series_fills)
+binned_v2_shapes = c("Causal-role differentiation" = 22, binned_series_shapes)
+binned_v2_lines = c("Causal-role differentiation" = "longdash", binned_series_lines)
+binned_v2_offsets = setNames(c(0, -.10, -.05, .05, .10), binned_v2_series_order)
+df.binned.responsibility.v2.plot = df.binned.responsibility.v2 %>%
+  mutate(x_plot = x + unname(binned_v2_offsets[as.character(series)]))
+p.binned.role.responsibility.v2 = ggplot(df.binned.responsibility.v2.plot,
+                                        aes(x = x_plot, y = mean_pct, group = series)) +
+  annotate("rect", xmin = -Inf, xmax = 2.22, ymin = -Inf, ymax = Inf,
+           fill = talk_v2$childhood_fill, color = NA) +
+  geom_hline(yintercept = 50, linetype = "dashed", linewidth = .95, color = "#555555") +
+  geom_errorbar(aes(ymin = lower_pct, ymax = upper_pct, color = series),
+                width = .055, linewidth = .65, alpha = .5, show.legend = FALSE) +
+  geom_line(aes(color = series, linetype = series), linewidth = 2.1) +
+  geom_point(aes(color = series, fill = series, shape = series), size = 7.2, stroke = 1.25) +
+  facet_wrap(~ panel, nrow = 1) + binned_x_scale() +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 25),
+                     labels = function(x) paste0(x, "%"), expand = expansion(add = 2)) +
+  scale_color_manual(NULL, values = binned_v2_colors, limits = binned_v2_series_order, labels = binned_v2_labels) +
+  scale_fill_manual(NULL, values = binned_v2_fills, limits = binned_v2_series_order, labels = binned_v2_labels) +
+  scale_shape_manual(NULL, values = binned_v2_shapes, limits = binned_v2_series_order, labels = binned_v2_labels) +
+  scale_linetype_manual(NULL, values = binned_v2_lines, limits = binned_v2_series_order, labels = binned_v2_labels) +
+  labs(x = "Age", y = '\"Yes\" responses /\ndifferentiation (%)',
+       caption = paste0("Colored lines: raw Yes responses. Gray line: Study 1 causal-role differentiation.\n",
+                        "Single Cause child data are pilot data. Bars show 95% participant-bootstrap CIs.")) +
+  binned_talk_theme +
+  theme(legend.text = element_text(size = 23), legend.key.width = grid::unit(2.2, "cm"),
+        plot.caption = element_text(size = 18, hjust = .5, margin = margin(t = 14))) +
+  guides(color = guide_legend(nrow = 1), fill = guide_legend(nrow = 1),
+         shape = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1))
+save_presentation_v2(p.binned.role.responsibility.v2,
+                    file.path(binned_responsibility_output, "causal_role_and_raw_responsibility_talk_v2"),
+                    width = 20, height = 10.5)
+p.binned.role.responsibility.v2
+```
+
+## Confirm V1 identity and the duplicated reference
+
+```{r binned-role-responsibility-v2-checks}
+df.binned.v2.checked = df.binned.responsibility.v2.values %>%
+  mutate(source_panel = if_else(context == "Baseline", "Causal-role differentiation", as.character(panel))) %>%
+  left_join(df.binned.responsibility.values %>% rename(source_panel = panel),
+            by = c("source_panel", "study", "context", "condition", "population", "age_group", "quantity", "unit"),
+            suffix = c("", "_v1"), relationship = "many-to-one")
+binned_v2_built = ggplot_build(p.binned.role.responsibility.v2)
+binned_v2_groups = as_tibble(binned_v2_built$data[[4]]) %>% count(PANEL, group)
+binned_v2_reference = df.binned.responsibility.v2.values %>%
+  filter(context == "Baseline") %>% select(panel, age_group, n, mean_pct, lower_pct, upper_pct)
+stopifnot(nrow(df.binned.v2.checked) == 30L, !anyNA(df.binned.v2.checked),
+          all(df.binned.v2.checked$n == df.binned.v2.checked$n_v1),
+          all(df.binned.v2.checked$mean_pct == df.binned.v2.checked$mean_pct_v1),
+          all(df.binned.v2.checked$lower_pct == df.binned.v2.checked$lower_pct_v1),
+          all(df.binned.v2.checked$upper_pct == df.binned.v2.checked$upper_pct_v1),
+          identical(filter(binned_v2_reference, panel == "Fault") %>% select(-panel),
+                    filter(binned_v2_reference, panel == "Punish") %>% select(-panel)),
+          nrow(binned_v2_built$layout$layout) == 2L,
+          nrow(binned_v2_built$data[[5]]) == 30L, nrow(binned_v2_groups) == 10L,
+          all(binned_v2_groups$n == 3L), all(binned_v2_built$data[[2]]$yintercept == 50),
+          all(binned_v2_built$data[[3]]$ymin >= 0), all(binned_v2_built$data[[3]]$ymax <= 100),
+          identical(binned_v2_built$layout$panel_params[[1]]$x.range,
+                    binned_v2_built$layout$panel_params[[2]]$x.range),
+          identical(binned_v2_built$layout$panel_params[[1]]$y.range,
+                    binned_v2_built$layout$panel_params[[2]]$y.range))
+```
+
+The unchanged intervals describe each mean, not the separation between curves.
+An equal height of a differentiation score and a raw Yes rate does not imply
+that they measure the same construct. All existing pilot, adult-sample and
+unresolved scientific handoff limitations remain unchanged.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons
