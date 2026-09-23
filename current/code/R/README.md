@@ -1,5 +1,7 @@
 # R analysis
 
+The [centered comparison and intention-effect backup](../../figures/study_comparison/binned_role_and_responsibility/CENTERED_AND_INTENTION_EFFECT.md) add two Fault/Punish figures: the requested Yes-minus-50 and differentiation-divided-by-two scale, and a direct Single Cause versus Chain: Distal comparison of Intentional-minus-Accidental effects. Earlier figures and source estimates remain unchanged.
+
 The [two-panel raw-responsibility V2](../../figures/study_comparison/binned_role_and_responsibility/V2.md) repeats the unchanged Study 1 differentiation reference inside both Fault and Punish, alongside four raw-response trajectories. It preserves the three-panel V1 and reuses all estimates and participant-bootstrap CIs.
 
 The [binned differentiation and raw responsibility figure](../../figures/study_comparison/binned_role_and_responsibility/README.md) places the Study 1 baseline composite beside raw Fault/Punish Yes rates for Single Cause and Chain: Distal, with context colors, condition markers and participant-bootstrap CIs. It uses ages 3–4, 5–6 and Adult; all earlier figures remain unchanged.

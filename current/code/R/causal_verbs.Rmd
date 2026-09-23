@@ -4632,6 +4632,205 @@ An equal height of a differentiation score and a raw Yes rate does not imply
 that they measure the same construct. All existing pilot, adult-sample and
 unresolved scientific handoff limitations remain unchanged.
 
+# Centered responsibility and a direct intention-effect comparison
+
+These two new figures preserve all earlier versions and source data. Both use
+Fault/Punish panels and ages 3–4, 5–6 and Adult, with the same participant-first
+averaging and sample definitions as the binned raw-response figures. Single
+Cause child data remain **pilot data**. No participant is added or excluded.
+
+## Center the five trajectories using the requested transformations
+
+Start with the V2 percentages, not proportions on a 0–1 scale. For responsibility,
+subtract 50 from each Yes percentage. For Study 1 causal-role differentiation,
+divide the composite percentage-point score by 2, with no subtraction. Thus 0
+means either 50/50 responding or no causal-role differentiation. Perfect expected
+role differentiation (+100 before scaling) and 100% Yes both map to +50. A
+negative differentiation score, if present, would mean the reverse expected
+role mapping; a negative responsibility value means less than 50% Yes.
+
+Apply the **same positive linear transformation to both confidence limits**.
+This preserves the original 95% percentile-bootstrap coverage and requires no
+new bootstrap draws. The raw means and bounds remain in the exported table
+beside the transformed values. The two quantities retain different substantive
+meanings even though their numeric ranges and chosen zero points now align.
+
+```{r centered-role-responsibility-values}
+df.binned.centered = df.binned.responsibility.v2 %>%
+  mutate(transformation = if_else(context == "Baseline", "Differentiation (%) / 2", "Yes (%) - 50"),
+         centered_mean = if_else(context == "Baseline", mean_pct / 2, mean_pct - 50),
+         centered_lower = if_else(context == "Baseline", lower_pct / 2, lower_pct - 50),
+         centered_upper = if_else(context == "Baseline", upper_pct / 2, upper_pct - 50),
+         x_plot = x + unname(binned_v2_offsets[as.character(series)]))
+df.binned.centered.values = df.binned.centered %>%
+  mutate(age_group = binned_age_labels[as.integer(stage)]) %>%
+  select(panel, series, study, context, condition, population, age_group, n,
+         quantity, unit, mean_pct, lower_pct, upper_pct, transformation,
+         centered_mean, centered_lower, centered_upper)
+write_csv(df.binned.centered.values,
+          file.path(binned_responsibility_output, "causal_role_and_raw_responsibility_centered_talk_v1_values.csv"))
+kable(select(df.binned.centered.values, panel, series, age_group, n,
+              transformation, centered_mean, centered_lower, centered_upper), digits = 3,
+      caption = "Centered comparison: transformed means and 95% participant-bootstrap CIs")
+```
+
+The centered main plot keeps the five-trajectory mapping from V2. A strong
+zero reference replaces the 50% reference. The common −50% to 50% range includes
+all transformed means and CI bounds, without clipping. The caption gives the
+exact transformations and explains zero directly on the figure.
+
+```{r centered-role-responsibility-plot, fig.width=20, fig.height=10.5}
+p.binned.centered = ggplot(df.binned.centered,
+                           aes(x = x_plot, y = centered_mean, group = series)) +
+  annotate("rect", xmin = -Inf, xmax = 2.22, ymin = -Inf, ymax = Inf,
+           fill = talk_v2$childhood_fill, color = NA) +
+  geom_hline(yintercept = 0, linetype = "dashed", linewidth = 1.2, color = "black") +
+  geom_errorbar(aes(ymin = centered_lower, ymax = centered_upper, color = series),
+                width = .055, linewidth = .65, alpha = .5, show.legend = FALSE) +
+  geom_line(aes(color = series, linetype = series), linewidth = 2.1) +
+  geom_point(aes(color = series, fill = series, shape = series), size = 7.2, stroke = 1.25) +
+  facet_wrap(~ panel, nrow = 1) + binned_x_scale() +
+  scale_y_continuous(limits = c(-50, 50), breaks = seq(-50, 50, 25),
+                     labels = function(x) paste0(x, "%"), expand = expansion(add = 2)) +
+  scale_color_manual(NULL, values = binned_v2_colors, limits = binned_v2_series_order, labels = binned_v2_labels) +
+  scale_fill_manual(NULL, values = binned_v2_fills, limits = binned_v2_series_order, labels = binned_v2_labels) +
+  scale_shape_manual(NULL, values = binned_v2_shapes, limits = binned_v2_series_order, labels = binned_v2_labels) +
+  scale_linetype_manual(NULL, values = binned_v2_lines, limits = binned_v2_series_order, labels = binned_v2_labels) +
+  labs(x = "Age", y = "Centered score (%)",
+       caption = paste0("Responsibility: Yes (%) − 50. Causal-role differentiation: differentiation (%) / 2.\n",
+                        "0% = 50/50 responding or no differentiation. Single Cause child data are pilot data. 95% participant-bootstrap CIs.")) +
+  binned_talk_theme +
+  theme(legend.text = element_text(size = 23), legend.key.width = grid::unit(2.2, "cm"),
+        plot.caption = element_text(size = 18, hjust = .5, margin = margin(t = 14))) +
+  guides(color = guide_legend(nrow = 1), fill = guide_legend(nrow = 1),
+         shape = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1))
+save_presentation_v2(p.binned.centered,
+                    file.path(binned_responsibility_output, "causal_role_and_raw_responsibility_centered_talk_v1"),
+                    width = 20, height = 10.5)
+p.binned.centered
+```
+
+## Compare intention-effect magnitudes directly
+
+The separate backup contains exactly two trajectories per panel: Single Cause
+and Chain: Distal. Each value is **100 × (Intentional mean Yes − Accidental mean
+Yes)**, after participant-level scenario averaging. Conditions contain different
+people; this is a difference of group means, not a within-person subtraction.
+
+Reuse the 12 matching estimates and CIs from `df.context.sensitivity.summary`,
+computed earlier in this workflow. Those CIs use 5,000 bootstrap replicates,
+independently resampling whole participants within each stage and condition.
+The difference is calculated in every replicate, so its interval includes
+uncertainty in both condition means. **Do not subtract raw-response CI bounds.**
+Single Cause uses the existing seed `bootstrap_seed + 10`; chain uses
+`bootstrap_seed + 12`, retaining each participant's judgments together.
+
+```{r binned-intention-effect-values}
+binned_effect_context_order = c("Single Cause", "Chain: Distal")
+df.binned.intention.effects = df.context.sensitivity.summary %>%
+  filter(measure %in% c("Fault", "Punish"), context %in% binned_effect_context_order) %>%
+  mutate(panel = factor(as.character(measure), levels = c("Fault", "Punish")),
+         context = factor(context, levels = binned_effect_context_order), x = as.integer(stage)) %>%
+  arrange(panel, context, stage)
+df.binned.intention.effect.values = df.binned.intention.effects %>%
+  mutate(age_group = binned_age_labels[as.integer(stage)]) %>%
+  select(panel, study, context, age_group, contrast,
+         eligible_n_Intentional, eligible_n_Accidental, n_Intentional, n_Accidental,
+         yes_mean_Intentional, yes_mean_Accidental, mean_pp, lower_pp, upper_pp)
+write_csv(df.binned.intention.effect.values,
+          file.path(binned_responsibility_output, "single_cause_vs_chain_distal_intention_effect_talk_v1_values.csv"))
+kable(select(df.binned.intention.effect.values, panel, context, age_group, n_Intentional,
+              n_Accidental, mean_pp, lower_pp, upper_pp), digits = 3,
+      caption = "Direct intention effects: percentage-point differences and 95% participant-bootstrap CIs")
+```
+
+The backup retains blue for Single Cause and red for Chain: Distal, with two
+solid lines and distinct large filled markers. It has no baseline trajectory
+and no condition-specific raw-response lines. Both panels share a scale that
+includes every difference CI. The zero line means no Intentional–Accidental
+difference, rather than the neutral-response interpretation of the centered plot.
+
+```{r binned-intention-effect-plot, fig.width=20, fig.height=10.5}
+binned_effect_colors = binned_context_colors[binned_effect_context_order]
+binned_effect_shapes = setNames(c(21, 23), binned_effect_context_order)
+binned_effect_offsets = setNames(c(-.05, .05), binned_effect_context_order)
+binned_effect_limits = c(25 * floor(min(0, df.binned.intention.effects$lower_pp) / 25),
+                         25 * ceiling(max(0, df.binned.intention.effects$upper_pp) / 25))
+df.binned.intention.effect.plot = df.binned.intention.effects %>%
+  mutate(x_plot = x + unname(binned_effect_offsets[as.character(context)]))
+p.binned.intention.effects = ggplot(df.binned.intention.effect.plot,
+                                    aes(x = x_plot, y = mean_pp, group = context)) +
+  annotate("rect", xmin = -Inf, xmax = 2.22, ymin = -Inf, ymax = Inf,
+           fill = talk_v2$childhood_fill, color = NA) +
+  geom_hline(yintercept = 0, linetype = "dashed", linewidth = 1.2, color = "black") +
+  geom_errorbar(aes(ymin = lower_pp, ymax = upper_pp, color = context),
+                width = .065, linewidth = .7, alpha = .55, show.legend = FALSE) +
+  geom_line(aes(color = context), linewidth = 2.1) +
+  geom_point(aes(fill = context, shape = context), color = "black", size = 7.2, stroke = 1.2) +
+  facet_wrap(~ panel, nrow = 1) + binned_x_scale() +
+  scale_y_continuous(limits = binned_effect_limits, breaks = seq(binned_effect_limits[1], binned_effect_limits[2], 25),
+                     labels = function(x) paste0(x, "%"), expand = expansion(add = 2)) +
+  scale_color_manual(NULL, values = binned_effect_colors, limits = binned_effect_context_order) +
+  scale_fill_manual(NULL, values = binned_effect_colors, limits = binned_effect_context_order) +
+  scale_shape_manual(NULL, values = binned_effect_shapes, limits = binned_effect_context_order) +
+  labs(x = "Age", y = "Intentional − Accidental\n(percentage points)",
+       caption = "Single Cause child data are pilot data. Bars show 95% participant-bootstrap CIs.") +
+  binned_talk_theme +
+  theme(legend.text = element_text(size = 25), legend.key.width = grid::unit(2.2, "cm"),
+        plot.caption = element_text(size = 18, hjust = .5, margin = margin(t = 14))) +
+  guides(color = guide_legend(nrow = 1), fill = guide_legend(nrow = 1), shape = guide_legend(nrow = 1))
+save_presentation_v2(p.binned.intention.effects,
+                    file.path(binned_responsibility_output, "single_cause_vs_chain_distal_intention_effect_talk_v1"),
+                    width = 20, height = 10.5)
+p.binned.intention.effects
+```
+
+## Verify transformations, source contrasts and panel structure
+
+```{r centered-and-intention-effect-checks}
+# Inverse-transform both means and interval limits to recover the source exactly.
+for (pair in list(c("mean_pct", "centered_mean"), c("lower_pct", "centered_lower"), c("upper_pct", "centered_upper"))) {
+  original = df.binned.centered[[pair[1]]]
+  centered = df.binned.centered[[pair[2]]]
+  recovered = if_else(df.binned.centered$context == "Baseline", 2 * centered, centered + 50)
+  stopifnot(all(abs(recovered - original) < 1e-12))
+}
+df.binned.effect.source = df.binned.responsibility %>%
+  select(panel, study, context, stage, condition, mean_pct, n) %>%
+  pivot_wider(names_from = condition, values_from = c(mean_pct, n)) %>%
+  inner_join(df.binned.intention.effects, by = c("panel", "study", "context", "stage"),
+             suffix = c("_raw", "_effect"), relationship = "one-to-one")
+centered_built = ggplot_build(p.binned.centered)
+effect_built = ggplot_build(p.binned.intention.effects)
+centered_groups = as_tibble(centered_built$data[[4]]) %>% count(PANEL, group)
+effect_groups = as_tibble(effect_built$data[[4]]) %>% count(PANEL, group)
+stopifnot(nrow(df.binned.centered) == 30L, nrow(df.binned.intention.effects) == 12L,
+          nrow(df.binned.effect.source) == 12L,
+          all(abs(df.binned.effect.source$mean_pp - (df.binned.effect.source$mean_pct_Intentional -
+                                                    df.binned.effect.source$mean_pct_Accidental)) < 1e-10),
+          all(df.binned.effect.source$n_Intentional_raw == df.binned.effect.source$n_Intentional_effect),
+          all(df.binned.effect.source$n_Accidental_raw == df.binned.effect.source$n_Accidental_effect),
+          all(df.binned.centered$centered_lower >= -50), all(df.binned.centered$centered_upper <= 50),
+          nrow(centered_built$data[[5]]) == 30L, nrow(centered_groups) == 10L, all(centered_groups$n == 3L),
+          nrow(effect_built$data[[5]]) == 12L, nrow(effect_groups) == 4L, all(effect_groups$n == 3L),
+          all(centered_built$data[[2]]$yintercept == 0), all(effect_built$data[[2]]$yintercept == 0),
+          all(effect_built$data[[3]]$ymin >= binned_effect_limits[1]),
+          all(effect_built$data[[3]]$ymax <= binned_effect_limits[2]))
+for (built in list(centered_built, effect_built)) {
+  stopifnot(nrow(built$layout$layout) == 2L,
+            identical(built$layout$panel_params[[1]]$x.range, built$layout$panel_params[[2]]$x.range),
+            identical(built$layout$panel_params[[1]]$y.range, built$layout$panel_params[[2]]$y.range))
+}
+```
+
+These are descriptive cross-sample comparisons. The larger estimated Single
+Cause intention effects at ages 5–6 and in adult punishment are visible directly
+in the backup; at ages 3–4, punishment instead has the larger Chain: Distal
+estimate. The displayed pointwise CIs do not test whether the two context effects
+differ. Adult chain points remain from the available Study 2 pilot, the main
+adult dataset remains missing, and the Single Cause historical N=30 subset
+remains unidentified. All original scientific handoff gaps remain unresolved.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons
