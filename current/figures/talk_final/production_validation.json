@@ -1,0 +1,20 @@
+{
+  "main_figures": 8,
+  "backups": 6,
+  "builds": 59,
+  "pdfs": 73,
+  "pngs": 73,
+  "main_full_builds_byte_identical": 8,
+  "build_text_positions_fixed": 59,
+  "raw_N_displays_verified": 4,
+  "point_denominator_exceptions": 0,
+  "all_PDFs_rendered": 73,
+  "existing_outputs": 442,
+  "restored_metadata_only_pdfs": 161,
+  "source_files": 303,
+  "all_main_backup_and_build_pages_visually_reviewed": true,
+  "statistical_results_unchanged": true,
+  "source_commit": "d41b717fabe734ecfd4b704d31523c5c7d1cfd34",
+  "date": "2026-09-23",
+  "original_HTML_figure_images_preserved": 53
+}

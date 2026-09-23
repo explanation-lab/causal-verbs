@@ -1,5 +1,7 @@
 # R analysis
 
+The [final talk folder](../../figures/talk_final/README.md) contains the eight ordered main figures, 59 cumulative builds and six selected backups. [talk_final.Rmd](talk_final.Rmd) is a presentation-only child of the shared workflow: it reuses existing estimates and fits, standardizes marks and vertical CIs, and derives the raw-figure participant counts from the included samples. Original figures and results remain unchanged.
+
 The [centered two-panel talk builds](../../figures/study_comparison/binned_role_and_responsibility/builds/causal_role_and_raw_responsibility_centered_talk_v1_gap_reveal/README.md) use the exact centered Fault/Punish figure, with the gray differentiation reference inside both panels. Build 09 copies the existing centered PDF/PNG exactly; the final two frames add blue and red gap fills behind the data.
 
 The [raw-response V1 talk builds](../../figures/study_comparison/binned_role_and_responsibility/builds/causal_role_and_raw_responsibility_talk_v1_gap_reveal/README.md) reveal the original three-panel figure one trajectory at a time, then add transparent blue and red intentionality-gap fills. All original values, CIs and geometry remain fixed.

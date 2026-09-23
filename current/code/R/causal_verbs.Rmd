@@ -5107,6 +5107,15 @@ copies for delivery. Across all 12 builds, PDF text positions and the locations
 of all axes, panels and marks are checked. Earlier figures, build series, source
 data and unresolved scientific handoff limitations remain unchanged.
 
+# Final talk production folder
+
+The production child document reuses the validated summaries and plot objects
+above, and writes only to `current/figures/talk_final/`. Original figures and
+statistical results are retained.
+
+```{r final-talk-production, child="talk_final.Rmd"}
+```
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons
