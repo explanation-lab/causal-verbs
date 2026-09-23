@@ -4980,6 +4980,133 @@ V1/V2, centered figures, source data and handoff limitations are preserved. The
 Single Cause child pilot note and Study 1 baseline attribution remain in the
 original caption throughout the series.
 
+# Centered two-panel builds with intentionality-gap shading
+
+This additional series uses **`causal_role_and_raw_responsibility_centered_talk_v1`**
+as its exact base. It has only **Fault | Punish**, with the gray Study 1
+causal-role differentiation trajectory inside both panels. The preceding
+three-panel raw-response series is preserved separately and is not used as the
+base here. No data, scoring, estimates or confidence intervals change.
+
+Reuse `p.binned.centered` directly, including its 20 × 10.5 inch canvas, centered
+scale, limits, childhood shading, offsets, colors, shapes, typography, panel
+spacing, caption and bottom legend. Keep every data row in every build, changing
+only the visibility of marks. Build 09 is an exact copy of the existing centered
+PDF and PNG. Builds 10 and 11 add the two requested fills behind all marks.
+
+## Centered reveal order and mean-gap boundaries
+
+```{r centered-gap-build-settings}
+centered_gap_build_output = file.path(binned_responsibility_output, "builds",
+                                      "causal_role_and_raw_responsibility_centered_talk_v1_gap_reveal")
+dir.create(centered_gap_build_output, recursive = TRUE, showWarnings = FALSE)
+centered_gap_reveals = tibble(
+  reveal_step = 2:9,
+  panel = rep(c("Fault", "Punish"), 4),
+  context = rep(c("Single Cause", "Chain: Distal", "Single Cause", "Chain: Distal"), each = 2),
+  condition = rep(c("Intentional", "Accidental"), each = 4))
+df.centered.gap.reveal = df.binned.centered %>%
+  left_join(centered_gap_reveals, by = c("panel", "context", "condition"), relationship = "many-to-one") %>%
+  mutate(reveal_step = if_else(context == "Baseline", 1L, reveal_step))
+stopifnot(nrow(df.centered.gap.reveal) == 30L, !anyNA(df.centered.gap.reveal$reveal_step))
+centered_gap_build_names = c(
+  "build00_blank", "build01_causal_role_differentiation_both_panels",
+  "build02_single_cause_intentional_fault", "build03_single_cause_intentional_punish",
+  "build04_chain_distal_intentional_fault", "build05_chain_distal_intentional_punish",
+  "build06_single_cause_accidental_fault", "build07_single_cause_accidental_punish",
+  "build08_chain_distal_accidental_fault", "build09_centered_original_complete",
+  "build10_single_cause_gap_fill", "build11_add_chain_distal_gap_fill_full")
+df.centered.gap.build.manifest = tibble(
+  build = 0:11, filename = centered_gap_build_names,
+  added = c("Blank centered two-panel scaffold", "Causal-role differentiation in both panels",
+    paste(centered_gap_reveals$context, centered_gap_reveals$condition, centered_gap_reveals$panel, sep = " / "),
+    "Single Cause gap shading in both panels", "Chain: Distal gap shading in both panels"),
+  visible_trajectories = c(0L, 2:10, 10L, 10L), visible_points = 3L * visible_trajectories,
+  single_cause_fill_alpha = if_else(build >= 10L, .18, 0),
+  chain_distal_fill_alpha = if_else(build >= 11L, .18, 0))
+write_csv(df.centered.gap.build.manifest, file.path(centered_gap_build_output, "build_manifest.csv"))
+
+# Trace the centered plot's actual means and offsets; baseline is never part of a fill.
+df.centered.gap.polygons = df.binned.centered %>% filter(context != "Baseline") %>%
+  group_by(panel, context) %>% group_modify(function(rows, keys) {
+    bind_rows(filter(rows, condition == "Intentional") %>% arrange(x_plot),
+              filter(rows, condition == "Accidental") %>% arrange(desc(x_plot)))
+  }) %>% ungroup()
+stopifnot(nrow(df.centered.gap.polygons) == 24L,
+          setequal(as.character(df.centered.gap.polygons$panel), c("Fault", "Punish")))
+
+make_centered_gap_build = function(step) {
+  stopifnot(step %in% 0:11)
+  # Copy existing layers and change opacity only; reuse the source plot's complete theme.
+  plot = binned_mark_visibility(p.binned.centered, df.centered.gap.reveal,
+                                df.centered.gap.reveal$reveal_step <= step) +
+    guides(color = guide_legend(nrow = 1, override.aes = list(alpha = 1)))
+  blue_fill = geom_polygon(data = filter(df.centered.gap.polygons, context == "Single Cause"),
+    aes(x = x_plot, y = centered_mean, group = panel), inherit.aes = FALSE,
+    fill = binned_context_colors[["Single Cause"]], color = NA,
+    alpha = if (step >= 10L) .18 else 0, show.legend = FALSE)
+  red_fill = geom_polygon(data = filter(df.centered.gap.polygons, context == "Chain: Distal"),
+    aes(x = x_plot, y = centered_mean, group = panel), inherit.aes = FALSE,
+    fill = binned_context_colors[["Chain: Distal"]], color = NA,
+    alpha = if (step >= 11L) .18 else 0, show.legend = FALSE)
+  # Keep the original background first, then blue, red, zero line, CIs, lines and points.
+  plot$layers = append(plot$layers, list(blue_fill, red_fill), after = 1L)
+  plot
+}
+```
+
+Both fills have alpha 0.18. Each follows its original centered Intentional and
+Accidental mean trajectories, including their fixed horizontal offsets. Blue
+appears first; red then overlays blue transparently. The fills are not CI bands
+or new estimates, and do not alter either centered transformation. The original
+pilot-data note and explanation of the common zero remain visible throughout.
+
+## Export all builds and verify the exact centered base
+
+```{r centered-gap-build-export, fig.width=20, fig.height=10.5}
+centered_gap_source = ggplot_build(p.binned.centered)
+p.centered.gap.builds = lapply(0:11, function(step) {
+  plot = make_centered_gap_build(step)
+  built = ggplot_build(plot)
+  stopifnot(nrow(built$layout$layout) == 2L,
+            identical(as.character(built$layout$layout$panel), c("Fault", "Punish")))
+  for (layer_number in 3:5) {
+    stopifnot(identical(select(built$data[[layer_number + 2L]], -alpha),
+                        select(centered_gap_source$data[[layer_number]], -alpha)))
+  }
+  stopifnot(identical(built$data[[7]]$alpha, as.numeric(df.centered.gap.reveal$reveal_step <= step)),
+            sum(built$data[[7]]$alpha > 0) == df.centered.gap.build.manifest$visible_points[step + 1L],
+            all(built$data[[2]]$alpha == if (step >= 10L) .18 else 0),
+            all(built$data[[3]]$alpha == if (step >= 11L) .18 else 0))
+  for (panel_number in 1:2) {
+    current = built$layout$panel_params[[panel_number]]
+    source = centered_gap_source$layout$panel_params[[panel_number]]
+    stopifnot(identical(current$x.range, source$x.range), identical(current$y.range, source$y.range),
+              identical(current$x$breaks, source$x$breaks), identical(current$y$breaks, source$y$breaks),
+              identical(current$x$get_labels(), source$x$get_labels()),
+              identical(current$y$get_labels(), source$y$get_labels()))
+  }
+  destination = file.path(centered_gap_build_output, centered_gap_build_names[step + 1L])
+  if (step == 9L) {
+    # Preserve even the original PDF metadata and PNG encoding in this exact-base frame.
+    source = file.path(binned_responsibility_output, "causal_role_and_raw_responsibility_centered_talk_v1")
+    for (extension in c(".pdf", ".png")) {
+      stopifnot(file.copy(paste0(source, extension), paste0(destination, extension), overwrite = TRUE))
+    }
+  } else save_presentation_v2(plot, destination, width = 20, height = 10.5)
+  plot
+})
+stopifnot(identical(ggplot_build(p.binned.centered)$data, centered_gap_source$data))
+kable(df.centered.gap.build.manifest, caption = "Centered Fault/Punish builds: cumulative reveals and gap shading")
+p.centered.gap.builds[[12]]
+```
+
+The generated Build 09 is also independently rendered and compared pixel for
+pixel with the existing centered figure, before using the exact source-file
+copies for delivery. Across all 12 builds, PDF text positions and the locations
+of all axes, panels and marks are checked. Earlier figures, build series, source
+data and unresolved scientific handoff limitations remain unchanged.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons

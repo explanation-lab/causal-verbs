@@ -1,0 +1,13 @@
+build,filename,added,visible_trajectories,visible_points,single_cause_fill_alpha,chain_distal_fill_alpha
+0,build00_blank,Blank centered two-panel scaffold,0,0,0,0
+1,build01_causal_role_differentiation_both_panels,Causal-role differentiation in both panels,2,6,0,0
+2,build02_single_cause_intentional_fault,Single Cause / Intentional / Fault,3,9,0,0
+3,build03_single_cause_intentional_punish,Single Cause / Intentional / Punish,4,12,0,0
+4,build04_chain_distal_intentional_fault,Chain: Distal / Intentional / Fault,5,15,0,0
+5,build05_chain_distal_intentional_punish,Chain: Distal / Intentional / Punish,6,18,0,0
+6,build06_single_cause_accidental_fault,Single Cause / Accidental / Fault,7,21,0,0
+7,build07_single_cause_accidental_punish,Single Cause / Accidental / Punish,8,24,0,0
+8,build08_chain_distal_accidental_fault,Chain: Distal / Accidental / Fault,9,27,0,0
+9,build09_centered_original_complete,Chain: Distal / Accidental / Punish,10,30,0,0
+10,build10_single_cause_gap_fill,Single Cause gap shading in both panels,10,30,0.18,0
+11,build11_add_chain_distal_gap_fill_full,Chain: Distal gap shading in both panels,10,30,0.18,0.18

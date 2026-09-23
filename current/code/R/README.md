@@ -1,5 +1,7 @@
 # R analysis
 
+The [centered two-panel talk builds](../../figures/study_comparison/binned_role_and_responsibility/builds/causal_role_and_raw_responsibility_centered_talk_v1_gap_reveal/README.md) use the exact centered Fault/Punish figure, with the gray differentiation reference inside both panels. Build 09 copies the existing centered PDF/PNG exactly; the final two frames add blue and red gap fills behind the data.
+
 The [raw-response V1 talk builds](../../figures/study_comparison/binned_role_and_responsibility/builds/causal_role_and_raw_responsibility_talk_v1_gap_reveal/README.md) reveal the original three-panel figure one trajectory at a time, then add transparent blue and red intentionality-gap fills. All original values, CIs and geometry remain fixed.
 
 The [centered comparison and intention-effect backup](../../figures/study_comparison/binned_role_and_responsibility/CENTERED_AND_INTENTION_EFFECT.md) add two Fault/Punish figures: the requested Yes-minus-50 and differentiation-divided-by-two scale, and a direct Single Cause versus Chain: Distal comparison of Intentional-minus-Accidental effects. Earlier figures and source estimates remain unchanged.
