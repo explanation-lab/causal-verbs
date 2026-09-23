@@ -1,5 +1,7 @@
 # R analysis
 
+The [raw-response V1 talk builds](../../figures/study_comparison/binned_role_and_responsibility/builds/causal_role_and_raw_responsibility_talk_v1_gap_reveal/README.md) reveal the original three-panel figure one trajectory at a time, then add transparent blue and red intentionality-gap fills. All original values, CIs and geometry remain fixed.
+
 The [centered comparison and intention-effect backup](../../figures/study_comparison/binned_role_and_responsibility/CENTERED_AND_INTENTION_EFFECT.md) add two Fault/Punish figures: the requested Yes-minus-50 and differentiation-divided-by-two scale, and a direct Single Cause versus Chain: Distal comparison of Intentional-minus-Accidental effects. Earlier figures and source estimates remain unchanged.
 
 The [two-panel raw-responsibility V2](../../figures/study_comparison/binned_role_and_responsibility/V2.md) repeats the unchanged Study 1 differentiation reference inside both Fault and Punish, alongside four raw-response trajectories. It preserves the three-panel V1 and reuses all estimates and participant-bootstrap CIs.

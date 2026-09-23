@@ -4831,6 +4831,155 @@ differ. Adult chain points remain from the available Study 2 pilot, the main
 adult dataset remains missing, and the Single Cause historical N=30 subset
 remains unidentified. All original scientific handoff gaps remain unresolved.
 
+# Raw-response V1 builds with intentionality-gap shading
+
+This new build series uses the original three-panel
+`causal_role_and_raw_responsibility_talk_v1`: causal-role differentiation,
+Fault and Punish. It does not use the centered or two-panel versions. Every
+estimate, CI, color, axis, label, marker, line width and horizontal offset stays
+unchanged. The 25 × 11 inch canvas, childhood shading, caption and full legend
+remain fixed, even in the blank scaffold. Only trajectory visibility and the two
+requested translucent fills change. Each reveal includes all three ages and
+its existing confidence intervals; there is no new analysis or resampling.
+
+## Reveal one complete trajectory at a time
+
+Keep all data rows in every plot. Hide unrevealed marks with zero opacity so
+facets, scale training and the legend never depend on which series is visible.
+Copy the original drawing layers before changing their opacity; the original
+plots remain unchanged. The legend always shows the complete original key.
+
+```{r binned-raw-gap-build-settings}
+binned_gap_build_output = file.path(binned_responsibility_output, "builds",
+                                    "causal_role_and_raw_responsibility_talk_v1_gap_reveal")
+dir.create(binned_gap_build_output, recursive = TRUE, showWarnings = FALSE)
+binned_gap_reveals = tibble(
+  reveal_step = 2:9,
+  panel = rep(c("Fault", "Punish"), 4),
+  context = rep(c("Single Cause", "Chain: Distal", "Single Cause", "Chain: Distal"), each = 2),
+  condition = rep(c("Intentional", "Accidental"), each = 4))
+df.binned.gap.reveal = df.binned.responsibility.plot %>%
+  left_join(binned_gap_reveals, by = c("panel", "context", "condition"), relationship = "many-to-one")
+stopifnot(nrow(df.binned.gap.reveal) == 24L, !anyNA(df.binned.gap.reveal$reveal_step))
+binned_gap_build_names = c(
+  "build00_blank", "build01_causal_role_differentiation",
+  "build02_single_cause_intentional_fault", "build03_single_cause_intentional_punish",
+  "build04_chain_distal_intentional_fault", "build05_chain_distal_intentional_punish",
+  "build06_single_cause_accidental_fault", "build07_single_cause_accidental_punish",
+  "build08_chain_distal_accidental_fault", "build09_chain_distal_accidental_punish",
+  "build10_single_cause_gap_fill", "build11_add_chain_distal_gap_fill_full")
+df.binned.gap.build.manifest = tibble(
+  build = 0:11, filename = binned_gap_build_names,
+  added = c("Blank scaffold", "Causal-role differentiation",
+    paste(binned_gap_reveals$context, binned_gap_reveals$condition, binned_gap_reveals$panel, sep = " / "),
+    "Single Cause gap shading in both responsibility panels",
+    "Chain: Distal gap shading in both responsibility panels"),
+  visible_trajectories = c(0:9, 9L, 9L), visible_points = 3L * visible_trajectories,
+  single_cause_fill_alpha = if_else(build >= 10L, .18, 0),
+  chain_distal_fill_alpha = if_else(build >= 11L, .18, 0))
+write_csv(df.binned.gap.build.manifest, file.path(binned_gap_build_output, "build_manifest.csv"))
+
+# Follow the actual plotted x offsets, rather than moving the curves to a common x.
+# Each polygon traces Intentional forward and Accidental backward, closing at the ends.
+df.binned.gap.polygons = df.binned.responsibility.plot %>%
+  group_by(panel, context) %>% group_modify(function(rows, keys) {
+    bind_rows(filter(rows, condition == "Intentional") %>% arrange(x_plot),
+              filter(rows, condition == "Accidental") %>% arrange(desc(x_plot)))
+  }) %>% ungroup()
+stopifnot(nrow(df.binned.gap.polygons) == 24L)
+
+binned_mark_visibility = function(plot, values, visible) {
+  for (layer_number in 3:5) { # Existing CI, line and point layers.
+    layer = local({
+      source_layer = plot$layers[[layer_number]]
+      ggplot2::ggproto(NULL, source_layer)
+    })
+    original_alpha = layer$aes_params$alpha
+    if (is.null(original_alpha)) original_alpha = 1
+    layer$data = mutate(values, build_alpha = original_alpha * as.numeric(visible))
+    layer$mapping$alpha = aes(alpha = build_alpha)$alpha
+    layer$aes_params$alpha = NULL
+    plot$layers[[layer_number]] = layer
+  }
+  plot + scale_alpha_identity(guide = "none")
+}
+
+make_binned_raw_gap_build = function(step) {
+  stopifnot(step %in% 0:11)
+  baseline = binned_mark_visibility(p.binned.baseline, df.binned.baseline, step >= 1L)
+  responsibility = binned_mark_visibility(p.binned.raw.responsibility, df.binned.gap.reveal,
+                                           df.binned.gap.reveal$reveal_step <= step) +
+    guides(color = guide_legend(nrow = 1, override.aes = list(alpha = 1)))
+  blue_fill = geom_polygon(data = filter(df.binned.gap.polygons, context == "Single Cause"),
+    aes(x = x_plot, y = mean_pct, group = panel), inherit.aes = FALSE,
+    fill = binned_context_colors[["Single Cause"]], color = NA,
+    alpha = if (step >= 10L) .18 else 0, show.legend = FALSE)
+  red_fill = geom_polygon(data = filter(df.binned.gap.polygons, context == "Chain: Distal"),
+    aes(x = x_plot, y = mean_pct, group = panel), inherit.aes = FALSE,
+    fill = binned_context_colors[["Chain: Distal"]], color = NA,
+    alpha = if (step >= 11L) .18 else 0, show.legend = FALSE)
+  # Childhood background, blue fill, red fill, then reference line, CIs, lines and points.
+  responsibility$layers = append(responsibility$layers, list(blue_fill, red_fill), after = 1L)
+  full = patchwork::wrap_plots(baseline, responsibility, widths = c(1, 2), guides = "collect") +
+    p.binned.role.responsibility$patches$annotation & theme(legend.position = "bottom")
+  list(plot = full, baseline = baseline, responsibility = responsibility)
+}
+```
+
+The fill uses the mean trajectories, not CI bounds. Its opacity is 0.18. Blue
+appears in Build 10; red overlays blue transparently in Build 11. Both fills sit
+behind the reference line, CIs, trajectories and points. The sloping end edges
+join the original offset markers at the first and last age categories. The areas
+illustrate the displayed separation; they are not additional estimates or tests.
+
+## Save the fixed-layout sequence and verify identity
+
+```{r binned-raw-gap-build-export, fig.width=25, fig.height=11}
+binned_gap_source_baseline = ggplot_build(p.binned.baseline)
+binned_gap_source_responsibility = ggplot_build(p.binned.raw.responsibility)
+p.binned.gap.builds = lapply(0:11, function(step) {
+  build = make_binned_raw_gap_build(step)
+  baseline_built = ggplot_build(build$baseline)
+  raw_built = ggplot_build(build$responsibility)
+  # The only changed property of an existing mark is visibility (alpha).
+  for (layer_number in 3:5) {
+    stopifnot(identical(select(baseline_built$data[[layer_number]], -alpha),
+                        select(binned_gap_source_baseline$data[[layer_number]], -alpha)),
+              identical(select(raw_built$data[[layer_number + 2L]], -alpha),
+                        select(binned_gap_source_responsibility$data[[layer_number]], -alpha)))
+  }
+  stopifnot(sum(baseline_built$data[[5]]$alpha > 0) == if (step >= 1L) 3L else 0L,
+            sum(raw_built$data[[7]]$alpha > 0) == 3L * min(8L, max(0L, step - 1L)),
+            all(raw_built$data[[2]]$alpha == if (step >= 10L) .18 else 0),
+            all(raw_built$data[[3]]$alpha == if (step >= 11L) .18 else 0))
+  for (pair in list(list(baseline_built, binned_gap_source_baseline),
+                   list(raw_built, binned_gap_source_responsibility))) {
+    for (panel_number in seq_along(pair[[1]]$layout$panel_params)) {
+      current = pair[[1]]$layout$panel_params[[panel_number]]
+      source = pair[[2]]$layout$panel_params[[panel_number]]
+      stopifnot(identical(current$x.range, source$x.range), identical(current$y.range, source$y.range),
+                identical(current$x$breaks, source$x$breaks), identical(current$y$breaks, source$y$breaks),
+                identical(current$x$get_labels(), source$x$get_labels()),
+                identical(current$y$get_labels(), source$y$get_labels()))
+    }
+  }
+  save_presentation_v2(build$plot, file.path(binned_gap_build_output, binned_gap_build_names[step + 1L]),
+                       width = 25, height = 11)
+  build
+})
+# The helper must not mutate the source plots or their data.
+stopifnot(identical(ggplot_build(p.binned.baseline)$data, binned_gap_source_baseline$data),
+          identical(ggplot_build(p.binned.raw.responsibility)$data, binned_gap_source_responsibility$data))
+kable(df.binned.gap.build.manifest, caption = "Raw-response V1: cumulative reveals and final gap shading")
+p.binned.gap.builds[[12]]$plot
+```
+
+Build 09 contains all original marks with no gap fill and is checked against the
+original rendered PNG. Every build retains identical scaffold geometry. Existing
+V1/V2, centered figures, source data and handoff limitations are preserved. The
+Single Cause child pilot note and Study 1 baseline attribution remain in the
+original caption throughout the series.
+
 # Compact validation tables and checks
 
 ## Inclusion flow and exclusion reasons
