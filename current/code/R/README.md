@@ -1,6 +1,6 @@
 # R analysis
 
-The [final talk folder](../../figures/talk_final/README.md) contains the eight ordered main figures, 59 cumulative builds and six selected backups. [talk_final.Rmd](talk_final.Rmd) is a presentation-only child of the shared workflow: it reuses existing estimates and fits, standardizes marks and vertical CIs, and derives the raw-figure participant counts from the included samples. Original figures and results remain unchanged.
+The [final talk folder](../../figures/talk_final/README.md) contains the nine ordered main figures, 64 cumulative builds and six selected backups. [talk_final.Rmd](talk_final.Rmd) is a presentation-only child of the shared workflow: it reuses existing estimates and fits, standardizes marks and vertical CIs, and derives the raw-figure participant counts from the included samples. The matched Baseline / Accidental / Intentional synthesis is included as a main figure with its five builds. Both age-adjusted relationships share its larger presentation style and retain their exact fitted values, participant coordinates and CIs. Original figures and results remain unchanged.
 
 The [centered two-panel talk builds](../../figures/study_comparison/binned_role_and_responsibility/builds/causal_role_and_raw_responsibility_centered_talk_v1_gap_reveal/README.md) use the exact centered Fault/Punish figure, with the gray differentiation reference inside both panels. Build 09 copies the existing centered PDF/PNG exactly; the final two frames add blue and red gap fills behind the data.
 

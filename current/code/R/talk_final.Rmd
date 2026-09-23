@@ -36,6 +36,13 @@ final_theme = function() {
           legend.margin = margin(t = 10), plot.margin = margin(20, 32, 18, 24))
 }
 
+final_matched_theme = function() {
+  final_theme() +
+    theme(axis.text = element_text(size = 40), axis.title = element_text(size = 44),
+          strip.text = element_text(size = 44, face = "bold", margin = margin(b = 20)),
+          legend.text = element_text(size = 34), legend.key.width = grid::unit(2.2, "cm"))
+}
+
 # Clone each drawing layer before editing it, so source plots remain untouched.
 # Ribbon predictions are already saved; use every tenth grid row, including ends.
 final_polish = function(plot, scatter = FALSE) {
@@ -250,6 +257,20 @@ final_family("03_chain_intention_yes", "baseline_intention", paste0(study2_outpu
   final_s2(16), 24, 19, final_s2_values, study2_build_names, final_s2, order = 3L,
   note = "Adult chain points use the selected available pilot; the main Study 2 adult dataset is missing.")
 
+# Preserve the source sequence: blank; each condition's children; all adults.
+final_matched = function(step) {
+  plot = final_polish(plot_matched_role_development(step)) + final_matched_theme()
+  for (i in seq_along(plot$layers)) if (inherits(plot$layers[[i]]$geom, "GeomSegment"))
+    plot$layers[[i]]$aes_params$linewidth = 4
+  plot
+}
+final_family("matched_role_differentiation_development_talk_v1", "baseline_intention",
+  paste0(matched_role_output, "/matched_role_differentiation_development_talk_v1.pdf"),
+  final_matched(4), 28, 11, df.matched.role.summary,
+  c("build00_blank", "build01_baseline", "build02_add_accidental", "build03_add_intentional",
+    "build04_add_adults_full"), final_matched, order = 4L,
+  note = "Baseline | Accidental | Intentional; unchanged participant-score means and CIs. Adults appear in the final build.")
+
 final_transition_order = c("Causal-role differentiation", "Single Cause", "Chain: Distal")
 final_transition = function(step) final_reveal(final_polish(p.role.intention.v2),
   function(rows) match(as.character(rows$series), final_transition_order) <= step)
@@ -257,27 +278,94 @@ final_family("04_intention_effect_transition", "baseline_intention",
   paste0(age_adjusted_output, "/role_differentiation_intention_effects_talk_v2.pdf"),
   final_transition(3), 24, 11, df.role.intention.v2,
   c("build00_blank", "build01_causal_role_differentiation", "build02_add_single_cause", "build03_add_chain_distal_full"),
-  final_transition, order = 4L, note = "Single Cause child data are pilot data, ages 3–6 only. Adult is separate.")
+  final_transition, order = 5L, note = "Single Cause child data are pilot data, ages 3–6 only. Adult is separate.")
 
+# The matched synthesis and both relationships share a wide talk canvas and
+# larger typography. Relationship points are observations, not fitted means;
+# keep them subordinate to the heavy fitted curves and thin vertical CIs.
 final_relationship = function(study, step) {
   source = if (study == "Study 1") p.study1.age.adjusted else p.study2.age.adjusted
-  plot = final_polish(source, scatter = TRUE) + theme(panel.spacing.x = grid::unit(4, "cm"))
-  final_reveal(plot, function(rows) {
+  plot = final_polish(source, scatter = TRUE) + final_matched_theme() +
+    theme(panel.background = element_rect(fill = "#F3F3F3", color = NA),
+          panel.spacing.x = grid::unit(4.2, "cm"),
+          legend.key = element_rect(fill = "white", color = NA),
+          plot.margin = margin(20, 80, 18, 24))
+  if (study == "Study 1") {
+    source_scales = plot$scales
+    plot$scales = ggproto(NULL, source_scales)
+    plot$scales$scales = Filter(function(scale) !"fill" %in% scale$aesthetics, plot$scales$scales)
+  }
+  plot$layers = Filter(function(layer) !inherits(layer$geom, "GeomVline"), plot$layers)
+  plot$layers = lapply(plot$layers, function(source_layer) {
+    layer = ggproto(NULL, source_layer)
+    if (inherits(layer$geom, "GeomLine")) {
+      layer$aes_params$linewidth = 4
+      layer$show.legend = FALSE
+    }
+    if (inherits(layer$geom, "GeomPoint")) {
+      layer$aes_params$alpha = .07
+      layer$aes_params$size = 3.5
+      if (study == "Study 2") {
+        layer$mapping$fill = aes(fill = intention)$fill
+        layer$aes_params$stroke = .65
+        layer$show.legend = TRUE
+        # Draw the condition marker over its legend line, so the triangle stays open.
+        source_geom = layer$geom
+        layer$geom = ggproto(NULL, source_geom, draw_key = function(data, params, size) {
+          grid::grobTree(draw_key_path(data, params, size), draw_key_point(data, params, size))
+        })
+      }
+    }
+    layer
+  })
+  plot = final_reveal(plot, function(rows) {
     if (study == "Study 1") match(as.character(rows$panel), c("Fault", "Punish")) <= step
     else match(as.character(rows$intention), c("Accidental", "Intentional")) <= step
   })
+  if (study == "Study 2") plot = plot +
+    scale_shape_manual(NULL, values = condition_shapes, limits = condition_order) +
+    scale_fill_manual(NULL, values = c(Intentional = comparison_colors[["Intentional"]], Accidental = "white"),
+                      limits = condition_order) +
+    guides(color = guide_legend(nrow = 1, override.aes = list(
+      alpha = 1, size = 7, stroke = 1.3, linewidth = 4,
+      shape = unname(condition_shapes[condition_order]),
+      linetype = unname(condition_lines[condition_order]),
+      fill = c(comparison_colors[["Intentional"]], "white"))),
+      shape = "none", fill = "none", linetype = "none")
+  if (step == 2L) {
+    # Styling must leave fitted values, observed points (including fixed jitter)
+    # and every displayed confidence limit exactly where the source put them.
+    original = ggplot_build(source); updated = ggplot_build(plot)
+    get_layer = function(p, b, geom) {
+      i = which(vapply(p$layers, function(layer) inherits(layer$geom, geom), logical(1)))
+      stopifnot(length(i) == 1L)
+      as_tibble(b$data[[i]])
+    }
+    for (geom in c("GeomPoint", "GeomLine")) {
+      old = get_layer(source, original, geom)
+      new = get_layer(plot, updated, geom)
+      stopifnot(identical(select(old, PANEL, x, y), select(new, PANEL, x, y)))
+    }
+    original_ci = get_layer(source, original, "GeomRibbon")
+    displayed_ci = get_layer(plot, updated, "GeomLinerange")
+    stopifnot(nrow(anti_join(select(displayed_ci, PANEL, x, ymin, ymax),
+                            select(original_ci, PANEL, x, ymin, ymax),
+                            by = c("PANEL", "x", "ymin", "ymax"))) == 0L,
+              all(displayed_ci$linetype == "solid"))
+  }
+  plot
 }
 final_family("05_study1_age_adjusted_relationship", "chain_baseline",
   paste0(age_adjusted_output, "/study1_role_differentiation_age_adjusted_talk_v1.pdf"),
-  final_relationship("Study 1", 2), 24, 12, filter(df.age.adjusted.predictions, study == "Study 1"),
+  final_relationship("Study 1", 2), 28, 11, filter(df.age.adjusted.predictions, study == "Study 1"),
   c("build00_blank", "build01_fault", "build02_add_punish_full"),
-  function(step) final_relationship("Study 1", step), order = 5L,
+  function(step) final_relationship("Study 1", step), order = 6L,
   note = "Children only; original numeric-age-adjusted model and pointwise bootstrap prediction limits.")
 final_family("06_study2_age_adjusted_relationship", "baseline_intention",
   paste0(age_adjusted_output, "/study2_role_differentiation_age_adjusted_talk_v1.pdf"),
-  final_relationship("Study 2", 2), 24, 12, filter(df.age.adjusted.predictions, study == "Study 2"),
+  final_relationship("Study 2", 2), 28, 11, filter(df.age.adjusted.predictions, study == "Study 2"),
   c("build00_blank", "build01_accidental", "build02_add_intentional_full"),
-  function(step) final_relationship("Study 2", step), order = 6L,
+  function(step) final_relationship("Study 2", step), order = 7L,
   note = "Children only; original differentiation × intention + numeric age model. Unchanged predictions.")
 
 final_sc_measures = c("Lexical", "Fault", "Punish")
@@ -293,12 +381,12 @@ final_family("07_single_cause_yes", "single_cause", paste0(single_output, "/sing
   final_sc(6), 26, 12, filter(final_sc_values, measure %in% final_sc_measures),
   c("build00_blank", "build01_lexical_intentional", "build02_lexical_accidental", "build03_fault_intentional",
     "build04_fault_accidental", "build05_punish_intentional", "build06_punish_accidental_full"),
-  final_sc, order = 7L, note = "Single Cause children are pilot data (ages 3–6); all 32 available adult records retained.")
+  final_sc, order = 8L, note = "Single Cause children are pilot data (ages 3–6); all 32 available adult records retained.")
 
 final_centered = function(step) final_polish(make_centered_gap_build(step)) + labs(y = "Relative to neutral (%)")
 final_family("08_centered_cross_study_gap_fills", "single_cause",
   paste0(binned_responsibility_output, "/causal_role_and_raw_responsibility_centered_talk_v1.pdf"),
-  final_centered(11), 26, 12, df.binned.centered.values, centered_gap_build_names, final_centered, order = 8L,
+  final_centered(11), 26, 12, df.binned.centered.values, centered_gap_build_names, final_centered, order = 9L,
   note = "Source centered figure plus its build11_add_chain_distal_gap_fill_full. Blue/red gap fills alpha=.18; these are not CIs.")
 ```
 
@@ -343,14 +431,14 @@ final_index = bind_rows(final_registry) %>% arrange(kind != "main", order, secti
 final_index$source = sub("^../../figures/", "../", final_index$source)
 write_csv(final_index, file.path(final_root, "figure_index.csv"))
 if (final_make_builds) write_csv(bind_rows(final_build_registry), file.path(final_root, "build_manifest.csv"))
-stopifnot(nrow(final_index) == 14L, identical(filter(final_index, kind == "main")$order, 1:8))
+stopifnot(nrow(final_index) == 15L, identical(filter(final_index, kind == "main")$order, 1:9))
 for (plot in final_plots) {
   stopifnot(is.null(plot$labels$title), is.null(plot$labels$subtitle), is.null(plot$labels$caption))
   for (layer in plot$layers)
     stopifnot(!inherits(layer$geom, c("GeomRibbon", "GeomErrorbar")))
 }
-if (final_make_builds) stopifnot(nrow(bind_rows(final_build_registry)) == 59L,
-                                length(final_geometry_checks) == 8L)
+if (final_make_builds) stopifnot(nrow(bind_rows(final_build_registry)) == 64L,
+                                length(final_geometry_checks) == 9L)
 # No participant identifiers are exported into the presentation folder.
 for (entry in final_registry) {
   values = read_csv(file.path(final_root, sub("\\.pdf$", "_values.csv", entry$final)), show_col_types = FALSE)
@@ -366,35 +454,38 @@ write_csv(df.age.adjusted.frequencies, file.path(final_root, "age_adjusted_joint
 final_table = function(rows) paste0(
   "| ", ifelse(is.na(rows$order), "—", rows$order), " | [", rows$stem, "](", rows$final, ") | [",
   basename(rows$source), "](", rows$source, ") | ", rows$section, " | ", rows$kind,
-  " | ", ifelse(rows$builds == "", "—", paste0("[builds](", rows$builds, "/)")), " | ", rows$note, " |")
+  " | ", ifelse(rows$builds == "", "—", paste0("[builds](", rows$builds, "/)")), " | ", gsub("|", " / ", rows$note, fixed = TRUE), " |")
 final_count_table = final_ns %>% transmute(
   line = paste0("| ", study, " | ", age_group, " | ", condition, " | ", display_n, " |"))
 final_readme = c(
   "# Final talk figures", "",
-  "Use the eight numbered main figures in the order below. Every figure and build has both a vector PDF and a 240-dpi PNG. Each main figure's final build is an exact file copy of that main PDF/PNG. All source figures and scientific data are preserved.", "",
+  "Use the nine main figures in the order below. Every figure and build has both a vector PDF and a 240-dpi PNG. Each main figure's final build is an exact file copy of that main PDF/PNG. All source figures and scientific data are preserved.", "",
   "## Main talk order and source map", "",
   "1. Chain baseline yes responses", "2. Study 1 developmental synthesis", "3. Chain with intentional/accidental information",
-  "4. Study 2 intention-effect transition figure", "5. Study 1 age-adjusted causal-role/responsibility relationship",
-  "6. Study 2 age-adjusted causal-role × intention relationship", "7. Single Cause yes responses (Lexical / Fault / Punish)",
-  "8. Final cross-study centered synthesis with gap fills", "",
+  "4. Matched developmental synthesis: Baseline | Accidental | Intentional",
+  "5. Study 2 intention-effect transition figure", "6. Study 1 age-adjusted causal-role/responsibility relationship",
+  "7. Study 2 age-adjusted causal-role × intention relationship", "8. Single Cause yes responses (Lexical / Fault / Punish)",
+  "9. Final cross-study centered synthesis with gap fills", "",
   "| Order | Final PDF (matching PNG alongside) | Original/source filename | Section | Use | Builds | Provenance note |",
   "| --- | --- | --- | --- | --- | --- | --- |", final_table(final_index), "",
   "## Builds", "",
   "- Chain baseline: the original 00–08 sequence, each measure's adults then children.",
   "- Study 1 development: blank → causal-role differentiation → + Fault → + Punish/full (adults included with each trajectory).",
   "- Chain intention: the original 00–16 sequence; within each measure Intentional adults/children, then Accidental adults/children.",
+  "- Matched development: blank → Baseline children → + Accidental children → + Intentional children → + all adults/full. The existing backup remains available; the main version has the larger matched-family typography.",
   "- Transition: blank → causal-role differentiation → + Single Cause → + Chain: Distal/full.",
   "- Study 1 age-adjusted: blank → Fault → + Punish/full.",
   "- Study 2 age-adjusted: blank → Accidental → + Intentional/full.",
   "- Single Cause: blank → Lexical Intentional → Lexical Accidental → Fault Intentional → Fault Accidental → Punish Intentional → Punish Accidental/full.",
   "- Centered payoff: blank → differentiation in both panels → Single Cause Intentional Fault/Punish → Chain: Distal Intentional Fault/Punish → Single Cause Accidental Fault/Punish → Chain: Distal Accidental Fault/Punish → blue gap fill → red gap fill/full.",
-  "", "The [build manifest](build_manifest.csv) lists all 59 frames. Panels, axes, legend positions and marks retain fixed geometry within every sequence. Full legends and sample-size labels stay visible in blank scaffolds.", "",
+  "", "The [build manifest](build_manifest.csv) lists all 64 frames. Panels, axes, legend positions and marks retain fixed geometry within every sequence. Full legends and sample-size labels stay visible in blank scaffolds.", "",
   "## Quantities, intervals and sample limitations", "",
   "- Raw Yes=1 / No=0. Average available scenarios within participant before group means; both-Yes and neither-Yes responses are retained. Distal/proximal are repeated measures, not separate participants.",
   "- Causal-role differentiation = [(Caused Distal − Proximal) + (Lexical Proximal − Distal)] / 2. Fault and Punish distal preferences = Distal − Proximal. Percentage ticks on contrasts denote percentage points.",
   "- The centered payoff uses responsibility Yes (%) − 50 and causal-role differentiation (%) / 2. Zero means 50/50 responsibility responding or no causal differentiation. These are different constructs on a shared display scale, not interchangeable measurements.",
   "- Blue/red fills in the payoff are the areas between each context's Intentional and Accidental means (alpha .18), not confidence bands. They sit behind all data marks; red overlays blue.",
   "- All estimates and 95% participant-bootstrap limits are reused unchanged from the source workflow (5,000 draws). Thin vertical bars have no horizontal caps or endpoint marks. Relationship plots replace ribbons with bars at every tenth saved prediction-grid row, including endpoints; all saved predictions/limits remain in the exact-value CSVs. Age-adjusted fits and predictions are reused directly; the pooled relationship backup retains its unchanged source linear-fit drawing layer.",
+  "- The matched main figure and both age-adjusted figures share a 28 × 11 inch canvas, 40-point tick labels, 44-point axis/panel labels, and 34-point legends. Age-adjusted fitted lines are 4 mm wide; observed participant points have alpha .07. Study 2 uses purple solid/filled-circle Intentional and teal dashed/open-triangle Accidental coding. The light gray relationship panels contain children only; their x-axis is differentiation, not age.",
   "- Age-adjusted figures are children-only: Study 1 responsibility ~ differentiation + numeric age; Study 2 responsibility ~ differentiation × intention + numeric age. Faint points are observed participant scores with unchanged display-only jitter; fitted lines use the original age standardization. Unchanged coefficients, contrasts and joint frequencies are supplied in the root CSVs. These exploratory cross-sectional associations do not establish causation or mediation.",
   "- Single Cause child data are pilot data and cover ages 3–6 only. Binned comparisons use participant-weighted 3–4 and 5–6 groups, excluding ages 7–9. Single-year figures show adults separately; binned figures retain their source categorical connections.",
   "- Study 2 adult chain values use the selected available adult pilot; the main adult dataset remains missing. Single Cause uses all 32 available adult records; the historical N=30 exclusion subset remains unidentified. No historical exclusions or preregistration decisions are invented.",
@@ -405,7 +496,7 @@ final_readme = c(
   "| Study | Age | Condition | Unique included N |", "| --- | --- | --- | --- |", final_count_table$line, "",
   "## Reproduce and verify", "",
   "Render [causal_verbs.Rmd](../../code/R/causal_verbs.Rmd), which includes [talk_final.Rmd](../../code/R/talk_final.Rmd) after the existing analysis. Paths are relative. This child document is presentation-only and consumes existing plot objects and validated summaries; it does not change participant selection, source data, bootstrap estimates or model specifications.", "",
-  "Production checks enforce 8 main figures, 6 backups, 59 builds, fixed build geometry, exact full-build copies, no titles/subtitles/captions, no CI ribbons/caps, and no participant identifiers in exported tables. Source-file and data hashes plus decoded PDF comparisons are checked before commit. All main, backup and build PDFs are visually reviewed after rendering."
+  "Production checks enforce 9 main figures, 6 backups, 64 builds, fixed build geometry, exact full-build copies, no titles/subtitles/captions, no CI ribbons/caps, and no participant identifiers in exported tables. Source-file and data hashes plus decoded PDF comparisons are checked before commit. All main, backup and build PDFs are visually reviewed after rendering."
 )
 writeLines(final_readme, file.path(final_root, "README.md"))
 knitr::kable(select(final_index, order, stem, section, kind))
