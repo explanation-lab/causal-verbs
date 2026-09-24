@@ -30,8 +30,8 @@ final_theme = function() {
           strip.background = element_blank(),
           strip.text = element_text(size = 36, face = "bold", margin = margin(b = 18)),
           legend.position = "bottom", legend.justification = "center",
-          legend.text = element_text(size = 30), legend.title = element_text(size = 28, face = "bold"),
-          legend.key.width = grid::unit(2, "cm"), legend.key.height = grid::unit(1.2, "cm"),
+          legend.text = element_text(size = 44), legend.title = element_text(size = 40, face = "bold"),
+          legend.key.width = grid::unit(2.6, "cm"), legend.key.height = grid::unit(1.6, "cm"),
           legend.spacing.x = grid::unit(.6, "cm"), legend.box.spacing = grid::unit(.6, "cm"),
           legend.margin = margin(t = 10), plot.margin = margin(20, 32, 18, 24))
 }
@@ -39,8 +39,7 @@ final_theme = function() {
 final_matched_theme = function() {
   final_theme() +
     theme(axis.text = element_text(size = 40), axis.title = element_text(size = 44),
-          strip.text = element_text(size = 44, face = "bold", margin = margin(b = 20)),
-          legend.text = element_text(size = 34), legend.key.width = grid::unit(2.2, "cm"))
+          strip.text = element_text(size = 44, face = "bold", margin = margin(b = 20)))
 }
 
 # Clone each drawing layer before editing it, so source plots remain untouched.
@@ -83,6 +82,8 @@ final_polish = function(plot, scatter = FALSE) {
     if (inherits(layer$geom, "GeomRect")) layer$aes_params$fill = "#F3F3F3"
     layer
   })
+  # Keep informative relationship-axis labels; age ticks already identify age.
+  if (identical(plot$labels$x, "Age")) plot = plot + labs(x = NULL)
   plot + final_theme() + labs(title = NULL, subtitle = NULL, caption = NULL, tag = NULL)
 }
 
@@ -226,6 +227,8 @@ final_raw = function(plot, study, measures = measure_order) {
     coord_cartesian(ylim = c(0, 1), clip = "off") +
     geom_text(data = counts, aes(x = x + if (split_condition) .07 else 0, y = y, label = label),
               inherit.aes = FALSE, family = final_font, size = 8.2, color = "#333333", show.legend = FALSE) +
+    # An empty spacer retains room for the sample-size rows below the age ticks.
+    labs(x = "") +
     theme(axis.title.x = element_text(margin = margin(t = if (split_condition) 96 else 65)),
           panel.spacing.y = grid::unit(if (split_condition) 4.1 else 3.1, "cm"))
   if (split_condition) plot = plot +
@@ -383,7 +386,12 @@ final_family("07_single_cause_yes", "single_cause", paste0(single_output, "/sing
     "build04_fault_accidental", "build05_punish_intentional", "build06_punish_accidental_full"),
   final_sc, order = 8L, note = "Single Cause children are pilot data (ages 3–6); all 32 available adult records retained.")
 
-final_centered = function(step) final_polish(make_centered_gap_build(step)) + labs(y = "Relative to neutral (%)")
+final_centered = function(step) final_polish(make_centered_gap_build(step)) +
+  labs(y = "Relative to neutral (%)") +
+  guides(color = guide_legend(nrow = 2, byrow = TRUE, override.aes = list(alpha = 1)),
+         fill = guide_legend(nrow = 2, byrow = TRUE),
+         shape = guide_legend(nrow = 2, byrow = TRUE),
+         linetype = guide_legend(nrow = 2, byrow = TRUE))
 final_family("08_centered_cross_study_gap_fills", "single_cause",
   paste0(binned_responsibility_output, "/causal_role_and_raw_responsibility_centered_talk_v1.pdf"),
   final_centered(11), 26, 12, df.binned.centered.values, centered_gap_build_names, final_centered, order = 9L,
@@ -433,7 +441,8 @@ write_csv(final_index, file.path(final_root, "figure_index.csv"))
 if (final_make_builds) write_csv(bind_rows(final_build_registry), file.path(final_root, "build_manifest.csv"))
 stopifnot(nrow(final_index) == 15L, identical(filter(final_index, kind == "main")$order, 1:9))
 for (plot in final_plots) {
-  stopifnot(is.null(plot$labels$title), is.null(plot$labels$subtitle), is.null(plot$labels$caption))
+  stopifnot(is.null(plot$labels$title), is.null(plot$labels$subtitle), is.null(plot$labels$caption),
+            !identical(plot$labels$x, "Age"), plot$theme$legend.text$size == 44)
   for (layer in plot$layers)
     stopifnot(!inherits(layer$geom, c("GeomRibbon", "GeomErrorbar")))
 }
@@ -485,7 +494,8 @@ final_readme = c(
   "- The centered payoff uses responsibility Yes (%) − 50 and causal-role differentiation (%) / 2. Zero means 50/50 responsibility responding or no causal differentiation. These are different constructs on a shared display scale, not interchangeable measurements.",
   "- Blue/red fills in the payoff are the areas between each context's Intentional and Accidental means (alpha .18), not confidence bands. They sit behind all data marks; red overlays blue.",
   "- All estimates and 95% participant-bootstrap limits are reused unchanged from the source workflow (5,000 draws). Thin vertical bars have no horizontal caps or endpoint marks. Relationship plots replace ribbons with bars at every tenth saved prediction-grid row, including endpoints; all saved predictions/limits remain in the exact-value CSVs. Age-adjusted fits and predictions are reused directly; the pooled relationship backup retains its unchanged source linear-fit drawing layer.",
-  "- The matched main figure and both age-adjusted figures share a 28 × 11 inch canvas, 40-point tick labels, 44-point axis/panel labels, and 34-point legends. Age-adjusted fitted lines are 4 mm wide; observed participant points have alpha .07. Study 2 uses purple solid/filled-circle Intentional and teal dashed/open-triangle Accidental coding. The light gray relationship panels contain children only; their x-axis is differentiation, not age.",
+  "- All final figures and builds omit the redundant Age axis title and use 44-point legend text with larger keys. Informative non-age x-axis labels are retained. The centered synthesis wraps its five-entry legend into two rows; raw figures retain space for participant counts.",
+  "- The matched main figure and both age-adjusted figures share a 28 × 11 inch canvas, 40-point tick labels and 44-point axis/panel labels. Age-adjusted fitted lines are 4 mm wide; observed participant points have alpha .07. Study 2 uses purple solid/filled-circle Intentional and teal dashed/open-triangle Accidental coding. The light gray relationship panels contain children only; their x-axis is differentiation, not age.",
   "- Age-adjusted figures are children-only: Study 1 responsibility ~ differentiation + numeric age; Study 2 responsibility ~ differentiation × intention + numeric age. Faint points are observed participant scores with unchanged display-only jitter; fitted lines use the original age standardization. Unchanged coefficients, contrasts and joint frequencies are supplied in the root CSVs. These exploratory cross-sectional associations do not establish causation or mediation.",
   "- Single Cause child data are pilot data and cover ages 3–6 only. Binned comparisons use participant-weighted 3–4 and 5–6 groups, excluding ages 7–9. Single-year figures show adults separately; binned figures retain their source categorical connections.",
   "- Study 2 adult chain values use the selected available adult pilot; the main adult dataset remains missing. Single Cause uses all 32 available adult records; the historical N=30 exclusion subset remains unidentified. No historical exclusions or preregistration decisions are invented.",
