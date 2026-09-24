@@ -4,21 +4,33 @@
   "builds": 64,
   "pdfs": 79,
   "pngs": 79,
+  "restored_regression_figures": 2,
+  "updated_builds": 6,
+  "updated_PDFs_rendered": 8,
   "main_full_builds_byte_identical": 9,
-  "build_text_positions_fixed": 64,
-  "all_PDFs_rendered": 79,
-  "Age_titles_remaining": 0,
-  "existing_non_age_labels_preserved": true,
-  "source_and_numerical_files_unchanged": 756,
-  "metadata_only_original_PDFs_restored": 165,
-  "raw_N_displays_verified": 4,
-  "point_denominator_exceptions": 0,
-  "all_main_backup_and_build_pages_visually_reviewed": true,
-  "legend_text_points": 44,
-  "plotted_data_and_CIs_unchanged": true,
-  "main_and_backup_plot_layers_compared": 15,
+  "updated_build_text_positions_fixed": 6,
+  "original_PDF_comparisons": [
+    {
+      "study": 1,
+      "retained_text_coordinates_exact": true,
+      "all_pixels_outside_removed_prose_identical": true
+    },
+    {
+      "study": 2,
+      "retained_text_coordinates_exact": true,
+      "all_pixels_outside_removed_prose_identical": true
+    }
+  ],
+  "source_and_other_output_files_unchanged": 897,
+  "statistical_results_unchanged": true,
+  "regression_CIs": "Original translucent 95% CI ribbons",
+  "source_commit": "d4720d6206c5b5df1f79b96b4443e4680d29cb9b",
+  "date": "2026-09-24",
+  "updated_PDFs_visually_reviewed": 8,
+  "previously_reviewed_PDFs_preserved": 71,
   "source_data_files_unchanged": 303,
   "original_HTML_figure_images_preserved": 53,
-  "source_commit": "6c0f4c0e3fc5860fd6cb2fc0ef9b8a9240a670c2",
-  "date": "2026-09-24"
+  "original_PDF_comparison_dpi": 85,
+  "raw_N_displays_verified": 4,
+  "point_denominator_exceptions": 0
 }
